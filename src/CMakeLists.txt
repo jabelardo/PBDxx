@@ -31,6 +31,6 @@ set(SOURCE_FILES
     pbdoc_head.cpp
     streams.cpp)
 
-add_library( ${LIB_NAME} ${SOURCE_FILES})
+add_library(${LIB_NAME} ${SOURCE_FILES})
 
 target_link_libraries(${LIB_NAME} ${ZLIB_LIBRARY})

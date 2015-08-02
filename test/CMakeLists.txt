@@ -17,6 +17,9 @@ add_executable(${EXE_NAME} ${SOURCE_FILES})
 
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
-target_link_libraries(${EXE_NAME} PBD++ ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+target_link_libraries(${EXE_NAME} 
+	PBD++ 
+	${ZLIB_LIBRARY} 
+	${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
 
 add_definitions(-DBOOST_TEST_DYN_LINK)
