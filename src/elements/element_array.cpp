@@ -15,7 +15,7 @@ ElementArray::ElementArray()
 }
 
 ElementArray::ElementArray(std::vector<Element> const& vector_to_copy)
-	: Array<std::vector<Element>, Element>(vector_to_copy)
+    : Array<std::vector<Element>, Element>(vector_to_copy)
 {
 }
 

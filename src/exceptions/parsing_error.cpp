@@ -9,9 +9,9 @@ namespace
 std::string
 message(std::string const& where, std::string const& except = "unknown", std::string const& what = "")
 {
-	std::ostringstream oss;	
+    std::ostringstream oss;	
     oss << where << ": ParsingError = (" << except << ")" << what;
-	return oss.str();
+    return oss.str();
 }	
 }
 

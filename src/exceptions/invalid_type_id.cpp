@@ -9,9 +9,9 @@ namespace
 std::string
 message(std::string const& where, TypeId::TypeId TypeId)
 {
-	std::ostringstream oss;
+    std::ostringstream oss;
     oss << where << ": invalid_TypeId = " << TypeId;
-	return oss.str();
+    return oss.str();
 }	
 }
 
@@ -28,7 +28,7 @@ InvalidTypeId::~InvalidTypeId() throw()
 TypeId::TypeId 
 InvalidTypeId::type_id() const
 {
-	return TypeId_;
+    return TypeId_;
 }
 
 }

@@ -15,7 +15,7 @@ StringArray::StringArray()
 }
 
 StringArray::StringArray(std::vector<std::string> const& vector_to_copy)
-	: Array<std::vector<std::string>, std::string>(vector_to_copy)
+    : Array<std::vector<std::string>, std::string>(vector_to_copy)
 {
 }
 	
@@ -26,13 +26,13 @@ StringArray::~StringArray()
 StringArray& 
 StringArray::as_string_array()
 {
-	return *this;
+    return *this;
 }
 
 StringArray const& 
 StringArray::as_string_array() const
 {
-	return *this;
+    return *this;
 }
 
 TypeId::TypeId 

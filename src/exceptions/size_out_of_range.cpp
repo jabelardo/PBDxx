@@ -9,9 +9,9 @@ namespace
 std::string
 message(std::string const& where, std::size_t size_wanted)
 {
-	std::ostringstream oss;
+    std::ostringstream oss;
     oss << where << ": size_out_of_range: " <<  size_wanted << " > 16777216UL";
-	return oss.str();
+    return oss.str();
 }	
 }
 
@@ -28,7 +28,7 @@ SizeOutOfRange::~SizeOutOfRange() throw()
 uint16_t 
 SizeOutOfRange::size_wanted() const
 {
-	return size_wanted_;
+    return size_wanted_;
 }
 
 }

@@ -11,7 +11,7 @@ String::clone() const
 }
 
 String::String(std::string const& datum)
-	: data_(datum)
+    : data_(datum)
 {
 }
 
@@ -22,13 +22,13 @@ String::~String()
 String&
 String::as_string()
 { 
-	return *this;
+    return *this;
 }
 
 String const&
 String::as_string() const
 { 
-	return *this; 
+    return *this; 
 }
 
 
@@ -41,7 +41,7 @@ String::type_id() const
 std::string 
 String::value() const
 {
-	return data_;
+    return data_;
 }
 
 TypeId::TypeId 

@@ -131,14 +131,14 @@ PbDocReader::head_size()
 std::istream& 
 PbDocReader::read_head(std::istream& is)
 {
-	try {           		
-	    std::vector<char> head_buffer(head_size());
+    try {           		
+        std::vector<char> head_buffer(head_size());
         if (is.read(&head_buffer[0], head_buffer.size())) {
-	        std::copy(head_buffer.begin(), head_buffer.end(), std::back_inserter(buffer_));
-	    }
+            std::copy(head_buffer.begin(), head_buffer.end(), std::back_inserter(buffer_));
+        }
         InVectorCharStream ivcs(head_buffer);
         ivcs >> head_;
-	    return is;
+        return is;
 	    
     } catch (std::exception const& e) {
     	throw ParsingError("PbDocReader::read_body_size:", e);
@@ -154,20 +154,19 @@ PbDocReader::body_size() const
 std::size_t 
 PbDocReader::buffer_size() const
 {
-	return buffer_.size();
+    return buffer_.size();
 }
 
 std::istream& 
 PbDocReader::read_body(std::istream& is)
 {
-	try {      
-		
-	    std::vector<char> body(body_size());
-        if (is.read(&body[0], body.size())) {
+    try {      
 
-	        std::copy(body.begin(), body.end(), std::back_inserter(buffer_));
-	    }
-	    return is;
+    std::vector<char> body(body_size());
+    if (is.read(&body[0], body.size())) {
+        std::copy(body.begin(), body.end(), std::back_inserter(buffer_));
+    }
+    return is;
 	    
     } catch (std::exception const& e) {
     	throw ParsingError("PbDocReader::read_body:", e);
@@ -183,18 +182,18 @@ PbDocReader::checksum_size() const
 std::istream& 
 PbDocReader::read_checksum(std::istream& is)
 {
-	try {      
+    try {      
 		
-	    uint16_t crc;
-	    if (is >> Reader<uint16_t>(crc)) {
-	    #ifdef BOOST_BIG_ENDIAN
-	            reinterpret_cast<uint8_t*>(&crc_ccitt_)[0] = reinterpret_cast<uint8_t*>(&crc)[1];
-	            reinterpret_cast<uint8_t*>(&crc_ccitt_)[1] = reinterpret_cast<uint8_t*>(&crc)[0];
-	    #else            
-	            crc_ccitt_= crc;
-	    #endif
-	    }
-	    return is;
+        uint16_t crc;
+        if (is >> Reader<uint16_t>(crc)) {
+        #ifdef BOOST_BIG_ENDIAN
+            reinterpret_cast<uint8_t*>(&crc_ccitt_)[0] = reinterpret_cast<uint8_t*>(&crc)[1];
+            reinterpret_cast<uint8_t*>(&crc_ccitt_)[1] = reinterpret_cast<uint8_t*>(&crc)[0];
+        #else            
+            crc_ccitt_= crc;
+        #endif
+        }
+        return is;
 	    
     } catch (std::exception const& e) {
     	throw ParsingError("PbDocReader::read_checksum:", e);
@@ -204,21 +203,21 @@ PbDocReader::read_checksum(std::istream& is)
 std::istream& 
 PbDocReader::one_step_read(std::istream& is)
 {
-	read_head(is) && read_body(is) && read_checksum(is);
-	return is;
+    read_head(is) && read_body(is) && read_checksum(is);
+    return is;
     	
 }
 
 std::vector<char> const& 
 PbDocReader::buffer() const
 {
-	return buffer_;
+    return buffer_;
 }
-    
+
 uint16_t 
 PbDocReader::crc_ccitt() const
 {
-	return crc_ccitt_;
+    return crc_ccitt_;
 }
 
 PbDoc 

@@ -6,12 +6,12 @@ namespace PBD
 {
 
 FilterOutStream::FilterOutStream(std::vector<char>& buffer)
-	: boost::iostreams::filtering_ostream(boost::iostreams::back_inserter(buffer))
+    : boost::iostreams::filtering_ostream(boost::iostreams::back_inserter(buffer))
 {
 }
 
 FilterInStream::FilterInStream(std::vector<char> const& buffer)
-	: boost::iostreams::filtering_istream(boost::make_iterator_range(buffer))
+    : boost::iostreams::filtering_istream(boost::make_iterator_range(buffer))
     , endianess_(Endianess::arch_endian)
 {
 }
@@ -36,8 +36,8 @@ VectorCharSink::VectorCharSink(std::vector<char>& buffer)
 std::streamsize
 VectorCharSink::write(const char* s, std::streamsize n)
 {
-	buffer_.insert(buffer_.end(), s, s + n);
-	return n;
+    buffer_.insert(buffer_.end(), s, s + n);
+    return n;
 }
 
 VectorCharSource::VectorCharSource(std::vector<char>& buffer)
@@ -48,7 +48,7 @@ VectorCharSource::VectorCharSource(std::vector<char>& buffer)
 std::streamsize 
 VectorCharSource::read(char* s, std::streamsize n)
 {
-	std::streamsize amt = static_cast<std::streamsize>(buffer_.size());
+    std::streamsize amt = static_cast<std::streamsize>(buffer_.size());
     std::streamsize result = std::min(n, amt);
     if (result != 0) {
         std::copy(buffer_.begin(), buffer_.begin() + result, s);

@@ -12,7 +12,7 @@ Real::clone() const
 }
 
 Real::Real(double datum)
-	: Number<double>(datum)
+    : Number<double>(datum)
 {
 }
 
@@ -23,13 +23,13 @@ Real::~Real()
 Real& 
 Real::as_real()
 {
-	return *this;
+    return *this;
 }
 
 Real const& 
 Real::as_real() const
 {
-	return *this;
+    return *this;
 }
 
 TypeId::TypeId 

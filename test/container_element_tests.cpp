@@ -385,24 +385,24 @@ BOOST_AUTO_TEST_CASE(test_element_array_3)
 	BOOST_CHECK_EQUAL(ptr_2.use_count(), 0);
 	BOOST_CHECK_EQUAL(ptr_3.use_count(), 0);
 	{
-		Element element_1 = Element::create_element_array();
+            Element element_1 = Element::create_element_array();
 
-		ptr_1 = element_1.implementation_;
-		BOOST_CHECK_EQUAL(ptr_1.use_count(), 1);
-		{
-			Element element_2 = Element::create_element_array();
-			ptr_2 = element_2.implementation_;						
-			BOOST_CHECK_EQUAL(ptr_2.use_count(), 1);
-						
-			element_1.as_element_array().push_back(element_2);
-			ptr_3 = element_1.implementation_;			
-			BOOST_CHECK_EQUAL(ptr_3.use_count(), 1);
-			BOOST_CHECK_EQUAL(ptr_1.use_count(), 0);
-			BOOST_CHECK_EQUAL(ptr_2.use_count(), 2);			
-		}
-		BOOST_CHECK_EQUAL(ptr_1.use_count(), 0);
-		BOOST_CHECK_EQUAL(ptr_2.use_count(), 1);
-		BOOST_CHECK_EQUAL(ptr_3.use_count(), 1);
+            ptr_1 = element_1.implementation_;
+            BOOST_CHECK_EQUAL(ptr_1.use_count(), 1);
+            {
+                Element element_2 = Element::create_element_array();
+                ptr_2 = element_2.implementation_;						
+                BOOST_CHECK_EQUAL(ptr_2.use_count(), 1);
+
+                element_1.as_element_array().push_back(element_2);
+                ptr_3 = element_1.implementation_;			
+                BOOST_CHECK_EQUAL(ptr_3.use_count(), 1);
+                BOOST_CHECK_EQUAL(ptr_1.use_count(), 0);
+                BOOST_CHECK_EQUAL(ptr_2.use_count(), 2);			
+            }
+            BOOST_CHECK_EQUAL(ptr_1.use_count(), 0);
+            BOOST_CHECK_EQUAL(ptr_2.use_count(), 1);
+            BOOST_CHECK_EQUAL(ptr_3.use_count(), 1);
 	}
 	BOOST_CHECK_EQUAL(ptr_1.use_count(), 0);
 	BOOST_CHECK_EQUAL(ptr_2.use_count(), 0);
@@ -421,31 +421,31 @@ BOOST_AUTO_TEST_CASE(test_element_array_4)
 	BOOST_CHECK_EQUAL(ptr_3.use_count(), 0);
 	BOOST_CHECK_EQUAL(ptr_4.use_count(), 0);
 	{
-		Element element_1 = Element::create_element_array();
-		ptr_1 = element_1.implementation_;
-		BOOST_CHECK_EQUAL(ptr_1.use_count(), 1);
-		{
-			Element element_2 = Element::create_element_array();
-			ptr_2 = element_2.implementation_;
-			BOOST_CHECK_EQUAL(ptr_2.use_count(), 1);
-						
-			element_1.as_element_array().push_back(element_2);
-			ptr_3 = element_1.implementation_;
-			BOOST_CHECK_EQUAL(ptr_1.use_count(), 0);
-			BOOST_CHECK_EQUAL(ptr_3.use_count(), 1);
-			BOOST_CHECK_EQUAL(ptr_2.use_count(), 2);
-			
-			element_2.as_element_array().push_back(element_1);
-			ptr_4 = element_2.implementation_;
-			BOOST_CHECK_EQUAL(ptr_2.use_count(), 1);
-			BOOST_CHECK_EQUAL(ptr_4.use_count(), 1);
-			BOOST_CHECK_EQUAL(ptr_1.use_count(), 0);
-			BOOST_CHECK_EQUAL(ptr_3.use_count(), 2);
-		}
-		BOOST_CHECK_EQUAL(ptr_1.use_count(), 0);
-		BOOST_CHECK_EQUAL(ptr_2.use_count(), 1);
-		BOOST_CHECK_EQUAL(ptr_3.use_count(), 1);
-		BOOST_CHECK_EQUAL(ptr_4.use_count(), 0);
+            Element element_1 = Element::create_element_array();
+            ptr_1 = element_1.implementation_;
+            BOOST_CHECK_EQUAL(ptr_1.use_count(), 1);
+            {
+                Element element_2 = Element::create_element_array();
+                ptr_2 = element_2.implementation_;
+                BOOST_CHECK_EQUAL(ptr_2.use_count(), 1);
+
+                element_1.as_element_array().push_back(element_2);
+                ptr_3 = element_1.implementation_;
+                BOOST_CHECK_EQUAL(ptr_1.use_count(), 0);
+                BOOST_CHECK_EQUAL(ptr_3.use_count(), 1);
+                BOOST_CHECK_EQUAL(ptr_2.use_count(), 2);
+
+                element_2.as_element_array().push_back(element_1);
+                ptr_4 = element_2.implementation_;
+                BOOST_CHECK_EQUAL(ptr_2.use_count(), 1);
+                BOOST_CHECK_EQUAL(ptr_4.use_count(), 1);
+                BOOST_CHECK_EQUAL(ptr_1.use_count(), 0);
+                BOOST_CHECK_EQUAL(ptr_3.use_count(), 2);
+            }
+            BOOST_CHECK_EQUAL(ptr_1.use_count(), 0);
+            BOOST_CHECK_EQUAL(ptr_2.use_count(), 1);
+            BOOST_CHECK_EQUAL(ptr_3.use_count(), 1);
+            BOOST_CHECK_EQUAL(ptr_4.use_count(), 0);
 	}
 	BOOST_CHECK_EQUAL(ptr_1.use_count(), 0);
 	BOOST_CHECK_EQUAL(ptr_2.use_count(), 0);

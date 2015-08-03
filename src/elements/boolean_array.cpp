@@ -16,7 +16,7 @@ BooleanArray::BooleanArray()
 }
 
 BooleanArray::BooleanArray(boost::dynamic_bitset<> const& set_to_copy)
-	: Array<boost::dynamic_bitset<>, bool>(set_to_copy)
+    : Array<boost::dynamic_bitset<>, bool>(set_to_copy)
 {
 }
 	
@@ -27,13 +27,13 @@ BooleanArray::~BooleanArray()
 BooleanArray&
 BooleanArray::as_boolean_array()
 {
-	return *this;
+    return *this;
 }
 
 BooleanArray const&
 BooleanArray::as_boolean_array() const
 {
-	return *this;
+    return *this;
 }
 
 TypeId::TypeId 

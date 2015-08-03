@@ -28,7 +28,7 @@ void fix_endianess(uint16_t& value)
 {
     uint16_t val = value;
     uint16_t tmp = ((0x00FF & (val >> 8))
-    			 | (0xFF00 & (val << 8)));
+                 |  (0xFF00 & (val << 8)));
     value = tmp;
 }
 
@@ -45,9 +45,9 @@ void fix_endianess(uint32_t& value)
 {
     uint32_t val = value;
     uint32_t tmp = ((0x000000FF & (val >> 24))
-    			 | (0x0000FF00 & (val >> 8))
-    			 | (0x00FF0000 & (val << 8))
-    			 | (0xFF000000 & (val << 24)));
+                 |  (0x0000FF00 & (val >> 8))
+                 |  (0x00FF0000 & (val << 8))
+                 |  (0xFF000000 & (val << 24)));
     value = tmp;
 }
 
@@ -65,13 +65,13 @@ void fix_endianess(uint64_t& value)
 	int64_t val = value;
 
 	int64_t tmp = ((0x00000000000000FFLL & (val >> 56))
-				| (0x000000000000FF00LL & (val >> 40))
-				| (0x0000000000FF0000LL & (val >> 24))
-				| (0x00000000FF000000LL & (val >> 8))
-				| (0x000000FF00000000LL & (val << 8))
-				| (0x0000FF0000000000LL & (val << 24))
-				| (0x00FF000000000000LL & (val << 40))
-				| (0xFF00000000000000LL & (val << 56)));
+                    |  (0x000000000000FF00LL & (val >> 40))
+                    |  (0x0000000000FF0000LL & (val >> 24))
+                    |  (0x00000000FF000000LL & (val >> 8))
+                    |  (0x000000FF00000000LL & (val << 8))
+                    |  (0x0000FF0000000000LL & (val << 24))
+                    |  (0x00FF000000000000LL & (val << 40))
+                    |  (0xFF00000000000000LL & (val << 56)));
 
 	value = tmp;
 }
@@ -79,7 +79,7 @@ void fix_endianess(uint64_t& value)
 template <>
 void fix_endianess(int64_t& value)
 {
-	uint64_t val = value;
+    uint64_t val = value;
     fix_endianess(val);
     value = val;
 }

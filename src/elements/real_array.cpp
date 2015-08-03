@@ -12,12 +12,12 @@ RealArray::clone() const
 }
 
 RealArray::RealArray()
-	: NumberArray<double>()
+    : NumberArray<double>()
 {
 }
 
 RealArray::RealArray(std::vector<double> const& vector_to_copy)
-	: NumberArray<double>(vector_to_copy)
+    : NumberArray<double>(vector_to_copy)
 {
 }
 	
@@ -28,25 +28,25 @@ RealArray::~RealArray()
 RealArray&
 RealArray::as_real_array()
 {
-	return *this;
+    return *this;
 }
 
 RealArray const&
 RealArray::as_real_array() const
 {
-	return *this;
+    return *this;
 }
 
 TypeId::TypeId 
 RealArray::type_id() const
 {
-	return TypeId::real_array;
+    return TypeId::real_array;
 }
  
 TypeId::TypeId 
 RealArray::type_id_to_write() const
 {
-	std::pair<DataType, DataType> range = data_range();
+    std::pair<DataType, DataType> range = data_range();
     return TypeId::best_real_array(range.first, range.second);
 }
 

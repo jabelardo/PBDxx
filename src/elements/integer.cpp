@@ -12,7 +12,7 @@ Integer::clone() const
 }
 
 Integer::Integer(int64_t datum)
-	: Number<int64_t>(datum)
+    : Number<int64_t>(datum)
 {
 }
 
@@ -23,13 +23,13 @@ Integer::~Integer()
 Integer& 
 Integer::as_integer()
 {
-	return *this;
+    return *this;
 }
 
 Integer const& 
 Integer::as_integer() const
 {
-	return *this;
+    return *this;
 }
 
 TypeId::TypeId 

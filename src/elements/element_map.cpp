@@ -12,12 +12,12 @@ ElementMap::clone() const
 }
 
 ElementMap::ElementMap()
-	: data_()
+    : data_()
 {
 }
 
 ElementMap::ElementMap(Data const& map_to_copy)
-	: data_(map_to_copy)
+    : data_(map_to_copy)
 {
 }
 
@@ -60,7 +60,7 @@ ElementMap::keys() const
 bool 
 ElementMap::insert(std::string const& key, Element const& value)
 {
-	return data_.insert(std::make_pair(key, value)).second;
+    return data_.insert(std::make_pair(key, value)).second;
 }
 
 bool 
@@ -78,25 +78,25 @@ ElementMap::insert(std::string const& key, ElementImplementation::SharedPtr cons
 ElementMap::Data const&
 ElementMap::value() const
 {
-	return data_;
+    return data_;
 }
 
 ElementMap&
 ElementMap::as_element_map()
 {
-	return *this;
+    return *this;
 }
 
 ElementMap const&
 ElementMap::as_element_map() const
 {
-	return *this;
+    return *this;
 }
 
 TypeId::TypeId 
 ElementMap::type_id() const
 {
-	return TypeId::element_map;
+    return TypeId::element_map;
 }
 
 TypeId::TypeId 
@@ -133,22 +133,22 @@ ElementMap::read(std::istream& is, TypeId::TypeId)
 void 
 ElementMap::write(std::ostream& os, TypeId::TypeId) const
 {    	
-	std::vector<std::string> keys;
-	std::vector<Element> values;
-	
-	for (Data::const_iterator datum = data_.begin();
-	     datum != data_.end(); ++datum) {
-	    keys.push_back(datum->first);
-	    values.push_back(datum->second);
-	}
-	
-	if (os << StringVectorWriter(keys)) {
+    std::vector<std::string> keys;
+    std::vector<Element> values;
+
+    for (Data::const_iterator datum = data_.begin();
+         datum != data_.end(); ++datum) {
+        keys.push_back(datum->first);
+        values.push_back(datum->second);
+    }
+
+    if (os << StringVectorWriter(keys)) {
         for (std::vector<Element>::const_iterator datum = values.begin();
              datum != values.end(); ++datum) {
             os << *datum;            
             if (!os) break;
         }
-	}
+    }
 }
 
 }

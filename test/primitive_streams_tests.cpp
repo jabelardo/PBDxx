@@ -8,27 +8,27 @@ using namespace PBD;
 
 BOOST_AUTO_TEST_CASE(test_bool)
 {       
-	std::vector<char> buffer;	
-	FilterOutStream out(buffer);
-	
-	out << Writer<bool>(false);
-	out.flush();	
-	BOOST_CHECK_EQUAL(buffer.size(), sizeof(int8_t));
+    std::vector<char> buffer;	
+    FilterOutStream out(buffer);
+
+    out << Writer<bool>(false);
+    out.flush();	
+    BOOST_CHECK_EQUAL(buffer.size(), sizeof(int8_t));
     out << Writer<bool>(true);
-	out.flush();	
+    out.flush();	
     BOOST_CHECK_EQUAL(buffer.size(), sizeof(int8_t) * 2);
     out << Writer<bool>(false);
-	out.flush();	
+    out.flush();	
     BOOST_CHECK_EQUAL(buffer.size(), sizeof(int8_t) * 3);
     out << Writer<bool>(false);
-	out.flush();	
+    out.flush();	
     BOOST_CHECK_EQUAL(buffer.size(), sizeof(int8_t) * 4);
     out << Writer<bool>(true);
-	out.flush();	
+    out.flush();	
     BOOST_CHECK_EQUAL(buffer.size(), sizeof(int8_t) * 5);    
     
     FilterInStream  in(buffer);	
-	bool data = true;
+    bool data = true;
 	
     in >> Reader<bool>(data);
     BOOST_CHECK_EQUAL(data, false);
@@ -46,29 +46,29 @@ template <typename PRIMITIVE>
 void 
 test_primitive()
 {
-	typedef Writer<PRIMITIVE> PRIMITIVE_WRITER;
-	typedef Reader<PRIMITIVE> PRIMITIVE_READER;
-	std::vector<char> buffer;	
-	FilterOutStream out(buffer);
-	     
+    typedef Writer<PRIMITIVE> PRIMITIVE_WRITER;
+    typedef Reader<PRIMITIVE> PRIMITIVE_READER;
+    std::vector<char> buffer;	
+    FilterOutStream out(buffer);
+
     out << PRIMITIVE_WRITER(std::numeric_limits<PRIMITIVE>::min());
-	out.flush();
+    out.flush();
     BOOST_CHECK_EQUAL(buffer.size(), sizeof(PRIMITIVE));
     out << PRIMITIVE_WRITER(std::numeric_limits<PRIMITIVE>::max() / 4);
-	out.flush();
+    out.flush();
     BOOST_CHECK_EQUAL(buffer.size(), sizeof(PRIMITIVE) * 2);
     out << PRIMITIVE_WRITER(std::numeric_limits<PRIMITIVE>::max() / 3);
-	out.flush();
+    out.flush();
     BOOST_CHECK_EQUAL(buffer.size(), sizeof(PRIMITIVE) * 3);
     out << PRIMITIVE_WRITER(std::numeric_limits<PRIMITIVE>::max() / 2);
-	out.flush();
+    out.flush();
     BOOST_CHECK_EQUAL(buffer.size(), sizeof(PRIMITIVE) * 4);
     out << PRIMITIVE_WRITER(std::numeric_limits<PRIMITIVE>::max());
-	out.flush();
+    out.flush();
     BOOST_CHECK_EQUAL(buffer.size(), sizeof(PRIMITIVE) * 5);
-    
+
     FilterInStream  in(buffer);	
-	PRIMITIVE data;
+    PRIMITIVE data;
 	    
     in >> PRIMITIVE_READER(data);
     BOOST_CHECK_EQUAL(data, std::numeric_limits<PRIMITIVE>::min());
@@ -101,13 +101,13 @@ BOOST_AUTO_TEST_CASE(test_bool_array)
     }
     
     std::vector<char> buffer;	
-	FilterOutStream out(buffer);
+    FilterOutStream out(buffer);
 
-	out << ArrayWriter<bool>(out_array, array_size);
-	out.flush();
+    out << ArrayWriter<bool>(out_array, array_size);
+    out.flush();
     BOOST_CHECK_EQUAL(buffer.size(), array_size * sizeof(uint8_t));
 
-	FilterInStream  in(buffer);	
+    FilterInStream  in(buffer);	
     bool* in_array = new bool[array_size];
     in >> ArrayReader<bool>(in_array, array_size);
     BOOST_CHECK(std::equal(out_array, out_array + array_size, in_array));
@@ -120,8 +120,8 @@ template <typename PRIMITIVE>
 void 
 test_primitive_array()
 {
-	typedef ArrayWriter<PRIMITIVE> PRIMITIVE_ARRAY_WRITER;
-	typedef ArrayReader<PRIMITIVE> PRIMITIVE_ARRAY_READER;
+    typedef ArrayWriter<PRIMITIVE> PRIMITIVE_ARRAY_WRITER;
+    typedef ArrayReader<PRIMITIVE> PRIMITIVE_ARRAY_READER;
 	
     std::vector<PRIMITIVE> out_array;
     PRIMITIVE const first = std::numeric_limits<PRIMITIVE>::min();
@@ -136,10 +136,10 @@ test_primitive_array()
     }
     
     std::vector<char> buffer;	
-	FilterOutStream out(buffer);
+    FilterOutStream out(buffer);
 	
     out << PRIMITIVE_ARRAY_WRITER(&out_array[0], out_array.size());
-	out.flush();
+    out.flush();
     BOOST_CHECK_EQUAL(buffer.size(), out_array.size() * sizeof(PRIMITIVE));
     
     FilterInStream  in(buffer);	
@@ -213,8 +213,8 @@ template<typename PRIMITIVE>
 void
 test_pbd_vector_vacio()
 {
-	typedef std::vector<PRIMITIVE> VECTOR_TYPE;
-	typedef VectorWriter<PRIMITIVE> PRIMITIVE_VECTOR_WRITER;
+    typedef std::vector<PRIMITIVE> VECTOR_TYPE;
+    typedef VectorWriter<PRIMITIVE> PRIMITIVE_VECTOR_WRITER;
     typedef VectorReader<PRIMITIVE> PRIMITIVE_VECTOR_READER;
     
     VECTOR_TYPE vector;    
@@ -222,12 +222,12 @@ test_pbd_vector_vacio()
     std::vector<char> buffer;
     FilterOutStream out(buffer);
     
-	out << PRIMITIVE_VECTOR_WRITER(vector);
+    out << PRIMITIVE_VECTOR_WRITER(vector);
 
     out.flush();
     BOOST_CHECK_EQUAL(buffer.size(), vector.size() + sizeof(uint16_t));
 
-	int64_t const random = get_random();
+    int64_t const random = get_random();
     out << Writer<int64_t>(random);
     out.flush();
     BOOST_CHECK_EQUAL(buffer.size(), vector.size() + sizeof(uint16_t) + sizeof(int64_t));

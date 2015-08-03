@@ -11,40 +11,40 @@ using namespace PBD;
 
 BOOST_AUTO_TEST_CASE(test_number_array_real)
 {
-	RealArray::VectorType vect;
-	double min_float = std::numeric_limits<float>::min();
-	double max_float = std::numeric_limits<float>::max();
-	vect.push_back (min_float);
-	vect.push_back (max_float);
-	RealArray real_array_1 (vect);
+    RealArray::VectorType vect;
+    double min_float = std::numeric_limits<float>::min();
+    double max_float = std::numeric_limits<float>::max();
+    vect.push_back (min_float);
+    vect.push_back (max_float);
+    RealArray real_array_1 (vect);
 
-	BOOST_CHECK_EQUAL(real_array_1.type_id(), TypeId::real_array);
-	BOOST_CHECK_EQUAL(real_array_1.type_id_to_write(), TypeId::float_array);
-	BOOST_CHECK_EQUAL(max_float, real_array_1[real_array_1.size() - 1]);
+    BOOST_CHECK_EQUAL(real_array_1.type_id(), TypeId::real_array);
+    BOOST_CHECK_EQUAL(real_array_1.type_id_to_write(), TypeId::float_array);
+    BOOST_CHECK_EQUAL(max_float, real_array_1[real_array_1.size() - 1]);
 
-	double max_double = std::numeric_limits<double>::max();
-	real_array_1.push_back(max_double);
+    double max_double = std::numeric_limits<double>::max();
+    real_array_1.push_back(max_double);
 
-	BOOST_CHECK_EQUAL(real_array_1.type_id_to_write(), TypeId::double_array);
-	BOOST_CHECK_EQUAL(max_double, real_array_1[real_array_1.size() - 1]);
+    BOOST_CHECK_EQUAL(real_array_1.type_id_to_write(), TypeId::double_array);
+    BOOST_CHECK_EQUAL(max_double, real_array_1[real_array_1.size() - 1]);
 
-	vect.push_back (max_double);
-	RealArray real_array_2 (vect);
+    vect.push_back (max_double);
+    RealArray real_array_2 (vect);
 
-	BOOST_CHECK_EQUAL(real_array_2.type_id(), TypeId::real_array);
-	BOOST_CHECK_EQUAL(real_array_2.type_id_to_write(), TypeId::double_array);
-	BOOST_CHECK_EQUAL(max_double, real_array_2[real_array_2.size() - 1]);
-	
-	double nan_double = std::numeric_limits<double>::quiet_NaN();
+    BOOST_CHECK_EQUAL(real_array_2.type_id(), TypeId::real_array);
+    BOOST_CHECK_EQUAL(real_array_2.type_id_to_write(), TypeId::double_array);
+    BOOST_CHECK_EQUAL(max_double, real_array_2[real_array_2.size() - 1]);
 
-	BOOST_CHECK_THROW(real_array_2.push_back(nan_double), std::invalid_argument);
+    double nan_double = std::numeric_limits<double>::quiet_NaN();
 
-	BOOST_CHECK_EQUAL(real_array_2.type_id_to_write(), TypeId::double_array);
+    BOOST_CHECK_THROW(real_array_2.push_back(nan_double), std::invalid_argument);
 
-	double nan_float = std::numeric_limits<float>::quiet_NaN();
-	vect.push_back (nan_float);
+    BOOST_CHECK_EQUAL(real_array_2.type_id_to_write(), TypeId::double_array);
 
-	BOOST_CHECK_THROW(RealArray real_array_3 (vect), std::invalid_argument);
+    double nan_float = std::numeric_limits<float>::quiet_NaN();
+    vect.push_back (nan_float);
+
+    BOOST_CHECK_THROW(RealArray real_array_3 (vect), std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(test_number_array_integer_1)
@@ -52,31 +52,31 @@ BOOST_AUTO_TEST_CASE(test_number_array_integer_1)
     IntegerArray::VectorType vect;
     int64_t min_uint8 = 0;
     int64_t max_uint8 = std::numeric_limits<uint8_t>::max();
-	vect.push_back (min_uint8);
-	vect.push_back (max_uint8);
+    vect.push_back (min_uint8);
+    vect.push_back (max_uint8);
     IntegerArray integer_array_1 (vect);
 
-	BOOST_CHECK_EQUAL(integer_array_1.type_id(), TypeId::integer_array);
-	BOOST_CHECK_EQUAL(integer_array_1.type_id_to_write(), TypeId::uint8_array);
-	BOOST_CHECK_EQUAL(max_uint8, integer_array_1[integer_array_1.size() - 1]);
+    BOOST_CHECK_EQUAL(integer_array_1.type_id(), TypeId::integer_array);
+    BOOST_CHECK_EQUAL(integer_array_1.type_id_to_write(), TypeId::uint8_array);
+    BOOST_CHECK_EQUAL(max_uint8, integer_array_1[integer_array_1.size() - 1]);
 
-	int64_t max_uint16 = std::numeric_limits<uint16_t>::max();
-	integer_array_1.push_back(max_uint16);
+    int64_t max_uint16 = std::numeric_limits<uint16_t>::max();
+    integer_array_1.push_back(max_uint16);
 
-	BOOST_CHECK_EQUAL(integer_array_1.type_id_to_write(), TypeId::uint16_array);
-	BOOST_CHECK_EQUAL(max_uint16, integer_array_1[integer_array_1.size() - 1]);
+    BOOST_CHECK_EQUAL(integer_array_1.type_id_to_write(), TypeId::uint16_array);
+    BOOST_CHECK_EQUAL(max_uint16, integer_array_1[integer_array_1.size() - 1]);
 
-	int64_t max_uint32 = std::numeric_limits<uint32_t>::max();
-	integer_array_1.push_back(max_uint32);
+    int64_t max_uint32 = std::numeric_limits<uint32_t>::max();
+    integer_array_1.push_back(max_uint32);
 
-	BOOST_CHECK_EQUAL(integer_array_1.type_id_to_write(), TypeId::uint32_array);
-	BOOST_CHECK_EQUAL(max_uint32, integer_array_1[integer_array_1.size() - 1]);
+    BOOST_CHECK_EQUAL(integer_array_1.type_id_to_write(), TypeId::uint32_array);
+    BOOST_CHECK_EQUAL(max_uint32, integer_array_1[integer_array_1.size() - 1]);
 
-	int64_t max_uint64 = std::numeric_limits<uint64_t>::max();
-	integer_array_1.push_back(max_uint64);
+    int64_t max_uint64 = std::numeric_limits<uint64_t>::max();
+    integer_array_1.push_back(max_uint64);
 
-	BOOST_CHECK_EQUAL(integer_array_1.type_id_to_write(), TypeId::int64_array);
-	BOOST_CHECK_EQUAL(max_uint64, integer_array_1[integer_array_1.size() - 1]);
+    BOOST_CHECK_EQUAL(integer_array_1.type_id_to_write(), TypeId::int64_array);
+    BOOST_CHECK_EQUAL(max_uint64, integer_array_1[integer_array_1.size() - 1]);
 }
 
 BOOST_AUTO_TEST_CASE(test_number_array_integer_2)
@@ -84,31 +84,31 @@ BOOST_AUTO_TEST_CASE(test_number_array_integer_2)
     IntegerArray::VectorType vect;
     int64_t min_int8 = std::numeric_limits<int8_t>::min();
     int64_t max_int8 = std::numeric_limits<int8_t>::max();
-	vect.push_back (min_int8);
-	vect.push_back (max_int8);
+    vect.push_back (min_int8);
+    vect.push_back (max_int8);
     IntegerArray integer_array_1 (vect);
 
-	BOOST_CHECK_EQUAL(integer_array_1.type_id(), TypeId::integer_array);
-	BOOST_CHECK_EQUAL(integer_array_1.type_id_to_write(), TypeId::int8_array);
-	BOOST_CHECK_EQUAL(max_int8, integer_array_1[integer_array_1.size() - 1]);
+    BOOST_CHECK_EQUAL(integer_array_1.type_id(), TypeId::integer_array);
+    BOOST_CHECK_EQUAL(integer_array_1.type_id_to_write(), TypeId::int8_array);
+    BOOST_CHECK_EQUAL(max_int8, integer_array_1[integer_array_1.size() - 1]);
 
-	int64_t max_int16 = std::numeric_limits<int16_t>::max();
-	integer_array_1.push_back(max_int16);
+    int64_t max_int16 = std::numeric_limits<int16_t>::max();
+    integer_array_1.push_back(max_int16);
 
-	BOOST_CHECK_EQUAL(integer_array_1.type_id_to_write(), TypeId::int16_array);
-	BOOST_CHECK_EQUAL(max_int16, integer_array_1[integer_array_1.size() - 1]);
+    BOOST_CHECK_EQUAL(integer_array_1.type_id_to_write(), TypeId::int16_array);
+    BOOST_CHECK_EQUAL(max_int16, integer_array_1[integer_array_1.size() - 1]);
 
-	int64_t max_int32 = std::numeric_limits<int32_t>::max();
-	integer_array_1.push_back(max_int32);
+    int64_t max_int32 = std::numeric_limits<int32_t>::max();
+    integer_array_1.push_back(max_int32);
 
-	BOOST_CHECK_EQUAL(integer_array_1.type_id_to_write(), TypeId::int32_array);
-	BOOST_CHECK_EQUAL(max_int32, integer_array_1[integer_array_1.size() - 1]);
+    BOOST_CHECK_EQUAL(integer_array_1.type_id_to_write(), TypeId::int32_array);
+    BOOST_CHECK_EQUAL(max_int32, integer_array_1[integer_array_1.size() - 1]);
 
-	int64_t max_int64 = std::numeric_limits<int64_t>::max();
-	integer_array_1.push_back(max_int64);
+    int64_t max_int64 = std::numeric_limits<int64_t>::max();
+    integer_array_1.push_back(max_int64);
 
-	BOOST_CHECK_EQUAL(integer_array_1.type_id_to_write(), TypeId::int64_array);
-	BOOST_CHECK_EQUAL(max_int64, integer_array_1[integer_array_1.size() - 1]);
+    BOOST_CHECK_EQUAL(integer_array_1.type_id_to_write(), TypeId::int64_array);
+    BOOST_CHECK_EQUAL(max_int64, integer_array_1[integer_array_1.size() - 1]);
 }
 
 BOOST_AUTO_TEST_CASE(test_number_array_real_copyTo)

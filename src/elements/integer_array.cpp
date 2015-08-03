@@ -12,12 +12,12 @@ IntegerArray::clone() const
 }
 
 IntegerArray::IntegerArray()
-	: NumberArray<int64_t>()
+    : NumberArray<int64_t>()
 {
 }
 
 IntegerArray::IntegerArray(std::vector<int64_t> const& vector_to_copy)
-	: NumberArray<int64_t>(vector_to_copy)
+    : NumberArray<int64_t>(vector_to_copy)
 {
 }
 	
@@ -28,25 +28,25 @@ IntegerArray::~IntegerArray()
 IntegerArray&
 IntegerArray::as_integer_array()
 {
-	return *this;
+    return *this;
 }
 
 IntegerArray const&
 IntegerArray::as_integer_array() const
 {
-	return *this;
+    return *this;
 }
 
 TypeId::TypeId 
 IntegerArray::type_id() const
 {
-	return TypeId::integer_array;
+    return TypeId::integer_array;
 }
- 
+
 TypeId::TypeId 
 IntegerArray::type_id_to_write() const
 {
-	std::pair<DataType, DataType> range = data_range();
+    std::pair<DataType, DataType> range = data_range();
     return TypeId::best_integer_array(range.first, range.second);
 }
 

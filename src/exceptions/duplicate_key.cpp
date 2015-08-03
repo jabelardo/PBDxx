@@ -9,9 +9,9 @@ namespace
 std::string
 message(std::string const& where, std::string const& key)
 {
-	std::ostringstream oss;
+    std::ostringstream oss;
     oss << where << ": duplicate_key = '" << key << "'";
-	return oss.str();
+    return oss.str();
 }	
 }
 
@@ -28,7 +28,7 @@ DuplicateKey::~DuplicateKey() throw()
 std::string 
 DuplicateKey::key() const
 {
-	return key_;
+    return key_;
 }
 
 }

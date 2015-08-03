@@ -128,26 +128,26 @@ TypeId
 to_write(TypeId type, std::size_t size)
 {
     switch (type) {    	
-		case int8_array:
-		case uint8_array:
-		case int16_array:
-		case uint16_array:
-		case int32_array:
-		case uint32_array:
-		case int64_array:
-		case float_array:
-		case double_array:
-		case boolean_array:
-		case string_array:    
-		case element_array:
-		case element_map:
-		case string:
-		    if (size > 65535)
-		        return TypeId(type + 2);
-		    else if (size > 255)
-		        return TypeId(type + 1);
-	            
-		default: break;		        
+        case int8_array:
+        case uint8_array:
+        case int16_array:
+        case uint16_array:
+        case int32_array:
+        case uint32_array:
+        case int64_array:
+        case float_array:
+        case double_array:
+        case boolean_array:
+        case string_array:    
+        case element_array:
+        case element_map:
+        case string:
+            if (size > 65535)
+                return TypeId(type + 2);
+            else if (size > 255)
+                return TypeId(type + 1);
+
+        default: break;		        
 	}
 	return type;
 }

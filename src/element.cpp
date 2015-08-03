@@ -12,19 +12,19 @@ namespace PBD
 Element::ImplSharedPtr 
 Element::implementation()  
 {
-	if (!implementation_) throw std::runtime_error("Element::implementation() : implementation_ es nulo");
-	if (is_a_copy_) {
-		implementation_ = implementation_->clone();
-		is_a_copy_ = false;
-	}
-	return implementation_;
+    if (!implementation_) throw std::runtime_error("Element::implementation() : implementation_ es nulo");
+    if (is_a_copy_) {
+            implementation_ = implementation_->clone();
+            is_a_copy_ = false;
+    }
+    return implementation_;
 }
 
 Element::ImplSharedPtr 
 Element::implementation() const  
 {
-	if (!implementation_) throw std::runtime_error("Element::implementation() : implementation_ es nulo");
-	return implementation_;
+    if (!implementation_) throw std::runtime_error("Element::implementation() : implementation_ es nulo");
+    return implementation_;
 }
 
 Element::Element(Element const& e)
@@ -36,11 +36,11 @@ Element::Element(Element const& e)
 Element& 
 Element::operator=(Element const& e)
 {
-	if (this != &e) {
-		implementation_ = e.implementation_;
-		is_a_copy_ = true;
-	}
-	return *this;
+    if (this != &e) {
+        implementation_ = e.implementation_;
+        is_a_copy_ = true;
+    }
+    return *this;
 }
 
 Element::Element(ImplSharedPtr const& impl)
@@ -76,12 +76,12 @@ Element::clone() const
 void 
 Element::swap(Element& e)
 {
-	if (this != &e) {
-		implementation_.swap(e.implementation_);
-		bool this_is_a_copy = is_a_copy_;
-		is_a_copy_ = e.is_a_copy_;
-		e.is_a_copy_ = this_is_a_copy;
-	}
+    if (this != &e) {
+        implementation_.swap(e.implementation_);
+        bool this_is_a_copy = is_a_copy_;
+        is_a_copy_ = e.is_a_copy_;
+        e.is_a_copy_ = this_is_a_copy;
+    }
 }
 
 void 
@@ -112,61 +112,61 @@ Element::type_id_to_write() const
 ElementMap&
 Element::as_element_map() 
 { 
-	return implementation()->as_element_map();
+    return implementation()->as_element_map();
 }
 
 ElementMap const&
 Element::as_element_map() const 
 {  
-	return implementation()->as_element_map();
+    return implementation()->as_element_map();
 }
 
 ElementArray&
 Element::as_element_array() 
 {  
-	return implementation()->as_element_array();
+    return implementation()->as_element_array();
 }
 
 ElementArray const&
 Element::as_element_array() const 
 { 
-	return implementation()->as_element_array(); 
+    return implementation()->as_element_array(); 
 }
 
 StringArray& 
 Element::as_string_array() 
 { 
-	return implementation()->as_string_array(); 
+    return implementation()->as_string_array(); 
 }
 
 StringArray const& 
 Element::as_string_array() const 
 { 
-	return implementation()->as_string_array(); 
+    return implementation()->as_string_array(); 
 }
 
 IntegerArray&
 Element::as_integer_array() 
 { 
-	return implementation()->as_integer_array(); 
+    return implementation()->as_integer_array(); 
 }
 
 IntegerArray const&
 Element::as_integer_array() const 
 { 
-	return implementation()->as_integer_array(); 
+    return implementation()->as_integer_array(); 
 }
 
 RealArray&
 Element::as_real_array() 
 { 
-	return implementation()->as_real_array(); 
+    return implementation()->as_real_array(); 
 }
 
 RealArray const&
 Element::as_real_array() const 
 { 
-	return implementation()->as_real_array(); 
+    return implementation()->as_real_array(); 
 }
 
 BooleanArray&
@@ -184,61 +184,61 @@ Element::as_boolean_array() const
 String&
 Element::as_string() 
 { 
-	return implementation()->as_string(); 
+    return implementation()->as_string(); 
 }
 
 String const&
 Element::as_string() const 
 { 
-	return implementation()->as_string(); 
+    return implementation()->as_string(); 
 }
 
 Boolean& 
 Element::as_boolean() 
 { 
-	return implementation()->as_boolean(); 
+    return implementation()->as_boolean(); 
 }
 
 Boolean const& 
 Element::as_boolean() const 
 { 
-	return implementation()->as_boolean(); 
+    return implementation()->as_boolean(); 
 }
 
 Integer& 
 Element::as_integer() 
 { 
-	return implementation()->as_integer(); 
+    return implementation()->as_integer(); 
 }
 
 Integer const& 
 Element::as_integer() const 
 { 
-	return implementation()->as_integer(); 
+    return implementation()->as_integer(); 
 }
 
 Real& 
 Element::as_real() 
 { 
-	return implementation()->as_real(); 
+    return implementation()->as_real(); 
 }
 
 Real const& 
 Element::as_real() const 
 { 
-	return implementation()->as_real(); 
+    return implementation()->as_real(); 
 }
 
 Null& 
 Element::as_null() 
 { 
-	return implementation()->as_null(); 
+    return implementation()->as_null(); 
 }
 
 Null const& 
 Element::as_null() const 
 { 
-	return implementation()->as_null(); 
+    return implementation()->as_null(); 
 }
 
 Element 
@@ -423,21 +423,21 @@ Element::create(TypeId::TypeId type)
 std::ostream& operator<<(std::ostream& os, Element const& e)
 {
     TypeId::TypeId const type_id = e.type_id_to_write();    
-	if (os << Writer<uint8_t>(static_cast<uint8_t>(type_id))) {
-		e.write(os, type_id);
-	}
-	return os;
+    if (os << Writer<uint8_t>(static_cast<uint8_t>(type_id))) {
+        e.write(os, type_id);
+    }
+    return os;
 }
 
 std::istream& operator>>(std::istream& is, Element& e)
 {
-	uint8_t type_id_raw = TypeId::unknown;
-	if (is >> Reader<uint8_t>(type_id_raw)) {
-		TypeId::TypeId const type_id = TypeId::TypeId(type_id_raw);
-		e = Element::create(type_id);
-		e.read(is, type_id);
-	}
-	return is;
+    uint8_t type_id_raw = TypeId::unknown;
+    if (is >> Reader<uint8_t>(type_id_raw)) {
+        TypeId::TypeId const type_id = TypeId::TypeId(type_id_raw);
+        e = Element::create(type_id);
+        e.read(is, type_id);
+    }
+    return is;
 }
 
 }
