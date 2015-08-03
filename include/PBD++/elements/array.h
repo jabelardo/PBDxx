@@ -1,5 +1,5 @@
-#ifndef PBD_ARRAY_H_
-#define PBD_ARRAY_H_
+#ifndef PBDXX_ARRAY_H_
+#define PBDXX_ARRAY_H_
 
 namespace PBD
 {
@@ -7,17 +7,17 @@ namespace PBD
 template<typename T_data, typename T_datum>
 struct ArrayValidator
 {
-	ArrayValidator() {}
+    ArrayValidator() {}
 
-	ArrayValidator(T_data const&) {}
+    ArrayValidator(T_data const&) {}
 
-	void operator() (T_datum const&) {}
+    void operator() (T_datum const&) {}
 };
 
 template<typename T_data, typename T_datum>
 class Array
 {
-	typedef ArrayValidator<T_data, T_datum> Validator;
+    typedef ArrayValidator<T_data, T_datum> Validator;
 public:    
     T_data const& value() const 
     { 
@@ -25,8 +25,8 @@ public:
     }
     
     /**
- 	 * @throws std::invalid_argument
- 	 */
+    * @throws std::invalid_argument
+    */
     void  push_back(T_datum const& datum)
     {
     	validator_(datum);
@@ -52,9 +52,9 @@ protected:
     Array() {}
     
     Array(T_data const& data)
-		: validator_(data), data_(data)
-	{
-	}
+        : validator_(data), data_(data)
+    {
+    }
     
     ~Array() {}
     
@@ -64,4 +64,4 @@ protected:
 
 }
 
-#endif /*PBD_ARRAY_H_*/
+#endif /*PBDXX_ARRAY_H_*/

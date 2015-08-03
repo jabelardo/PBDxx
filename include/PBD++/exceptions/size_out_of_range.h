@@ -1,5 +1,5 @@
-#ifndef PBD_SIZE_OUT_OF_RANGE_H_
-#define PBD_SIZE_OUT_OF_RANGE_H_
+#ifndef PBDXX_SIZE_OUT_OF_RANGE_H_
+#define PBDXX_SIZE_OUT_OF_RANGE_H_
 
 #include <stdexcept>
 #include <PBD++/details/cstdint.h>
@@ -10,15 +10,15 @@ namespace PBD
 class SizeOutOfRange : public std::out_of_range
 {
 public:
-	SizeOutOfRange(std::string const& where, uint16_t size_wanted);
-	virtual ~SizeOutOfRange() throw();
-	
-	uint16_t size_wanted() const;
+    SizeOutOfRange(std::string const& where, uint16_t size_wanted);
+    virtual ~SizeOutOfRange() throw();
+
+    uint16_t size_wanted() const;
 
 private:
-	uint16_t size_wanted_;
+    uint16_t size_wanted_;
 };
 
 }
 
-#endif /*PBD_SIZE_OUT_OF_RANGE_H_*/
+#endif /*PBDXX_SIZE_OUT_OF_RANGE_H_*/

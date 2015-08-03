@@ -1,5 +1,5 @@
-#ifndef PBD_NULL_H_
-#define PBD_NULL_H_
+#ifndef PBDXX_NULL_H_
+#define PBDXX_NULL_H_
 
 #include <PBD++/elements/element_implementation.h>
 
@@ -9,7 +9,7 @@ namespace PBD
 class Null : public PBD::ElementImplementation
 {
 public:
-	virtual Null& as_null();
+    virtual Null& as_null();
     virtual Null const& as_null() const;
     virtual TypeId::TypeId type_id() const; 
     virtual TypeId::TypeId type_id_to_write() const;
@@ -23,4 +23,4 @@ public:
 
 }
 
-#endif /*PBD_NULL_H_*/
+#endif /*PBDXX_NULL_H_*/

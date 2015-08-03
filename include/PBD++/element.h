@@ -1,5 +1,5 @@
-#ifndef PBD_ELEMENT_H_
-#define PBD_ELEMENT_H_
+#ifndef PBDXX_ELEMENT_H_
+#define PBDXX_ELEMENT_H_
 
 #include <iosfwd>
 #include <string>
@@ -173,11 +173,12 @@ public:
     Null& as_null();
     Null const& as_null() const; 
     
-	/**
+    /**
      * Devuelve el "tipo fisico Real" del elemento al momento de escribirse.
      * @return un TypeId que identifica el tipo del elemento.
      */
-	TypeId::TypeId type_id_to_write() const;
+    TypeId::TypeId type_id_to_write() const;
+    
     /**
      * Metodo que difine la accion de leer de un stream de entrada.
      * @param is el stream de entrada de donde se leeran los datos.
@@ -205,9 +206,9 @@ public:
     void swap(Element& e);
 
 #ifndef PBD_UNIT_TEST_
-	private:    
+    private:    
 #else
-	public:
+    public:
 #endif /*PBD_UNIT_TEST_*/
 
     ImplSharedPtr implementation() const;
@@ -223,4 +224,4 @@ std::istream& operator>>(std::istream& is, Element& e);
 
 }
 
-#endif /*PBD_ELEMENT_H_*/
+#endif /*PBDXX_ELEMENT_H_*/

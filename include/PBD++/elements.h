@@ -1,5 +1,5 @@
-#ifndef PBD_ELEMENTS_H_
-#define PBD_ELEMENTS_H_
+#ifndef PBDXX_ELEMENTS_H_
+#define PBDXX_ELEMENTS_H_
 
 #include <PBD++/elements/string.h>
 #include <PBD++/elements/boolean.h>
@@ -14,4 +14,4 @@
 #include <PBD++/elements/element_array.h>
 #include <PBD++/elements/element_map.h>
 
-#endif /*PBD_ELEMENTS_H_*/
+#endif /*PBDXX_ELEMENTS_H_*/

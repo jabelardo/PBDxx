@@ -1,5 +1,5 @@
-#ifndef PBD_H_
-#define PBD_H_
+#ifndef PBDXX_H_
+#define PBDXX_H_
 
 #include <PBD++/details/endianess.h>
 
@@ -11,4 +11,4 @@
 
 #include <PBD++/pbdoc.h>
 
-#endif /*PBD_VALUE_ELEMENTS_H_*/
+#endif /*PBDXX_VALUE_ELEMENTS_H_*/

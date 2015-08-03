@@ -14,7 +14,7 @@ using namespace PBD;
 
 BOOST_AUTO_TEST_CASE(test_string_pbd)
 {
-	std::string const STRING = "12345"; 
+    std::string const STRING = "12345"; 
     Element string_1 = Element::create_string(STRING);
 
     std::vector<char> buffer;

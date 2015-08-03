@@ -1,5 +1,5 @@
-#ifndef PBD_BOOLEAN_H_
-#define PBD_BOOLEAN_H_
+#ifndef PBDXX_BOOLEAN_H_
+#define PBDXX_BOOLEAN_H_
 
 #include <PBD++/elements/element_implementation.h>
 
@@ -12,13 +12,13 @@ namespace PBD
 class Boolean : public PBD::ElementImplementation
 {
 public:
-	/**
-	 * Devuelve la data del elemento.
-	 * @return un bool que es una copia de la data del elemento.
-	 */
-	bool value() const;
+    /**
+     * Devuelve la data del elemento.
+     * @return un bool que es una copia de la data del elemento.
+     */
+    bool value() const;
 		
-	virtual Boolean& as_boolean();
+    virtual Boolean& as_boolean();
     virtual Boolean const& as_boolean() const;
     virtual TypeId::TypeId type_id() const;
     virtual TypeId::TypeId type_id_to_write() const;
@@ -35,4 +35,4 @@ private:
 
 }
 
-#endif /*PBD_BOOLEAN_H_*/
+#endif /*PBDXX_BOOLEAN_H_*/

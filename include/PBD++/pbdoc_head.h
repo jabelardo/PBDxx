@@ -1,5 +1,5 @@
-#ifndef PBD_PBDOC_HEAD_H_
-#define PBD_PBDOC_HEAD_H_
+#ifndef PBDXX_PBDOC_HEAD_H_
+#define PBDXX_PBDOC_HEAD_H_
 
 #include <bitset>
 #include <PBD++/streams.h>
@@ -51,34 +51,34 @@ public:
     PbDocHead();
     PbDocHead(Flags const& f);
     PbDocHead(PbDocHead const& h);
-	static PbDocHead createCompressed(uint32_t body_size);
-	static PbDocHead createUncompressed(uint32_t body_size);
-	~PbDocHead();
+    static PbDocHead createCompressed(uint32_t body_size);
+    static PbDocHead createUncompressed(uint32_t body_size);
+    ~PbDocHead();
 	
-	PbDocHead& operator=(PbDocHead const& h);
-  
-	void read(std::istream& is);
-	
-	void write(std::ostream& os) const;
+    PbDocHead& operator=(PbDocHead const& h);
+
+    void read(std::istream& is);
+
+    void write(std::ostream& os) const;
 	
     std::size_t flags_size();
     
     std::size_t body_size_size();   
 
-	uint32_t body_size() const;
+    uint32_t body_size() const;
 
-	uint8_t version() const;
+    uint8_t version() const;
 
-	Endianess::Endianess endianess() const;
+    Endianess::Endianess endianess() const;
 
     void clear();
 
     bool is_compressed() const;
     
 #ifndef PBD_UNIT_TEST_
-	private:    
+    private:    
 #else
-	public:
+    public:
 #endif /*PBD_UNIT_TEST_*/
 
     Flags flags_;
@@ -92,4 +92,4 @@ std::istream& operator>>(std::istream& is, PbDocHead& h);
 
 }
 
-#endif /*PBD_PBDOC_HEAD_H_*/
+#endif /*PBDXX_PBDOC_HEAD_H_*/

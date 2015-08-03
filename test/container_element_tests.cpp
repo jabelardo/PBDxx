@@ -11,14 +11,14 @@ using namespace PBD;
 
 BOOST_AUTO_TEST_CASE(test_string_array)
 {
-	Element element_0 = Element::create_string_array();
+    Element element_0 = Element::create_string_array();
     element_0.as_string_array().push_back("true");
     element_0.as_string_array().push_back("true");
     element_0.as_string_array().push_back("false");
     element_0.as_string_array().push_back("true");
     element_0.as_string_array().push_back("false");
 
-	std::vector<char> buffer;
+    std::vector<char> buffer;
     FilterOutStream out(buffer);
     out << element_0;
     out.flush(); 
@@ -31,7 +31,7 @@ BOOST_AUTO_TEST_CASE(test_string_array)
     
     BOOST_CHECK_EQUAL(string_vector.size(), 5U);
     if (!string_vector.empty()) {
-		BOOST_CHECK_EQUAL(string_vector[0], "true");
+        BOOST_CHECK_EQUAL(string_vector[0], "true");
     	BOOST_CHECK_EQUAL(string_vector[1], "true");
     	BOOST_CHECK_EQUAL(string_vector[2], "false");
     	BOOST_CHECK_EQUAL(string_vector[3], "true");
@@ -43,17 +43,17 @@ BOOST_AUTO_TEST_CASE(test_string_array)
 
 BOOST_AUTO_TEST_CASE(test_boolean_array)
 {
-	Element element_0 = Element::create_boolean_array();
-	element_0.as_boolean_array().push_back(true);
-	element_0.as_boolean_array().push_back(true);
-	element_0.as_boolean_array().push_back(false);
-	element_0.as_boolean_array().push_back(true);
-	element_0.as_boolean_array().push_back(false);
+    Element element_0 = Element::create_boolean_array();
+    element_0.as_boolean_array().push_back(true);
+    element_0.as_boolean_array().push_back(true);
+    element_0.as_boolean_array().push_back(false);
+    element_0.as_boolean_array().push_back(true);
+    element_0.as_boolean_array().push_back(false);
 	
-	boost::dynamic_bitset<> dynamic_bitset_0 = element_0.as_boolean_array().value();        
+    boost::dynamic_bitset<> dynamic_bitset_0 = element_0.as_boolean_array().value();        
     BOOST_CHECK_EQUAL(dynamic_bitset_0.size(), 5U);
 	
-	std::vector<char> buffer;
+    std::vector<char> buffer;
     FilterOutStream out(buffer);
     out << element_0;
     out.flush(); 
@@ -85,11 +85,11 @@ BOOST_AUTO_TEST_CASE(test_integer_array)
     int64_t const val_5 = std::numeric_limits<int64_t>::max();
            
     Element element_0 = Element::create_integer_array();
-	element_0.as_integer_array().push_back(val_1);
-	element_0.as_integer_array().push_back(val_2);
-	element_0.as_integer_array().push_back(val_3);
-	element_0.as_integer_array().push_back(val_4);
-	element_0.as_integer_array().push_back(val_5);
+    element_0.as_integer_array().push_back(val_1);
+    element_0.as_integer_array().push_back(val_2);
+    element_0.as_integer_array().push_back(val_3);
+    element_0.as_integer_array().push_back(val_4);
+    element_0.as_integer_array().push_back(val_5);
 	
     std::vector<char> buffer;
     FilterOutStream out(buffer);
@@ -172,11 +172,11 @@ BOOST_AUTO_TEST_CASE(test_real_array)
     double const val_5 = std::numeric_limits<double>::max();
            
     Element element_0 = Element::create_real_array();
-	element_0.as_real_array().push_back(val_1);
-	element_0.as_real_array().push_back(val_2);
-	element_0.as_real_array().push_back(val_3);
-	element_0.as_real_array().push_back(val_4);
-	element_0.as_real_array().push_back(val_5);
+    element_0.as_real_array().push_back(val_1);
+    element_0.as_real_array().push_back(val_2);
+    element_0.as_real_array().push_back(val_3);
+    element_0.as_real_array().push_back(val_4);
+    element_0.as_real_array().push_back(val_5);
 	
     std::vector<char> buffer;
     FilterOutStream out(buffer);

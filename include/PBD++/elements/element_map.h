@@ -1,5 +1,5 @@
-#ifndef PBD_ELEMENT_MAP_H_
-#define PBD_ELEMENT_MAP_H_
+#ifndef PBDXX_ELEMENT_MAP_H_
+#define PBDXX_ELEMENT_MAP_H_
 
 #include <PBD++/elements/element_implementation.h>
 #include <PBD++/element.h>
@@ -13,8 +13,8 @@ class ElementMap : public PBD::ElementImplementation
 {
 public:    
 
-	bool insert(std::string const& key, Element const& value);
-	bool insert(std::string const& key, ElementImplementation const& value);
+    bool insert(std::string const& key, Element const& value);
+    bool insert(std::string const& key, ElementImplementation const& value);
     bool insert(std::string const& key, ElementImplementation::SharedPtr const& value);
 	
     std::size_t size() const;
@@ -50,9 +50,9 @@ public:
     virtual SharedPtr clone() const;
     
 private:        
-	Data data_;    
+    Data data_;    
 };
 
 }
 
-#endif /*PBD_ELEMENT_MAP_H_*/
+#endif /*PBDXX_ELEMENT_MAP_H_*/

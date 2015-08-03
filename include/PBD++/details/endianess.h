@@ -1,5 +1,5 @@
-#ifndef PBD_ENDIANESS_H_
-#define PBD_ENDIANESS_H_
+#ifndef PBDXX_ENDIANESS_H_
+#define PBDXX_ENDIANESS_H_
 
 #include <boost/detail/endian.hpp>
 
@@ -30,4 +30,4 @@ enum Endianess
 }
 }
 
-#endif /*PBD_ENDIANESS_H_*/
+#endif /*PBDXX_ENDIANESS_H_*/

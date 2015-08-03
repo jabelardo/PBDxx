@@ -1,5 +1,5 @@
-#ifndef PBD_DYNAMIC_BITSET_H_
-#define PBD_DYNAMIC_BITSET_H_
+#ifndef PBDXX_DYNAMIC_BITSET_H_
+#define PBDXX_DYNAMIC_BITSET_H_
 
 #include <boost/dynamic_bitset.hpp>
 #include <vector>
@@ -34,4 +34,4 @@ from_uint8_vector(std::vector<uint8_t> const& array);
 
 }
 
-#endif /*PBD_DYNAMIC_BITSET_H_*/
+#endif /*PBDXX_DYNAMIC_BITSET_H_*/

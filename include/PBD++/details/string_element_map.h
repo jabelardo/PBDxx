@@ -1,5 +1,5 @@
-#ifndef PBD_STRING_ELEMENT_MAP_H_
-#define PBD_STRING_ELEMENT_MAP_H_
+#ifndef PBDXX_STRING_ELEMENT_MAP_H_
+#define PBDXX_STRING_ELEMENT_MAP_H_
 
 #if __cplusplus >= 201103L
 
@@ -33,4 +33,4 @@ namespace PBD
 
 #endif // __GNUC__ > 3
 	
-#endif /*PBD_STRING_ELEMENT_MAP_H_*/
+#endif /*PBDXX_STRING_ELEMENT_MAP_H_*/

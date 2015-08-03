@@ -1,5 +1,5 @@
-#ifndef PBD_STRING_H_
-#define PBD_STRING_H_
+#ifndef PBDXX_STRING_H_
+#define PBDXX_STRING_H_
 
 #include <PBD++/elements/element_implementation.h>
 #include <string>
@@ -14,20 +14,20 @@ namespace PBD
 class String : public PBD::ElementImplementation
 {
 public:	
-	/**
+    /**
      * Devuelve la data del elemento.
      * @return un std::string que es una copia de la data del elemento.
      */
     std::string value() const;
     
-	virtual String& as_string();
-	virtual String const& as_string() const;
-	virtual TypeId::TypeId type_id() const;		
-	virtual TypeId::TypeId type_id_to_write() const;
-	virtual void read(std::istream& is, TypeId::TypeId type);    
-	virtual void write(std::ostream& os, TypeId::TypeId type) const;
-	
-	String(std::string const& datum = "");
+    virtual String& as_string();
+    virtual String const& as_string() const;
+    virtual TypeId::TypeId type_id() const;		
+    virtual TypeId::TypeId type_id_to_write() const;
+    virtual void read(std::istream& is, TypeId::TypeId type);    
+    virtual void write(std::ostream& os, TypeId::TypeId type) const;
+
+    String(std::string const& datum = "");
     virtual ~String();
     virtual SharedPtr clone() const;
     
@@ -37,4 +37,4 @@ private:
 
 }
 
-#endif /*PBD_STRING_H_*/
+#endif /*PBDXX_STRING_H_*/

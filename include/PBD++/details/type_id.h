@@ -1,5 +1,5 @@
-#ifndef PBD_TYPE_ID_H_
-#define PBD_TYPE_ID_H_
+#ifndef PBDXX_TYPE_ID_H_
+#define PBDXX_TYPE_ID_H_
 
 #include <cstdlib>
 #include <PBD++/details/cstdint.h>
@@ -117,16 +117,16 @@ TypeId to_write(TypeId type, std::size_t size);
 
 TypeId from_read(TypeId type);
 
-TypeId  best_integer(int64_t val);
+TypeId best_integer(int64_t val);
 
-TypeId  best_integer_array(int64_t min, int64_t max);
+TypeId best_integer_array(int64_t min, int64_t max);
 
-TypeId  best_real(double val);
+TypeId best_real(double val);
 
-TypeId  best_real_array(double min, double max);
+TypeId best_real_array(double min, double max);
 
 } // namespace TypeId
 
 } // namespace PBD
 
-#endif /*PBD_TYPE_ID_H_*/
+#endif /*PBDXX_TYPE_ID_H_*/

@@ -1,5 +1,5 @@
-#ifndef PBD_EXCEPTIONS_H_
-#define PBD_EXCEPTIONS_H_
+#ifndef PBDXX_EXCEPTIONS_H_
+#define PBDXX_EXCEPTIONS_H_
 
 #include <PBD++/exceptions/bad_cast.h>
 #include <PBD++/exceptions/checksum_error.h>
@@ -8,4 +8,4 @@
 #include <PBD++/exceptions/parsing_error.h>
 #include <PBD++/exceptions/size_out_of_range.h>
 
-#endif /*PBD_EXCEPTIONS_H_*/
+#endif /*PBDXX_EXCEPTIONS_H_*/

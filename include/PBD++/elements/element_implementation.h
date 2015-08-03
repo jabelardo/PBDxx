@@ -1,5 +1,5 @@
-#ifndef PBD_ELEMENT_IMPLEMENTATION_H_
-#define PBD_ELEMENT_IMPLEMENTATION_H_
+#ifndef PBDXX_ELEMENT_IMPLEMENTATION_H_
+#define PBDXX_ELEMENT_IMPLEMENTATION_H_
 
 #include <PBD++/details/type_id.h>
 #include <PBD++/streams.h>
@@ -27,14 +27,14 @@ class Null;
 class ElementImplementation : boost::noncopyable
 {
 protected:
-	ElementImplementation();	
+    ElementImplementation();	
 	
 public:    
     static void destroy(ElementImplementation* e);
     
     virtual ~ElementImplementation() = 0;
     	
-	/**
+    /**
      * Devuelve el tipo del elemento.
      * @return un TypeId que identifica el tipo del elemento.
      */
@@ -128,7 +128,7 @@ public:
     virtual Null& as_null();
     virtual Null const& as_null() const;    
     
-	/**
+    /**
      * Devuelve el "tipo fisico Real" del elemento al momento de escribirse.
      * @return un TypeId que identifica el tipo del elemento.
      */
@@ -154,4 +154,4 @@ public:
 
 }
 
-#endif /*ELEMENT_IMPLEMENTATION_H_*/
+#endif /*PBDXX_ELEMENT_IMPLEMENTATION_H_*/

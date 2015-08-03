@@ -1,5 +1,5 @@
-#ifndef PBD_BAD_CAST_H_
-#define PBD_BAD_CAST_H_
+#ifndef PBDXX_BAD_CAST_H_
+#define PBDXX_BAD_CAST_H_
 
 #include <stdexcept>
 
@@ -9,10 +9,10 @@ namespace PBD
 class BadCast : public std::runtime_error
 {
 public:
-	BadCast(std::string const& what_arg);
-	virtual ~BadCast() throw();
+    BadCast(std::string const& what_arg);
+    virtual ~BadCast() throw();
 };
 
 }
 
-#endif /*PBD_BAD_CAST_H_*/
+#endif /*PBDXX_BAD_CAST_H_*/

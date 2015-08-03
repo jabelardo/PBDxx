@@ -1,5 +1,5 @@
-#ifndef PBD_PBDOC_H_
-#define PBD_PBDOC_H_
+#ifndef PBDXX_PBDOC_H_
+#define PBDXX_PBDOC_H_
 
 #include <iosfwd>
 #include <PBD++/pbdoc_head.h>
@@ -77,16 +77,16 @@ public:
     
     std::size_t body_size() const;
     
-	/**
-	 * @throws PBD::ParsingError
-	 */      
+    /**
+     * @throws PBD::ParsingError
+     */      
     std::istream& read_body(std::istream& is);
     
     std::size_t checksum_size() const;
 
-	/**
-	 * @throws PBD::ParsingError
-	 */      
+    /**
+     * @throws PBD::ParsingError
+     */      
     std::istream& read_checksum(std::istream& is);
     
     /**
@@ -99,12 +99,12 @@ public:
     
     uint16_t crc_ccitt() const;
 
-	std::size_t buffer_size() const;
+    std::size_t buffer_size() const;
     
 #ifndef PBD_UNIT_TEST_
-	private:    
+    private:    
 #else
-	public:
+    public:
 #endif /*PBD_UNIT_TEST_*/
 
     PbDocHead head_;
@@ -116,4 +116,4 @@ public:
 	
 }
 
-#endif /*PBD_PBDOC_H_*/
+#endif /*PBDXX_PBDOC_H_*/

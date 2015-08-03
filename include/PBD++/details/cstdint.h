@@ -1,5 +1,5 @@
-#ifndef PBD_CSTDINT_H_
-#define PBD_CSTDINT_H_
+#ifndef PBDXX_CSTDINT_H_
+#define PBDXX_CSTDINT_H_
 
 #include <boost/cstdint.hpp>
 
@@ -17,4 +17,4 @@ using boost::int64_t;
 
 } // namespace PBD
 
-#endif /*PBD_CSTDINT_H_*/
+#endif /*PBDXX_CSTDINT_H_*/

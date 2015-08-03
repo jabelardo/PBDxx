@@ -1,5 +1,5 @@
-#ifndef PBD_STREAMS_H_
-#define PBD_STREAMS_H_
+#ifndef PBDXX_STREAMS_H_
+#define PBDXX_STREAMS_H_
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -27,7 +27,7 @@ namespace PBD
 class FilterOutStream : public boost::iostreams::filtering_ostream 
 {	
 public:
-	FilterOutStream(std::vector<char>& buffer);
+    FilterOutStream(std::vector<char>& buffer);
 };	
 
 //-----------------------------------------------------------------------------
@@ -35,10 +35,10 @@ public:
 class FilterInStream : public boost::iostreams::filtering_istream  
 {
 public:    
-	FilterInStream(std::vector<char> const& buffer);
-	
-	void endianess(Endianess::Endianess endianess);
-	Endianess::Endianess endianess() const;
+    FilterInStream(std::vector<char> const& buffer);
+
+    void endianess(Endianess::Endianess endianess);
+    Endianess::Endianess endianess() const;
 	
 private:
     Endianess::Endianess endianess_;
@@ -49,14 +49,14 @@ private:
 class VectorCharSink : public boost::iostreams::sink
 {
 public:
-	VectorCharSink(std::vector<char>& buffer);
+    VectorCharSink(std::vector<char>& buffer);
 
     std::streamsize write(const char* s, std::streamsize n);
 
 private:
     std::vector<char>& buffer_;
 
-	VectorCharSink& operator=(VectorCharSink const&);
+    VectorCharSink& operator=(VectorCharSink const&);
 };
 
 //-----------------------------------------------------------------------------
@@ -64,14 +64,14 @@ private:
 class VectorCharSource : public boost::iostreams::source
 {
 public:
-	VectorCharSource(std::vector<char>& buffer);
+    VectorCharSource(std::vector<char>& buffer);
     
     std::streamsize read(char* s, std::streamsize n);
     
 private:
     std::vector<char>& buffer_;
 
-	VectorCharSource& operator=(VectorCharSource const&);
+    VectorCharSource& operator=(VectorCharSource const&);
 };
 
 //-----------------------------------------------------------------------------
@@ -82,4 +82,4 @@ typedef boost::iostreams::stream<VectorCharSource> InVectorCharStream;
 
 }
 
-#endif /*PBD_STREAMS_H_*/
+#endif /*PBDXX_STREAMS_H_*/
