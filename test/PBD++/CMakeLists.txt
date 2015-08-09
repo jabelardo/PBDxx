@@ -2,7 +2,7 @@ project(PBD++_test)
 
 set(EXE_NAME PBD++_test)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../include)
 
 set(SOURCE_FILES
     container_element_tests.cpp

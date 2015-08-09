@@ -82,8 +82,8 @@ from_read(TypeId type)
         case string_three_bytes:
             return string;
 
-		default:
-			return type;
+        default:
+                return type;
 	}
 }
 

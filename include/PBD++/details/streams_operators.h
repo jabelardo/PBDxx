@@ -149,7 +149,7 @@ std::ostream& operator<<(std::ostream& os, VectorWriter<T> const& w)
     os << Writer<uint16_t>(static_cast<uint16_t>(w.vector_.size()));
 
     if (w.vector_.size() > 0) {    
-            os << ArrayWriter<T>(&w.vector_[0], w.vector_.size());
+        os << ArrayWriter<T>(&w.vector_[0], w.vector_.size());
     }
     return os;
 }
@@ -173,8 +173,8 @@ std::istream& operator>>(std::istream& is, VectorReader<T> r)
     uint16_t size = 0;
     is >> Reader<uint16_t>(size);
     if (size > 0) {
-            r.vector_.resize(size);
-            is >> ArrayReader<T>(&r.vector_[0], r.vector_.size());
+        r.vector_.resize(size);
+        is >> ArrayReader<T>(&r.vector_[0], r.vector_.size());
     }
     return is;
 }
