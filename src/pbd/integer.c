@@ -16,6 +16,9 @@ static int integer_to_buffer(const pbd_element* e, char** buffer, size_t* size) 
     pbd_integer* s = (pbd_integer*) &(*e);
     uint8_t type_id = pbd_type_best_integer(s->value);   
     size_t sizeof_value = pbd_sizeof_integer_value(type_id);
+    if (sizeof_value == 0) {
+        return -1;
+    }
     uint16_t full_size = SIZEOF_TYPE_ID + sizeof_value;
     *buffer = malloc(full_size);
     if (*buffer == NULL) {
@@ -45,8 +48,11 @@ static int integer_from_buffer(struct pbd_element* e, const char* buffer,
     assert(read_bytes != NULL);
     assert(type_id != pbd_type_unknown);
     assert(e->vtable->type == integer_vtable.type);
-    buffer += *read_bytes;
     size_t sizeof_value = pbd_sizeof_integer_value(type_id);
+    if (sizeof_value == 0) {
+        return -1;
+    }
+    buffer += *read_bytes;
     int64_t value;
     if (sizeof_value == sizeof(int8_t)) {
         int8_t tmp_value;

@@ -44,6 +44,9 @@ static int real_array_to_buffer(const pbd_element* e, char** buffer, size_t* siz
             s->size);
     size_t sizeof_array_size = pbd_sizeof_array_size_by_value(s->size);
     size_t sizeof_value = pbd_sizeof_real_array_value(type_id);
+    if (sizeof_value == 0) {
+        return -1;
+    }
     size_t full_size = SIZEOF_TYPE_ID + sizeof_array_size + sizeof_value * s->size;
     *buffer = malloc(full_size);
     if (*buffer == NULL) {
@@ -72,8 +75,11 @@ static int real_array_from_buffer(struct pbd_element* e, const char* buffer,
     assert(read_bytes != NULL);
     assert(type_id != pbd_type_unknown);
     assert(e->vtable->type == real_array_vtable.type);
-    buffer += *read_bytes;
     size_t sizeof_value = pbd_sizeof_real_array_value(type_id);
+    if (sizeof_value == 0) {
+        return -1;
+    }
+    buffer += *read_bytes;
     size_t sizeof_array_size = pbd_sizeof_array_size_by_type(type_id);
     uint32_t size = pbd_read_array_size(buffer, sizeof_array_size);
     for (int i = 0; i < size; ++i) {

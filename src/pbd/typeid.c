@@ -1,11 +1,10 @@
 #include <float.h>
-#include <assert.h>
+#include <errno.h>
 
 #include "typeid.h"
 #include "arrayutils.h"
 
 pbd_type_id pbd_type_from_read(pbd_type_id type_id) {
-    assert(type_id != pbd_type_unknown);
     switch (type_id) {
         case pbd_type_int8_array_one_byte:
         case pbd_type_int8_array_two_bytes:
@@ -73,7 +72,6 @@ pbd_type_id pbd_type_from_read(pbd_type_id type_id) {
 }
 
 pbd_type_id pbd_type_to_write(pbd_type_id type_id, size_t size) {
-    assert(type_id != pbd_type_unknown);
     switch (type_id) {
         case pbd_type_int8_array:
         case pbd_type_uint8_array:
@@ -151,7 +149,6 @@ pbd_type_id pbd_type_best_integer_array(int64_t min, int64_t max) {
 }
 
 size_t pbd_sizeof_integer_value(pbd_type_id type_id) {
-    assert(type_id != pbd_type_unknown);
     switch(type_id) {
         case pbd_type_int8_scalar:
         case pbd_type_uint8_scalar:
@@ -169,12 +166,12 @@ size_t pbd_sizeof_integer_value(pbd_type_id type_id) {
             return sizeof(int64_t);
             
         default:
+            errno = EINVAL;
             return 0;
     }
 }
 
 size_t pbd_sizeof_real_value(pbd_type_id type_id) {
-    assert(type_id != pbd_type_unknown);
     switch(type_id) {
         case pbd_type_float_scalar:
             return sizeof(float);
@@ -183,12 +180,12 @@ size_t pbd_sizeof_real_value(pbd_type_id type_id) {
             return sizeof(double);
             
         default:
+            errno = EINVAL;
             return 0;
     }
 }
 
 size_t pbd_sizeof_real_array_value(pbd_type_id type_id) {
-    assert(type_id != pbd_type_unknown);
     switch(type_id) {
         case pbd_type_float_array_one_byte:
         case pbd_type_float_array_two_bytes:
@@ -201,12 +198,12 @@ size_t pbd_sizeof_real_array_value(pbd_type_id type_id) {
             return sizeof(double);
             
         default:
+            errno = EINVAL;
             return 0;
     }
 }
 
 size_t pbd_sizeof_integer_array_value(pbd_type_id type_id) {
-    assert(type_id != pbd_type_unknown);
     switch(type_id) {
         case pbd_type_int8_array_one_byte:
         case pbd_type_uint8_array_one_byte:
@@ -224,7 +221,6 @@ size_t pbd_sizeof_integer_array_value(pbd_type_id type_id) {
         case pbd_type_uint16_array_four_bytes:
             return sizeof(int16_t);
             
-            
         case pbd_type_int32_array_one_byte:
         case pbd_type_uint32_array_one_byte:
         case pbd_type_int32_array_two_bytes:
@@ -233,19 +229,18 @@ size_t pbd_sizeof_integer_array_value(pbd_type_id type_id) {
         case pbd_type_uint32_array_four_bytes:
             return sizeof(int32_t);
             
-            
         case pbd_type_int64_array_one_byte:
         case pbd_type_int64_array_two_bytes:
         case pbd_type_int64_array_four_bytes:
             return sizeof(int64_t);
                         
         default:
+            errno = EINVAL;
             return 0;
     }
 }
 
 bool pbd_is_unsigned(pbd_type_id type_id) {
-    assert(type_id != pbd_type_unknown);
     switch (type_id) {
         case pbd_type_uint8_scalar:
         case pbd_type_uint16_scalar:

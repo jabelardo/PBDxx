@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <errno.h>
 
 #include <pbd/pbd.h>
 
@@ -33,7 +34,6 @@ int pbd_element_to_buffer(pbd_element* e, char** buffer, size_t* size) {
 }
 
 pbd_element* pbd_element_new(pbd_type type) {
-    assert(type != pbd_unknown_type);
     switch (type) {
         case pbd_bool_type: 
             return pbd_bool_new();
@@ -63,6 +63,7 @@ pbd_element* pbd_element_new(pbd_type type) {
             return pbd_string_new();
             
         default:
+            errno = EINVAL;
             return NULL;
     }
 }
@@ -144,6 +145,7 @@ pbd_element* pbd_element_from_buffer(const char* buffer, size_t* read_bytes) {
             return e;
         }
         default: 
+            errno = EINVAL;
             return NULL;
     }
 }
