@@ -15,3 +15,6 @@ target_link_libraries(number_array_tests pbd ${CMOCKA_LIBRARY})
 
 add_executable(single_element_tests single_element_tests.c)
 target_link_libraries(single_element_tests pbd ${CMOCKA_LIBRARY})
+
+add_executable(general_tests general_tests.c)
+target_link_libraries(general_tests pbd ${CMOCKA_LIBRARY})
