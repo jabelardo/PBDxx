@@ -75,7 +75,7 @@ static int integer_from_buffer(struct pbd_element* e, const char* buffer,
 }
 
 static struct pbd_element_vtable integer_vtable = {
-    pbd_integer_type, integer_to_buffer, integer_from_buffer, NULL
+    pbd_type_integer, integer_to_buffer, integer_from_buffer, NULL
 };
 
 pbd_element* pbd_integer_new() {

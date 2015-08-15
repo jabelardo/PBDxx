@@ -37,23 +37,23 @@ void test_pbd_element_array_single_element_childs(void **state) {
     pbd_element* e2 = pbd_element_from_buffer(buffer, &read_bytes);
     assert_non_null(e2);
     assert_int_equal(size, read_bytes);
-    assert_int_equal(pbd_element_type(e2), pbd_element_array_type);
+    assert_int_equal(pbd_element_type(e2), pbd_type_element_array);
     
     assert_int_equal(pbd_element_array_size(e2), 14);
-    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[0]), pbd_null_type);
-    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[1]), pbd_bool_type);
-    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[2]), pbd_bool_type);
-    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[3]), pbd_null_type);
-    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[4]), pbd_integer_type);
-    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[5]), pbd_integer_type);
-    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[6]), pbd_integer_type);
-    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[7]), pbd_integer_type);
-    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[8]), pbd_null_type);
-    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[9]), pbd_real_type);
-    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[10]), pbd_real_type);
-    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[11]), pbd_null_type);
-    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[12]), pbd_string_type);
-    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[13]), pbd_null_type);
+    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[0]), pbd_type_null);
+    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[1]), pbd_type_bool);
+    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[2]), pbd_type_bool);
+    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[3]), pbd_type_null);
+    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[4]), pbd_type_integer);
+    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[5]), pbd_type_integer);
+    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[6]), pbd_type_integer);
+    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[7]), pbd_type_integer);
+    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[8]), pbd_type_null);
+    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[9]), pbd_type_real);
+    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[10]), pbd_type_real);
+    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[11]), pbd_type_null);
+    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[12]), pbd_type_string);
+    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[13]), pbd_type_null);
     
     assert_int_equal(pbd_bool_get(pbd_element_array_values(e2)[1]), true);
     assert_int_equal(pbd_bool_get(pbd_element_array_values(e2)[2]), false);
@@ -115,12 +115,12 @@ void test_pbd_element_array_single_element_array_childs(void **state) {
     pbd_element* e2 = pbd_element_from_buffer(buffer, &read_bytes);
     assert_non_null(e2);
     assert_int_equal(size, read_bytes);
-    assert_int_equal(pbd_element_type(e2), pbd_element_array_type);
+    assert_int_equal(pbd_element_type(e2), pbd_type_element_array);
     
     assert_int_equal(pbd_element_array_size(e2), 3);
-    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[0]), pbd_bool_array_type);
-    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[1]), pbd_integer_array_type);
-    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[2]), pbd_real_array_type);
+    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[0]), pbd_type_bool_array);
+    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[1]), pbd_type_integer_array);
+    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[2]), pbd_type_real_array);
     
     assert_int_equal(pbd_bool_array_size(pbd_element_array_values(e2)[0]), 11);
     assert_int_equal(pbd_bool_array_values(pbd_element_array_values(e2)[0])[0], false);
@@ -194,34 +194,34 @@ void test_pbd_element_array_element_array_childs(void **state) {
     pbd_element* ne = pbd_element_from_buffer(buffer, &read_bytes);
     assert_non_null(ne);
     assert_int_equal(size, read_bytes);
-    assert_int_equal(pbd_element_type(ne), pbd_element_array_type);
+    assert_int_equal(pbd_element_type(ne), pbd_type_element_array);
     
     assert_int_equal(pbd_element_array_size(ne), 6);
-    assert_int_equal(pbd_element_type(pbd_element_array_values(ne)[0]), pbd_element_array_type);
-    assert_int_equal(pbd_element_type(pbd_element_array_values(ne)[1]), pbd_element_array_type);
-    assert_int_equal(pbd_element_type(pbd_element_array_values(ne)[2]), pbd_null_type);
-    assert_int_equal(pbd_element_type(pbd_element_array_values(ne)[3]), pbd_bool_type);
-    assert_int_equal(pbd_element_type(pbd_element_array_values(ne)[4]), pbd_integer_type);
-    assert_int_equal(pbd_element_type(pbd_element_array_values(ne)[5]), pbd_real_type);
+    assert_int_equal(pbd_element_type(pbd_element_array_values(ne)[0]), pbd_type_element_array);
+    assert_int_equal(pbd_element_type(pbd_element_array_values(ne)[1]), pbd_type_element_array);
+    assert_int_equal(pbd_element_type(pbd_element_array_values(ne)[2]), pbd_type_null);
+    assert_int_equal(pbd_element_type(pbd_element_array_values(ne)[3]), pbd_type_bool);
+    assert_int_equal(pbd_element_type(pbd_element_array_values(ne)[4]), pbd_type_integer);
+    assert_int_equal(pbd_element_type(pbd_element_array_values(ne)[5]), pbd_type_real);
     assert_int_equal(pbd_bool_get(pbd_element_array_values(ne)[3]), true);
     assert_int_equal(pbd_integer_get(pbd_element_array_values(ne)[4]), INT8_MAX/2);
     assert_true(pbd_real_get(pbd_element_array_values(ne)[5]) == FLT_MAX/2.0f);
     
     const pbd_element* ne1 = pbd_element_array_values(ne)[0];
     assert_int_equal(pbd_element_array_size(ne1), 3);
-    assert_int_equal(pbd_element_type(pbd_element_array_values(ne1)[0]), pbd_element_array_type);
-    assert_int_equal(pbd_element_type(pbd_element_array_values(ne1)[1]), pbd_null_type);
-    assert_int_equal(pbd_element_type(pbd_element_array_values(ne1)[2]), pbd_bool_array_type);
+    assert_int_equal(pbd_element_type(pbd_element_array_values(ne1)[0]), pbd_type_element_array);
+    assert_int_equal(pbd_element_type(pbd_element_array_values(ne1)[1]), pbd_type_null);
+    assert_int_equal(pbd_element_type(pbd_element_array_values(ne1)[2]), pbd_type_bool_array);
     
     const pbd_element* ne1_1 = pbd_element_array_values(ne1)[0];
     assert_int_equal(pbd_element_array_size(ne1_1), 2);
-    assert_int_equal(pbd_element_type(pbd_element_array_values(ne1_1)[0]), pbd_null_type);
-    assert_int_equal(pbd_element_type(pbd_element_array_values(ne1_1)[1]), pbd_integer_array_type);
+    assert_int_equal(pbd_element_type(pbd_element_array_values(ne1_1)[0]), pbd_type_null);
+    assert_int_equal(pbd_element_type(pbd_element_array_values(ne1_1)[1]), pbd_type_integer_array);
     
     const pbd_element* ne2 = pbd_element_array_values(ne)[1];
     assert_int_equal(pbd_element_array_size(ne2), 2);
-    assert_int_equal(pbd_element_type(pbd_element_array_values(ne2)[0]), pbd_null_type);
-    assert_int_equal(pbd_element_type(pbd_element_array_values(ne2)[1]), pbd_real_array_type);
+    assert_int_equal(pbd_element_type(pbd_element_array_values(ne2)[0]), pbd_type_null);
+    assert_int_equal(pbd_element_type(pbd_element_array_values(ne2)[1]), pbd_type_real_array);
     
     const pbd_element* nba = pbd_element_array_values(ne1)[2];
     assert_int_equal(pbd_bool_array_values(nba)[0], false);

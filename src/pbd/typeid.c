@@ -85,9 +85,9 @@ pbd_type_id pbd_type_to_write(pbd_type_id type_id, size_t size) {
         case pbd_type_bool_array:
         case pbd_type_element_array:
         case pbd_type_string:
-            if (size > 65535) {
+            if (size > UINT16_MAX) {
                 return type_id + 2;
-            } else if (size > 255) {
+            } else if (size > UINT8_MAX) {
                 return type_id + 1;
             }
         default: break;

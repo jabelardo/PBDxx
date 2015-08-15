@@ -43,7 +43,7 @@ static int bool_from_buffer(struct pbd_element* e, const char* buffer,
 }
 
 static struct pbd_element_vtable bool_vtable = {
-    pbd_bool_type, bool_to_buffer, bool_from_buffer, NULL
+    pbd_type_bool, bool_to_buffer, bool_from_buffer, NULL
 };
 
 pbd_element* pbd_bool_new() {

@@ -6,9 +6,9 @@
 #include "element.h"
 
 pbd_array_size_bytes pbd_sizeof_array_size_by_value(size_t size) {
-    if (size > 65535) {
+    if (size > UINT16_MAX) {
         return pbd_four_bytes;
-    } else if (size > 255) {
+    } else if (size > UINT8_MAX) {
         return pbd_two_bytes;
     } else {
         return pbd_one_byte;

@@ -58,7 +58,7 @@ static void string_free(const pbd_element* e) {
 }
 
 static struct pbd_element_vtable string_vtable = {
-    pbd_string_type, string_to_buffer, string_from_buffer, string_free
+    pbd_type_string, string_to_buffer, string_from_buffer, string_free
 };
 
 pbd_element* pbd_string_new() {

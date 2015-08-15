@@ -103,7 +103,7 @@ static void bool_array_free(const pbd_element* e) {
 }
 
 static struct pbd_element_vtable bool_array_vtable = {
-    pbd_bool_array_type, bool_array_to_buffer, bool_from_buffer, bool_array_free
+    pbd_type_bool_array, bool_array_to_buffer, bool_from_buffer, bool_array_free
 };
 
 pbd_element* pbd_bool_array_new() {

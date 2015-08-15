@@ -28,7 +28,7 @@ void test_pbd_bool_array_one_byte_size(void **state) {
     pbd_element* element_2 = pbd_element_from_buffer(buffer, &read_bytes);
     assert_int_equal(size, read_bytes);
     assert_non_null(element_2);
-    assert_int_equal(pbd_element_type(element_2), pbd_bool_array_type);
+    assert_int_equal(pbd_element_type(element_2), pbd_type_bool_array);
     assert_int_equal(pbd_bool_array_size(element_2), n_elem);
     for (int i = 0; i < n_elem; ++i) {
         assert_int_equal(pbd_bool_array_values(element_2)[i], i % 3 != 0);
@@ -60,7 +60,7 @@ void test_pbd_bool_array_two_bytes_size(void **state) {
     pbd_element* element_2 = pbd_element_from_buffer(buffer, &read_bytes);
     assert_int_equal(size, read_bytes);
     assert_non_null(element_2);
-    assert_int_equal(pbd_element_type(element_2), pbd_bool_array_type);
+    assert_int_equal(pbd_element_type(element_2), pbd_type_bool_array);
     assert_int_equal(pbd_bool_array_size(element_2), n_elem);
     for (int i = 0; i < n_elem; ++i) {
         assert_int_equal(pbd_bool_array_values(element_2)[i], i % 3 != 0);
@@ -92,7 +92,7 @@ void test_pbd_bool_array_four_bytes_size(void **state) {
     pbd_element* element_2 = pbd_element_from_buffer(buffer, &read_bytes);
     assert_int_equal(size, read_bytes);
     assert_non_null(element_2);
-    assert_int_equal(pbd_element_type(element_2), pbd_bool_array_type);
+    assert_int_equal(pbd_element_type(element_2), pbd_type_bool_array);
     assert_int_equal(pbd_bool_array_size(element_2), n_elem);
     for (int i = 0; i < n_elem; ++i) {
         assert_int_equal(pbd_bool_array_values(element_2)[i], i % 3 != 0);

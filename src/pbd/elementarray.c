@@ -103,7 +103,7 @@ static void element_array_free(const pbd_element* e) {
 }
 
 static struct pbd_element_vtable element_array_vtable = {
-    pbd_element_array_type, element_array_to_buffer, element_array_from_buffer, 
+    pbd_type_element_array, element_array_to_buffer, element_array_from_buffer, 
     element_array_free
 };
 

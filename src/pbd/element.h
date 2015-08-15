@@ -24,7 +24,7 @@ extern "C" {
 struct pbd_element;
     
 typedef struct pbd_element_vtable {
-    const pbd_type type;
+    const pbd_type_id type;
     int (*to_buffer)(const struct pbd_element* e, char** buffer, size_t* size);
     int (*from_buffer)(struct pbd_element* e, const char* buffer, pbd_type_id type_id,  size_t* read_bytes);
     void (*free)(const struct pbd_element* e);

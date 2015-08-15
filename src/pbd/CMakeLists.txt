@@ -13,6 +13,7 @@ set(SOURCE_FILES
     integer.c
     integerarray.c
     null.c
+    pbddoc.c
     real.c
     realarray.c
     string.c

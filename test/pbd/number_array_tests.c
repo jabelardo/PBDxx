@@ -15,7 +15,7 @@ void test_real_array_to_buffer_float(void **state) {
     pbd_real_array_add(element_1, min);
     pbd_real_array_add(element_1, max);
 
-    assert_int_equal(pbd_element_type(element_1), pbd_real_array_type);
+    assert_int_equal(pbd_element_type(element_1), pbd_type_real_array);
     assert_int_equal(pbd_real_array_size(element_1), 2);
     assert_int_equal(pbd_real_array_values(element_1)[0], min);
     assert_int_equal(pbd_real_array_values(element_1)[1], max);
@@ -30,7 +30,7 @@ void test_real_array_to_buffer_float(void **state) {
     pbd_element* element_2 = pbd_element_from_buffer(buffer, &read_bytes);
     assert_non_null(element_2);
     assert_int_equal(size, read_bytes);
-    assert_int_equal(pbd_element_type(element_2), pbd_real_array_type);
+    assert_int_equal(pbd_element_type(element_2), pbd_type_real_array);
     assert_int_equal(pbd_real_array_size(element_2), 2);
     assert_int_equal(pbd_real_array_values(element_2)[0], min);
     assert_int_equal(pbd_real_array_values(element_2)[1], max);
@@ -47,7 +47,7 @@ void test_real_array_to_buffer_double(void **state) {
     pbd_real_array_add(element_1, min);
     pbd_real_array_add(element_1, max);
 
-    assert_int_equal(pbd_element_type(element_1), pbd_real_array_type);
+    assert_int_equal(pbd_element_type(element_1), pbd_type_real_array);
     assert_int_equal(pbd_real_array_size(element_1), 2);
     assert_int_equal(pbd_real_array_values(element_1)[0], min);
     assert_int_equal(pbd_real_array_values(element_1)[1], max);
@@ -62,7 +62,7 @@ void test_real_array_to_buffer_double(void **state) {
     pbd_element* element_2 = pbd_element_from_buffer(buffer, &read_bytes);
     assert_non_null(element_2);
     assert_int_equal(size, read_bytes);
-    assert_int_equal(pbd_element_type(element_2), pbd_real_array_type);
+    assert_int_equal(pbd_element_type(element_2), pbd_type_real_array);
     assert_int_equal(pbd_real_array_size(element_2), 2);
     assert_int_equal(pbd_real_array_values(element_2)[0], min);
     assert_int_equal(pbd_real_array_values(element_2)[1], max);
@@ -80,7 +80,7 @@ void test_real_array_two_bytes(void **state) {
         pbd_real_array_add(element_1, num);
         num /= -2;
     }
-    assert_int_equal(pbd_element_type(element_1), pbd_real_array_type);
+    assert_int_equal(pbd_element_type(element_1), pbd_type_real_array);
     assert_int_equal(pbd_real_array_size(element_1), 256);
 
     char *buffer = NULL;
@@ -93,7 +93,7 @@ void test_real_array_two_bytes(void **state) {
     pbd_element* element_2 = pbd_element_from_buffer(buffer, &read_bytes);
     assert_non_null(element_2);
     assert_int_equal(size, read_bytes);
-    assert_int_equal(pbd_element_type(element_2), pbd_real_array_type);
+    assert_int_equal(pbd_element_type(element_2), pbd_type_real_array);
     assert_int_equal(pbd_real_array_size(element_2), 256);
 
     for (int i = 0; i < 256; ++i) {
@@ -155,7 +155,7 @@ void test_integer_array_to_buffer_int8_one_byte(void **state) {
     assert_int_equal(pbd_integer_array_size(element_1), 2);
     assert_int_equal(pbd_integer_array_values(element_1)[0], min);
     assert_int_equal(pbd_integer_array_values(element_1)[1], max);
-    assert_int_equal(pbd_element_type(element_1), pbd_integer_array_type);
+    assert_int_equal(pbd_element_type(element_1), pbd_type_integer_array);
 
     char *buffer = NULL;
     size_t size;
@@ -167,7 +167,7 @@ void test_integer_array_to_buffer_int8_one_byte(void **state) {
     pbd_element* element_2 = pbd_element_from_buffer(buffer, &read_bytes);
     assert_non_null(element_2);
     assert_int_equal(size, read_bytes);
-    assert_int_equal(pbd_element_type(element_2), pbd_integer_array_type);
+    assert_int_equal(pbd_element_type(element_2), pbd_type_integer_array);
     assert_int_equal(pbd_integer_array_size(element_2), 2);
     assert_int_equal(pbd_integer_array_values(element_2)[0], min);
     assert_int_equal(pbd_integer_array_values(element_2)[1], max);
@@ -185,7 +185,7 @@ void test_integer_array_to_buffer_int8_two_bytes(void **state) {
         pbd_integer_array_add(element_1, num);
         num /= -2;
     }
-    assert_int_equal(pbd_element_type(element_1), pbd_integer_array_type);
+    assert_int_equal(pbd_element_type(element_1), pbd_type_integer_array);
     assert_int_equal(pbd_integer_array_size(element_1), 256);
 
     char *buffer = NULL;
@@ -198,7 +198,7 @@ void test_integer_array_to_buffer_int8_two_bytes(void **state) {
     pbd_element* element_2 = pbd_element_from_buffer(buffer, &read_bytes);
     assert_non_null(element_2);
     assert_int_equal(size, read_bytes);
-    assert_int_equal(pbd_element_type(element_2), pbd_integer_array_type);
+    assert_int_equal(pbd_element_type(element_2), pbd_type_integer_array);
     assert_int_equal(pbd_integer_array_size(element_2), 256);
     
     assert_int_equal(
@@ -222,7 +222,7 @@ void test_integer_array_to_buffer_int8_four_bytes(void **state) {
         pbd_integer_array_add(element_1, max);
     }
 
-    assert_int_equal(pbd_element_type(element_1), pbd_integer_array_type);
+    assert_int_equal(pbd_element_type(element_1), pbd_type_integer_array);
 
     char *buffer = NULL;
     size_t size;
@@ -246,7 +246,7 @@ void test_integer_array_to_buffer_int16(void **state) {
     int16_t max = INT16_MAX;
     pbd_integer_array_add(element_1, max);
 
-    assert_int_equal(pbd_element_type(element_1), pbd_integer_array_type);
+    assert_int_equal(pbd_element_type(element_1), pbd_type_integer_array);
 
     char *buffer = NULL;
     size_t size;
@@ -263,7 +263,7 @@ void test_integer_array_to_buffer_int32(void **state) {
     int32_t max = INT32_MAX;
     pbd_integer_array_add(element_1, max);
 
-    assert_int_equal(pbd_element_type(element_1), pbd_integer_array_type);
+    assert_int_equal(pbd_element_type(element_1), pbd_type_integer_array);
 
     char *buffer = NULL;
     size_t size;
@@ -280,7 +280,7 @@ void test_integer_array_to_buffer_int64(void **state) {
     int64_t max = INT64_MAX;
     pbd_integer_array_add(element_1, max);
 
-    assert_int_equal(pbd_element_type(element_1), pbd_integer_array_type);
+    assert_int_equal(pbd_element_type(element_1), pbd_type_integer_array);
 
     char *buffer = NULL;
     size_t size;

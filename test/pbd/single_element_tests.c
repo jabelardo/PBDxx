@@ -19,7 +19,7 @@ void test_pbd_string(void **state) {
     pbd_element* element = pbd_element_from_buffer(buffer, &read_bytes);
     assert_non_null(element);
     assert_int_equal(size, read_bytes);
-    assert_int_equal(pbd_element_type(element), pbd_string_type);
+    assert_int_equal(pbd_element_type(element), pbd_type_string);
     assert_string_equal(pbd_string_get(element), STRING);
     free(buffer);
     pbd_element_free(string_1);
@@ -37,7 +37,7 @@ void test_pbd_bool(void **state) {
     pbd_element* element = pbd_element_from_buffer(buffer, &read_bytes);
     assert_non_null(element);
     assert_int_equal(size, read_bytes);
-    assert_int_equal(pbd_element_type(element), pbd_bool_type);    
+    assert_int_equal(pbd_element_type(element), pbd_type_bool);    
     assert_int_equal(pbd_bool_get(element), true);   
     free(buffer); 
     pbd_element_free(bool_1);
@@ -55,7 +55,7 @@ void test_pbd_null(void **state) {
     pbd_element* element = pbd_element_from_buffer(buffer, &read_bytes);
     assert_non_null(element);
     assert_int_equal(size, read_bytes);
-    assert_int_equal(pbd_element_type(element), pbd_null_type);   
+    assert_int_equal(pbd_element_type(element), pbd_type_null);   
     free(buffer); 
     pbd_element_free(null_1);
     pbd_element_free(element);
@@ -73,7 +73,7 @@ void test_int8_integer_pbd(void **state) {
     pbd_element* element = pbd_element_from_buffer(buffer, &read_bytes);
     assert_non_null(element);
     assert_int_equal(size, read_bytes);
-    assert_int_equal(pbd_element_type(element), pbd_integer_type);
+    assert_int_equal(pbd_element_type(element), pbd_type_integer);
     assert_int_equal(pbd_integer_get(element), number);
     free(buffer); 
     pbd_element_free(integer_1);
@@ -93,7 +93,7 @@ void test_uint8_integer_pbd(void **state) {
     pbd_element* element = pbd_element_from_buffer(buffer, &read_bytes);
     assert_non_null(element);
     assert_int_equal(size, read_bytes);
-    assert_int_equal(pbd_element_type(element), pbd_integer_type);
+    assert_int_equal(pbd_element_type(element), pbd_type_integer);
     assert_int_equal(pbd_integer_get(element), number);
     free(buffer); 
     pbd_element_free(integer_1);
@@ -112,7 +112,7 @@ void test_int16_integer_pbd(void **state) {
     pbd_element* element = pbd_element_from_buffer(buffer, &read_bytes);
     assert_non_null(element);
     assert_int_equal(size, read_bytes);
-    assert_int_equal(pbd_element_type(element), pbd_integer_type);
+    assert_int_equal(pbd_element_type(element), pbd_type_integer);
     assert_int_equal(pbd_integer_get(element), number);
     free(buffer); 
     pbd_element_free(integer_1);
@@ -131,7 +131,7 @@ void test_uint16_integer_pbd(void **state) {
     pbd_element* element = pbd_element_from_buffer(buffer, &read_bytes);
     assert_non_null(element);
     assert_int_equal(size, read_bytes);
-    assert_int_equal(pbd_element_type(element), pbd_integer_type);
+    assert_int_equal(pbd_element_type(element), pbd_type_integer);
     assert_int_equal(pbd_integer_get(element), number);
     free(buffer); 
     pbd_element_free(integer_1);
@@ -150,7 +150,7 @@ void test_int32_integer_pbd(void **state) {
     pbd_element* element = pbd_element_from_buffer(buffer, &read_bytes);
     assert_non_null(element);
     assert_int_equal(size, read_bytes);
-    assert_int_equal(pbd_element_type(element), pbd_integer_type);
+    assert_int_equal(pbd_element_type(element), pbd_type_integer);
     assert_int_equal(pbd_integer_get(element), number);
     free(buffer); 
     pbd_element_free(integer_1);
@@ -169,7 +169,7 @@ void test_uint32_integer_pbd(void **state) {
     pbd_element* element = pbd_element_from_buffer(buffer, &read_bytes);
     assert_non_null(element);
     assert_int_equal(size, read_bytes);
-    assert_int_equal(pbd_element_type(element), pbd_integer_type);
+    assert_int_equal(pbd_element_type(element), pbd_type_integer);
     assert_int_equal(pbd_integer_get(element), number);
     free(buffer); 
     pbd_element_free(integer_1);
@@ -188,7 +188,7 @@ void test_int64_integer_pbd(void **state) {
     pbd_element* element = pbd_element_from_buffer(buffer, &read_bytes);
     assert_non_null(element);
     assert_int_equal(size, read_bytes);
-    assert_int_equal(pbd_element_type(element), pbd_integer_type);
+    assert_int_equal(pbd_element_type(element), pbd_type_integer);
     assert_int_equal(pbd_integer_get(element), number);
     free(buffer); 
     pbd_element_free(integer_1);
@@ -208,7 +208,7 @@ void test_float_real_pbd(void **state) {
     pbd_element* element = pbd_element_from_buffer(buffer, &read_bytes);
     assert_non_null(element);
     assert_int_equal(size, read_bytes);
-    assert_int_equal(pbd_element_type(element), pbd_real_type);
+    assert_int_equal(pbd_element_type(element), pbd_type_real);
     assert_true(pbd_real_get(element) == number);
     free(buffer); 
     pbd_element_free(real_1);
@@ -227,7 +227,7 @@ void test_double_real_pbd(void **state) {
     pbd_element* element = pbd_element_from_buffer(buffer, &read_bytes);
     assert_non_null(element);
     assert_int_equal(size, read_bytes);
-    assert_int_equal(pbd_element_type(element), pbd_real_type);
+    assert_int_equal(pbd_element_type(element), pbd_type_real);
     assert_true(pbd_real_get(element) == number);
     free(buffer); 
     pbd_element_free(real_1);

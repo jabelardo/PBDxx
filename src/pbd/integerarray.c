@@ -127,7 +127,7 @@ static void integer_array_free(const pbd_element* e) {
 }
 
 static struct pbd_element_vtable integer_array_vtable = {
-    pbd_integer_array_type, integer_array_to_buffer, integer_array_from_buffer, 
+    pbd_type_integer_array, integer_array_to_buffer, integer_array_from_buffer, 
     integer_array_free
 };
 

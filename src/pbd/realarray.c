@@ -110,7 +110,7 @@ static void real_array_free(const pbd_element* e) {
 }
 
 static struct pbd_element_vtable real_array_vtable = {
-    pbd_real_array_type, real_array_to_buffer, real_array_from_buffer, real_array_free
+    pbd_type_real_array, real_array_to_buffer, real_array_from_buffer, real_array_free
 };
 
 pbd_element* pbd_real_array_new() {

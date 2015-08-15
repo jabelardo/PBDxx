@@ -21,7 +21,7 @@ void pbd_element_free(const pbd_element* e) {
     free((pbd_element*) e);
 }
 
-pbd_type pbd_element_type(const pbd_element* e) {
+pbd_type_id pbd_element_type(const pbd_element* e) {
     assert(e != NULL);
     return e->vtable->type;
 }
@@ -33,33 +33,33 @@ int pbd_element_to_buffer(pbd_element* e, char** buffer, size_t* size) {
     return e->vtable->to_buffer(e, buffer, size);
 }
 
-pbd_element* pbd_element_new(pbd_type type) {
+pbd_element* pbd_element_new(pbd_type_id type) {
     switch (type) {
-        case pbd_bool_type: 
+        case pbd_type_bool: 
             return pbd_bool_new();
             
-        case pbd_bool_array_type: 
+        case pbd_type_bool_array:
             return pbd_bool_array_new();
             
-        case pbd_element_array_type: 
+        case pbd_type_element_array:
             return pbd_element_array_new();
             
-        case pbd_integer_type: 
+        case pbd_type_integer:
             return pbd_integer_new();
             
-        case pbd_integer_array_type: 
+        case pbd_type_integer_array:
             return pbd_integer_array_new();
             
-        case pbd_null_type: 
+        case pbd_type_null:
             return pbd_null_new();
             
-        case pbd_real_type: 
+        case pbd_type_real:
             return pbd_real_new();
             
-        case pbd_real_array_type: 
+        case pbd_type_real_array:
             return pbd_real_array_new();
             
-        case pbd_string_type: 
+        case pbd_type_string:
             return pbd_string_new();
             
         default:

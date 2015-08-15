@@ -37,7 +37,7 @@ static int null_from_buffer(struct pbd_element* e, const char* buffer,
 }
 
 static struct pbd_element_vtable null_vtable = {
-    pbd_null_type, null_to_buffer, null_from_buffer, NULL
+    pbd_type_null, null_to_buffer, null_from_buffer, NULL
 };
 
 pbd_element* pbd_null_new() {

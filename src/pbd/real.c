@@ -61,7 +61,7 @@ static int real_from_buffer(struct pbd_element* e, const char* buffer,
 }
 
 static struct pbd_element_vtable real_vtable = {
-    pbd_real_type, real_to_buffer, real_from_buffer, NULL
+    pbd_type_real, real_to_buffer, real_from_buffer, NULL
 };
 
 pbd_element* pbd_real_new() {
