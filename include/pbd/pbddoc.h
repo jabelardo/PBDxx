@@ -20,8 +20,8 @@ extern "C" {
  */
 /* 0000 0000 */
 #define PBDDOC_VERSION_1            ((uint8_t) 0x00)
-/* 0000 1111 */
-#define PBDDOC_VERSION_MASK         ((uint8_t) 0x0f)
+/* 0000 0011 */
+#define PBDDOC_VERSION_MASK         ((uint8_t) 0x03)
 
 #define PBDDOC_VERSION              PBDDOC_VERSION_1
     
@@ -38,6 +38,20 @@ extern "C" {
 #define PBDDOC_SIZE_LENGTH_8        ((uint8_t) 0x30)
 /* 0011 0000 */    
 #define PBDDOC_SIZE_LENGTH_MASK     ((uint8_t) 0x30)  
+    
+/**
+ * Uncompressed payload size length
+ */
+/* 0000 0000 */
+#define PBDDOC_UNC_SIZE_LENGTH_0_OR_1   ((uint8_t) 0x00)
+/* 0000 0100 */    
+#define PBDDOC_UNC_SIZE_LENGTH_2        ((uint8_t) 0x04)
+/* 0000 1000 */
+#define PBDDOC_UNC_SIZE_LENGTH_4        ((uint8_t) 0x08)
+/* 0000 1100 */    
+#define PBDDOC_UNC_SIZE_LENGTH_8        ((uint8_t) 0x0c)
+/* 0000 1100 */    
+#define PBDDOC_UNC_SIZE_LENGTH_MASK     ((uint8_t) 0x0c)  
 
 /**
  * Endianess
@@ -71,6 +85,7 @@ typedef struct pbd_doc_head {
     bool compressed;
     uint8_t version;
     uint8_t size_length;
+    uint8_t uncompressed_size_length;
 } pbd_doc_head;
     
 int pbd_doc_to_buffer(pbd_element* e, char** buffer, size_t* size);

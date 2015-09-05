@@ -18,7 +18,7 @@ static size_t buffer_size_length_by_value(size_t size) {
     }
 }
 
-uint8_t pbd_doc_head_create(bool compressed, size_t size_length) {
+uint8_t pbd_doc_head_create(bool compressed, size_t size_length, size_t uncompressed_size_length) {
     size_t s = 0;
 //#ifdef BIG_ENDIAN
 //    s |= PBDDOC_BIG_ENDIAN_FLAG;
@@ -34,6 +34,15 @@ uint8_t pbd_doc_head_create(bool compressed, size_t size_length) {
         s |= PBDDOC_SIZE_LENGTH_2;
     } else if (size_length == 1) {
         s |= PBDDOC_SIZE_LENGTH_1;
+    } 
+    if (uncompressed_size_length == 8) {
+        s |= PBDDOC_UNC_SIZE_LENGTH_8;
+    } else if (uncompressed_size_length == 4) {
+        s |= PBDDOC_UNC_SIZE_LENGTH_4;
+    } else if (uncompressed_size_length == 2) {
+        s |= PBDDOC_UNC_SIZE_LENGTH_2;
+    } else if (uncompressed_size_length == 1 || uncompressed_size_length == 0) {
+        s |= PBDDOC_UNC_SIZE_LENGTH_0_OR_1;
     } 
     s |= PBDDOC_VERSION;
     return s;
@@ -118,6 +127,7 @@ int pbd_doc_to_buffer(pbd_element* e, char** buffer, size_t* size) {
         free(e_buffer);
         return -1;
     }
+    size_t uncompressed_size = e_size;
     if (rcode == 1) {
         free(e_buffer);
         e_buffer = c_buffer;
@@ -125,13 +135,14 @@ int pbd_doc_to_buffer(pbd_element* e, char** buffer, size_t* size) {
         compressed = true;
     }
     size_t buffer_size_length = buffer_size_length_by_value(e_size);
-    *size = PBDDOC_HEAD_SIZE + buffer_size_length + e_size + PBDDOC_CRC_SIZE;
+    size_t uncompressed_size_length = compressed ? buffer_size_length_by_value(uncompressed_size) : 0;
+    *size = PBDDOC_HEAD_SIZE + buffer_size_length + uncompressed_size_length + e_size + PBDDOC_CRC_SIZE;
     *buffer = malloc(*size);
     if (*buffer == NULL) {
         free(e_buffer);
         return -1;
     }
-    uint8_t head_val = pbd_doc_head_create(compressed, buffer_size_length);
+    uint8_t head_val = pbd_doc_head_create(compressed, buffer_size_length, uncompressed_size_length);
     memcpy(*buffer, &head_val, sizeof(uint8_t));
     if (buffer_size_length == 1) {
         uint8_t tmp_size = e_size;
@@ -146,10 +157,23 @@ int pbd_doc_to_buffer(pbd_element* e, char** buffer, size_t* size) {
         uint64_t tmp_size = e_size;
         memcpy(*buffer + PBDDOC_HEAD_SIZE, &tmp_size, buffer_size_length);
     }
-    memcpy(*buffer + PBDDOC_HEAD_SIZE + buffer_size_length, e_buffer, e_size);
+    if (uncompressed_size_length == 1) {
+        uint8_t tmp_size = uncompressed_size;
+        memcpy(*buffer + PBDDOC_HEAD_SIZE + buffer_size_length, &tmp_size, uncompressed_size_length);
+    } else if (uncompressed_size_length == 2) {
+        uint16_t tmp_size = uncompressed_size;
+        memcpy(*buffer + PBDDOC_HEAD_SIZE + buffer_size_length, &tmp_size, uncompressed_size_length);
+    } else if (uncompressed_size_length == 4) {
+        uint32_t tmp_size = uncompressed_size;
+        memcpy(*buffer + PBDDOC_HEAD_SIZE + buffer_size_length, &tmp_size, uncompressed_size_length);
+    } else if (uncompressed_size_length == 8) {
+        uint64_t tmp_size = uncompressed_size;
+        memcpy(*buffer + PBDDOC_HEAD_SIZE + buffer_size_length, &tmp_size, uncompressed_size_length);
+    }
+    memcpy(*buffer + PBDDOC_HEAD_SIZE + buffer_size_length + uncompressed_size_length, e_buffer, e_size);
     uint16_t checksum = pbd_doc_get_checksum(*buffer, PBDDOC_HEAD_SIZE + 
-            buffer_size_length + e_size);
-    memcpy(*buffer + PBDDOC_HEAD_SIZE + buffer_size_length + e_size, &checksum , 
+            buffer_size_length + uncompressed_size_length + e_size);
+    memcpy(*buffer + PBDDOC_HEAD_SIZE + buffer_size_length + uncompressed_size_length + e_size, &checksum , 
             sizeof(uint16_t));
     
     free(e_buffer);
@@ -178,14 +202,36 @@ static size_t pbd_doc_get_buffer_size(pbd_doc_head h, const char*  buffer) {
     return buffer_size;
 }
 
+static size_t pbd_doc_get_uncompressed_size(pbd_doc_head h, const char*  buffer) {
+    size_t buffer_size = 0;
+    if (h.uncompressed_size_length == 1) {
+        uint8_t tmp_size;
+        memcpy(&tmp_size, buffer + PBDDOC_HEAD_SIZE + h.size_length, sizeof(uint8_t));
+        buffer_size = tmp_size;
+    } else if (h.uncompressed_size_length == 2) {
+        uint16_t tmp_size;
+        memcpy(&tmp_size, buffer + PBDDOC_HEAD_SIZE + h.size_length, sizeof(uint16_t));
+        buffer_size = tmp_size;
+    } else if (h.uncompressed_size_length == 4) {
+        uint32_t tmp_size;
+        memcpy(&tmp_size, buffer + PBDDOC_HEAD_SIZE + h.size_length, sizeof(uint32_t));
+        buffer_size = tmp_size;
+    } else if (h.uncompressed_size_length == 8) {
+        uint64_t tmp_size;
+        memcpy(&tmp_size, buffer + PBDDOC_HEAD_SIZE + h.size_length, sizeof(uint64_t));
+        buffer_size = tmp_size;
+    }  
+    return buffer_size;
+}
+
 int pbd_doc_valid_checksum(const char* buffer) {
     pbd_doc_head h = pbd_doc_head_parse(buffer[0]);
     size_t buffer_size = pbd_doc_get_buffer_size(h, buffer);
     uint16_t checksum_calc = pbd_doc_get_checksum(buffer, PBDDOC_HEAD_SIZE + 
-            h.size_length + buffer_size);
+            h.size_length + h.uncompressed_size_length + buffer_size);
     uint16_t checksum_doc;
-    memcpy(&checksum_doc, buffer + PBDDOC_HEAD_SIZE +  h.size_length + 
-            buffer_size, sizeof(uint16_t));
+    memcpy(&checksum_doc, buffer + PBDDOC_HEAD_SIZE +  h.size_length
+            + h.uncompressed_size_length + buffer_size, sizeof(uint16_t));
     return (checksum_calc == checksum_doc) ? 0 : -1;
 }
 
@@ -210,6 +256,26 @@ pbd_doc_head pbd_doc_head_parse(uint8_t value) {
             
         default:
             h.size_length = 1;
+    }
+    if (h.compressed) {
+        switch (value & PBDDOC_UNC_SIZE_LENGTH_MASK) {
+            case PBDDOC_UNC_SIZE_LENGTH_8:
+                h.uncompressed_size_length = 8;
+                break;
+
+            case PBDDOC_UNC_SIZE_LENGTH_4:
+                h.uncompressed_size_length = 4;
+                break;   
+
+            case PBDDOC_UNC_SIZE_LENGTH_2:
+                h.uncompressed_size_length = 2;
+                break; 
+
+            default:
+                h.uncompressed_size_length = 1;
+        }
+    } else {
+        h.uncompressed_size_length = 0;
     }
     return h;
 }
@@ -260,15 +326,15 @@ pbd_element* pbd_doc_from_buffer(const char* buffer, size_t* read_bytes) {
     pbd_doc_head h = pbd_doc_head_parse(buffer[0]);
     size_t buffer_size = pbd_doc_get_buffer_size(h, buffer);
     uint16_t checksum_calc = pbd_doc_get_checksum(buffer, PBDDOC_HEAD_SIZE + 
-            h.size_length + buffer_size);
+            h.size_length + h.uncompressed_size_length + buffer_size);
     uint16_t checksum_doc;
     memcpy(&checksum_doc, buffer + PBDDOC_HEAD_SIZE +  h.size_length + 
-            buffer_size, sizeof(uint16_t));
+           h.uncompressed_size_length + buffer_size, sizeof(uint16_t));
     if (checksum_calc != checksum_doc) {
         return NULL;
     }
     char* d_buffer;
-    char* c_buffer = (char*) buffer + PBDDOC_HEAD_SIZE +  h.size_length;
+    char* c_buffer = (char*) buffer + PBDDOC_HEAD_SIZE +  h.size_length + h.uncompressed_size_length;
     if (h.compressed) {
         size_t result_size;
         if (-1 == pbd_doc_decompress(c_buffer, buffer_size, &d_buffer, &result_size)) {
@@ -277,7 +343,8 @@ pbd_element* pbd_doc_from_buffer(const char* buffer, size_t* read_bytes) {
     } else {
         d_buffer = c_buffer;
     }
-    *read_bytes =  PBDDOC_HEAD_SIZE +  h.size_length +  buffer_size + PBDDOC_CRC_SIZE;
+    *read_bytes =  PBDDOC_HEAD_SIZE +  h.size_length + h.uncompressed_size_length +  
+            buffer_size + PBDDOC_CRC_SIZE;
     
     pbd_element* e = pbd_element_create(d_buffer);
     

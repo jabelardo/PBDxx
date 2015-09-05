@@ -110,7 +110,7 @@ typedef struct pbd_element pbd_element;
 /* element */
 pbd_type_id pbd_element_type(const pbd_element* e);
 
-int pbd_element_to_buffer(pbd_element* e, char** buffer, size_t* size);
+int pbd_element_to_buffer(const pbd_element* e, char** buffer, size_t* size);
 
 pbd_element* pbd_element_from_buffer(const char* buffer, size_t* read_bytes);
 

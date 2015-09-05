@@ -26,7 +26,7 @@ pbd_type_id pbd_element_type(const pbd_element* e) {
     return e->vtable->type;
 }
 
-int pbd_element_to_buffer(pbd_element* e, char** buffer, size_t* size) {
+int pbd_element_to_buffer(const pbd_element* e, char** buffer, size_t* size) {
     assert(e != NULL);
     assert(buffer != NULL);
     assert(size != NULL);
