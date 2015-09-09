@@ -127,15 +127,15 @@ int pbd_doc_to_buffer_custom(pbd_element* e, char** buffer, size_t* size, pbd_co
     if (conf.use_compression) {
         rcode = pbd_doc_compress(e_buffer, e_size, &c_buffer, &c_size, conf);
         if (rcode == -1) {
-            free(e_buffer);
+            conf.free_mem(e_buffer);
             return -1;
         }
         if (e_size <= c_size + uncompressed_size_length) {
-            free(c_buffer);
+            conf.free_mem(c_buffer);
             uncompressed_size_length = 0;
 
         } else {
-            free(e_buffer);
+            conf.free_mem(e_buffer);
             e_buffer = c_buffer;
             e_size = c_size;
             compressed = true;
@@ -145,7 +145,7 @@ int pbd_doc_to_buffer_custom(pbd_element* e, char** buffer, size_t* size, pbd_co
     *size = PBDDOC_HEAD_SIZE + buffer_size_length + uncompressed_size_length + e_size + PBDDOC_CRC_SIZE;
     *buffer = conf.mem_alloc(*size);
     if (*buffer == NULL) {
-        free(e_buffer);
+        conf.free_mem(e_buffer);
         return -1;
     }
     uint8_t head_val = pbd_doc_head_create(compressed, buffer_size_length, uncompressed_size_length);
@@ -182,7 +182,7 @@ int pbd_doc_to_buffer_custom(pbd_element* e, char** buffer, size_t* size, pbd_co
     memcpy(*buffer + PBDDOC_HEAD_SIZE + buffer_size_length + uncompressed_size_length + e_size, &checksum , 
             sizeof(uint16_t));
     
-    free(e_buffer);
+    conf.free_mem(e_buffer);
     return 0;
 }
 
@@ -319,7 +319,7 @@ static int pbd_doc_decompress(const char* in, size_t in_size, size_t out_size,
             case Z_DATA_ERROR:
             case Z_MEM_ERROR:
                 inflateEnd(&strm);
-                free(*result);
+                conf.free_mem(*result);
                 *result = NULL;
                 *result_size = 0;
                 return -1;
@@ -365,7 +365,7 @@ pbd_element* pbd_doc_from_buffer_custom(const char* buffer, size_t* read_bytes, 
     pbd_element* e = pbd_element_create(d_buffer);
     
     if (h.compressed) {
-        free(d_buffer);
+        conf.free_mem(d_buffer);
     }
     return e;
 }
