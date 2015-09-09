@@ -7,6 +7,7 @@
 #include "integer.h"
 #include "integerarray.h"
 #include "arrayutils.h"
+#include "endianess.h"
 
 typedef struct pbd_int64_t_min_max {
     int64_t min;
@@ -89,6 +90,7 @@ static int integer_array_from_buffer(struct pbd_element* e, const char* buffer,
     buffer += *read_bytes;
     size_t sizeof_array_size = pbd_sizeof_array_size_by_type(type_id);
     uint32_t size = pbd_read_array_size(buffer, sizeof_array_size);
+    bool little_endian = pbd_is_little_endian();
     for (int i = 0; i < size; ++i) {
         int64_t value;
         if (sizeof_value == 1) {
@@ -100,15 +102,18 @@ static int integer_array_from_buffer(struct pbd_element* e, const char* buffer,
             int16_t tmp_val;
             memcpy(&tmp_val, buffer + SIZEOF_TYPE_ID + sizeof_array_size + 
                     sizeof_value * i, sizeof_value);
+            tmp_val = pbd_get_uint16(little_endian, tmp_val);
             value = pbd_is_unsigned(type_id) ? (uint16_t) tmp_val : tmp_val;
         } else if (sizeof_value == 4) {
             int32_t tmp_val;
             memcpy(&tmp_val, buffer + SIZEOF_TYPE_ID + sizeof_array_size + 
                     sizeof_value * i, sizeof_value);
+            tmp_val = pbd_get_uint32(little_endian, tmp_val);
             value = pbd_is_unsigned(type_id) ? (uint32_t) tmp_val : tmp_val;
         } else {
             memcpy(&value, buffer + SIZEOF_TYPE_ID + sizeof_array_size + 
                     sizeof_value * i, sizeof_value);
+            value = pbd_get_uint64(little_endian, value);
         }
         pbd_integer_array_add(e, value);
     }

@@ -4,6 +4,7 @@
 
 #include "arrayutils.h"
 #include "element.h"
+#include "endianess.h" 
 
 pbd_array_size_bytes pbd_sizeof_array_size_by_value(size_t size) {
     if (size > UINT16_MAX) {
@@ -54,6 +55,7 @@ pbd_array_size_bytes pbd_sizeof_array_size_by_type(pbd_type_id type_id) {
 uint32_t pbd_read_array_size(const char* buffer, pbd_array_size_bytes sizeof_array_size) {
     assert(buffer != NULL);
     uint32_t size;
+    bool little_endian = pbd_is_little_endian();
     if (sizeof_array_size == pbd_one_byte) {
         uint8_t tmp_size;
         memcpy(&tmp_size, buffer + SIZEOF_TYPE_ID, sizeof_array_size);
@@ -61,9 +63,10 @@ uint32_t pbd_read_array_size(const char* buffer, pbd_array_size_bytes sizeof_arr
     } else if (sizeof_array_size == pbd_two_bytes) {
         uint16_t tmp_size;
         memcpy(&tmp_size, buffer + SIZEOF_TYPE_ID, sizeof_array_size);
-        size = tmp_size;
+        size = pbd_get_uint32_from_uint16(little_endian, tmp_size);
     } else {
         memcpy(&size, buffer + SIZEOF_TYPE_ID, sizeof_array_size);
+        size = pbd_get_uint32(little_endian, size);
     }
     return size;
 }

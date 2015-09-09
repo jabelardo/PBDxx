@@ -81,7 +81,7 @@ extern "C" {
 #define PBDDOC_CRC_SIZE sizeof(uint16_t)
     
 typedef struct pbd_doc_head {
-    bool big_endian;
+    bool little_endian;
     bool compressed;
     uint8_t version;
     uint8_t size_length;

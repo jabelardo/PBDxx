@@ -10,6 +10,7 @@ set(SOURCE_FILES
     boolarray.c
     element.c
     elementarray.c
+    endianess.c
     integer.c
     integerarray.c
     null.c

@@ -9,6 +9,7 @@
 #include "real.h"
 #include "typeid.h"
 #include "arrayutils.h"
+#include "endianess.h"
 
 typedef struct pbd_double_min_max {
     double min;
@@ -82,16 +83,18 @@ static int real_array_from_buffer(struct pbd_element* e, const char* buffer,
     buffer += *read_bytes;
     size_t sizeof_array_size = pbd_sizeof_array_size_by_type(type_id);
     uint32_t size = pbd_read_array_size(buffer, sizeof_array_size);
+    bool little_endian = pbd_is_little_endian();
     for (int i = 0; i < size; ++i) {
         double value;
         if (sizeof_value == sizeof(float)) {
             float tmp_value;
             memcpy(&tmp_value, buffer + SIZEOF_TYPE_ID + sizeof_array_size + 
                     sizeof_value * i, sizeof_value);
-            value = tmp_value;
+            value = pbd_get_float(little_endian, tmp_value);
         } else {
             memcpy(&value, buffer + SIZEOF_TYPE_ID + sizeof_array_size + 
                     sizeof_value * i, sizeof_value);
+            value = pbd_get_double(little_endian, value);
         }
         pbd_real_array_add(e, value);
     }

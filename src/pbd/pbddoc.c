@@ -5,6 +5,7 @@
 
 #include <pbd/pbd.h>
 #include <pbd/pbddoc.h>
+#include "endianess.h"
 
 static size_t buffer_size_length_by_value(size_t size) {
     if (size > UINT32_MAX) {
@@ -20,9 +21,9 @@ static size_t buffer_size_length_by_value(size_t size) {
 
 uint8_t pbd_doc_head_create(bool compressed, size_t size_length, size_t uncompressed_size_length) {
     size_t s = 0;
-//#ifdef BIG_ENDIAN
-//    s |= PBDDOC_BIG_ENDIAN_FLAG;
-//#endif
+    if (!pbd_is_little_endian()) {
+        s |= PBDDOC_BIG_ENDIAN_FLAG;
+    }
     if (compressed) {
         s |= PBDDOC_COMPRESSED_FLAG;
     }
@@ -105,11 +106,7 @@ int pbd_doc_compress(char* in, size_t in_size, char** result, size_t* result_siz
         *result_size += have;
     } while (strm.avail_out == 0);
     deflateEnd(&strm);
-    if (in_size <= *result_size) {
-        free(*result);
-        return 0;
-    }
-    return 1;
+    return 0;
 }
 
 int pbd_doc_to_buffer(pbd_element* e, char** buffer, size_t* size) {
@@ -128,14 +125,18 @@ int pbd_doc_to_buffer(pbd_element* e, char** buffer, size_t* size) {
         return -1;
     }
     size_t uncompressed_size = e_size;
-    if (rcode == 1) {
+    size_t uncompressed_size_length = buffer_size_length_by_value(uncompressed_size);
+    if (e_size <= c_size + uncompressed_size_length) {
+        free(c_buffer);
+        uncompressed_size_length = 0;
+        
+    } else {
         free(e_buffer);
         e_buffer = c_buffer;
         e_size = c_size;
         compressed = true;
     }
     size_t buffer_size_length = buffer_size_length_by_value(e_size);
-    size_t uncompressed_size_length = compressed ? buffer_size_length_by_value(uncompressed_size) : 0;
     *size = PBDDOC_HEAD_SIZE + buffer_size_length + uncompressed_size_length + e_size + PBDDOC_CRC_SIZE;
     *buffer = malloc(*size);
     if (*buffer == NULL) {
@@ -189,15 +190,15 @@ static size_t pbd_doc_get_buffer_size(pbd_doc_head h, const char*  buffer) {
     } else if (h.size_length == 2) {
         uint16_t tmp_size;
         memcpy(&tmp_size, buffer + PBDDOC_HEAD_SIZE, sizeof(uint16_t));
-        buffer_size = tmp_size;
+        buffer_size = pbd_get_size_from_uint16(h.little_endian, tmp_size);
     } else if (h.size_length == 4) {
         uint32_t tmp_size;
         memcpy(&tmp_size, buffer + PBDDOC_HEAD_SIZE, sizeof(uint32_t));
-        buffer_size = tmp_size;
+        buffer_size = pbd_get_size_from_uint32(h.little_endian, tmp_size);
     } else if (h.size_length == 8) {
         uint64_t tmp_size;
         memcpy(&tmp_size, buffer + PBDDOC_HEAD_SIZE, sizeof(uint64_t));
-        buffer_size = tmp_size;
+        buffer_size = pbd_get_size_from_uint64(h.little_endian, tmp_size);
     }  
     return buffer_size;
 }
@@ -211,15 +212,15 @@ static size_t pbd_doc_get_uncompressed_size(pbd_doc_head h, const char*  buffer)
     } else if (h.uncompressed_size_length == 2) {
         uint16_t tmp_size;
         memcpy(&tmp_size, buffer + PBDDOC_HEAD_SIZE + h.size_length, sizeof(uint16_t));
-        buffer_size = tmp_size;
+        buffer_size = pbd_get_size_from_uint16(h.little_endian, tmp_size);
     } else if (h.uncompressed_size_length == 4) {
         uint32_t tmp_size;
         memcpy(&tmp_size, buffer + PBDDOC_HEAD_SIZE + h.size_length, sizeof(uint32_t));
-        buffer_size = tmp_size;
+        buffer_size = pbd_get_size_from_uint32(h.little_endian, tmp_size);
     } else if (h.uncompressed_size_length == 8) {
         uint64_t tmp_size;
         memcpy(&tmp_size, buffer + PBDDOC_HEAD_SIZE + h.size_length, sizeof(uint64_t));
-        buffer_size = tmp_size;
+        buffer_size = pbd_get_size_from_uint64(h.little_endian, tmp_size);
     }  
     return buffer_size;
 }
@@ -238,7 +239,7 @@ int pbd_doc_valid_checksum(const char* buffer) {
 pbd_doc_head pbd_doc_head_parse(uint8_t value) {
     pbd_doc_head h;
     h.compressed = value & PBDDOC_COMPRESS_MASK;
-    h.big_endian = value & PBDDOC_ENDIAN_MASK;
+    h.little_endian = !(value & PBDDOC_ENDIAN_MASK);
     h.version = value & PBDDOC_VERSION_MASK;
     
     switch (value & PBDDOC_SIZE_LENGTH_MASK) {
@@ -330,7 +331,7 @@ pbd_element* pbd_doc_from_buffer(const char* buffer, size_t* read_bytes) {
     uint16_t checksum_doc;
     memcpy(&checksum_doc, buffer + PBDDOC_HEAD_SIZE +  h.size_length + 
            h.uncompressed_size_length + buffer_size, sizeof(uint16_t));
-    if (checksum_calc != checksum_doc) {
+    if (checksum_calc != pbd_get_uint16(h.little_endian, checksum_doc)) {
         return NULL;
     }
     char* d_buffer;

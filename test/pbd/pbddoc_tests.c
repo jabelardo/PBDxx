@@ -9,6 +9,7 @@
 
 #include <pbd/pbd.h>
 #include <pbd/pbddoc.h>
+#include "../../src/pbd/endianess.h"
 
 void test_pbd_doc_uncompressed(void **state) { 
     uint8_t const number = 4;
@@ -24,22 +25,22 @@ void test_pbd_doc_uncompressed(void **state) {
     assert_int_equal((uint8_t) buffer[2], (uint8_t) 4);
     assert_int_equal((uint8_t) buffer[3], (uint8_t) 4);
 
-//#ifdef BOOST_LITTLE_ENDIAN
-    assert_int_equal((buffer[0] & PBDDOC_ENDIAN_MASK), PBDDOC_LITTLE_ENDIAN_FLAG);
-//#else
-//    assert_int_equal((buffer[0] & PBDDOC_ENDIAN_MASK), PBDDOC_BIG_ENDIAN_FLAG);
-//#endif
+    if (pbd_is_little_endian()) {
+        assert_int_equal((buffer[0] & PBDDOC_ENDIAN_MASK), PBDDOC_LITTLE_ENDIAN_FLAG);
+    } else {
+        assert_int_equal((buffer[0] & PBDDOC_ENDIAN_MASK), PBDDOC_BIG_ENDIAN_FLAG);
+    }
     assert_int_equal((buffer[0] & PBDDOC_VERSION_MASK), PBDDOC_VERSION_1);
     assert_int_equal((buffer[0] & PBDDOC_COMPRESS_MASK), PBDDOC_UNCOMPRESSED_FLAG);
     assert_int_equal((buffer[0] & PBDDOC_SIZE_LENGTH_MASK), PBDDOC_SIZE_LENGTH_1);
     assert_int_equal((buffer[0] & PBDDOC_UNC_SIZE_LENGTH_MASK), PBDDOC_UNC_SIZE_LENGTH_0_OR_1);
 
     pbd_doc_head head = pbd_doc_head_parse(buffer[0]);
-//#ifdef LITTLE_ENDIAN
-    assert_int_equal(head.big_endian, false);
-//#else
-//    assert_int_equal(head.big_endian, true);
-//#endif
+    if (pbd_is_little_endian()) {
+        assert_int_equal(head.little_endian, true);
+    } else {
+        assert_int_equal(head.little_endian, false);
+    }
     assert_int_equal(head.version, PBDDOC_VERSION);
     assert_int_equal(head.compressed, false);
     assert_int_equal(head.size_length, 1);
@@ -71,22 +72,22 @@ void test_pbd_doc_compressed(void **state) {
     size_t size;
     pbd_doc_to_buffer(element_1, &buffer, &size);
 
-//#ifdef BOOST_LITTLE_ENDIAN
-    assert_int_equal((buffer[0] & PBDDOC_ENDIAN_MASK), PBDDOC_LITTLE_ENDIAN_FLAG);
-//#else
-//    assert_int_equal((buffer[0] & PBDDOC_ENDIAN_MASK), PBDDOC_BIG_ENDIAN_FLAG);
-//#endif
+    if (pbd_is_little_endian()) {
+        assert_int_equal((buffer[0] & PBDDOC_ENDIAN_MASK), PBDDOC_LITTLE_ENDIAN_FLAG);
+    } else {
+        assert_int_equal((buffer[0] & PBDDOC_ENDIAN_MASK), PBDDOC_BIG_ENDIAN_FLAG);
+    }
     assert_int_equal((buffer[0] & PBDDOC_VERSION_MASK), PBDDOC_VERSION_1);
     assert_int_equal((buffer[0] & PBDDOC_COMPRESS_MASK), PBDDOC_COMPRESSED_FLAG);
     assert_int_equal((buffer[0] & PBDDOC_SIZE_LENGTH_MASK), PBDDOC_SIZE_LENGTH_4);
     assert_int_equal((buffer[0] & PBDDOC_UNC_SIZE_LENGTH_MASK), PBDDOC_UNC_SIZE_LENGTH_4);
 
     pbd_doc_head head = pbd_doc_head_parse(buffer[0]);
-//#ifdef LITTLE_ENDIAN
-    assert_int_equal(head.big_endian, false);
-//#else
-//    assert_int_equal(head.big_endian, true);
-//#endif
+    if (pbd_is_little_endian()) {
+        assert_int_equal(head.little_endian, true);
+    } else {
+        assert_int_equal(head.little_endian, false);
+    }
     assert_int_equal(head.version, PBDDOC_VERSION);
     assert_int_equal(head.compressed, true);
     assert_int_equal(head.size_length, 4);

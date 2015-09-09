@@ -5,6 +5,7 @@
 
 #include "real.h"
 #include "typeid.h"
+#include "endianess.h"
 
 static struct pbd_element_vtable real_vtable;
 
@@ -48,12 +49,14 @@ static int real_from_buffer(struct pbd_element* e, const char* buffer,
     }
     buffer += *read_bytes;
     double value;
+    bool little_endian = pbd_is_little_endian();
     if (sizeof_value == sizeof(float)) {
         float tmp_value;
         memcpy(&tmp_value, buffer + SIZEOF_TYPE_ID, sizeof_value);
-        value = tmp_value;
+        value = pbd_get_float(little_endian, tmp_value);
     } else {
         memcpy(&value, buffer + SIZEOF_TYPE_ID, sizeof_value);
+        value = pbd_get_double(little_endian, value);
     }
     pbd_real_set(e, value);
     *read_bytes += SIZEOF_TYPE_ID + sizeof_value;

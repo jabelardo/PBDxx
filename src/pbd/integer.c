@@ -5,6 +5,7 @@
 
 #include "integer.h"
 #include "typeid.h"
+#include "endianess.h"
 
 static struct pbd_element_vtable integer_vtable;
 
@@ -54,6 +55,7 @@ static int integer_from_buffer(struct pbd_element* e, const char* buffer,
     }
     buffer += *read_bytes;
     int64_t value;
+    bool little_endian = pbd_is_little_endian();
     if (sizeof_value == sizeof(int8_t)) {
         int8_t tmp_value;
         memcpy(&tmp_value, buffer + SIZEOF_TYPE_ID, sizeof_value);
@@ -61,13 +63,16 @@ static int integer_from_buffer(struct pbd_element* e, const char* buffer,
     } else if (sizeof_value == sizeof(int16_t)) {
         int16_t tmp_value;
         memcpy(&tmp_value, buffer + SIZEOF_TYPE_ID, sizeof_value);
+        tmp_value = pbd_get_uint16(little_endian, tmp_value);
         value = pbd_is_unsigned(type_id) ? (uint16_t) tmp_value : tmp_value;
     } else if (sizeof_value == sizeof(int32_t)) {
         int32_t tmp_value;
         memcpy(&tmp_value, buffer + SIZEOF_TYPE_ID, sizeof_value);
+        tmp_value = pbd_get_uint32(little_endian, tmp_value);
         value = pbd_is_unsigned(type_id) ? (uint32_t) tmp_value : tmp_value;
     } else {
         memcpy(&value, buffer + SIZEOF_TYPE_ID, sizeof_value);
+        value = pbd_get_uint64(little_endian, value);
     }
     pbd_integer_set(e, value);
     *read_bytes += SIZEOF_TYPE_ID + sizeof_value;
