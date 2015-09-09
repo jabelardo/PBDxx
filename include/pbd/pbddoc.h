@@ -11,6 +11,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include <pbd/pbdconf.h>
+
 #ifdef	__cplusplus
 extern "C" {
 #endif
@@ -90,9 +92,13 @@ typedef struct pbd_doc_head {
     
 int pbd_doc_to_buffer(pbd_element* e, char** buffer, size_t* size);
 
+int pbd_doc_to_buffer_custom(pbd_element* e, char** buffer, size_t* size, pbd_conf conf);
+
 pbd_doc_head pbd_doc_head_parse(uint8_t value);
 
 pbd_element* pbd_doc_from_buffer(const char* buffer, size_t* read_bytes);
+
+pbd_element* pbd_doc_from_buffer_custom(const char* buffer, size_t* read_bytes, pbd_conf conf);
 
 int pbd_doc_valid_checksum(const char* buffer);
 

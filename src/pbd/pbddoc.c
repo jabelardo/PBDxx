@@ -3,9 +3,11 @@
 #include <errno.h>
 #include <zlib.h>
 
+#include <pbd/pbdconf.h>
 #include <pbd/pbd.h>
 #include <pbd/pbddoc.h>
 #include "endianess.h"
+#include "pbdconf_internal.h"
 
 static size_t buffer_size_length_by_value(size_t size) {
     if (size > UINT32_MAX) {
@@ -80,7 +82,8 @@ uint16_t pbd_doc_get_checksum(const char* buffer, size_t size) {
     return crc;    
 }
 
-int pbd_doc_compress(char* in, size_t in_size, char** result, size_t* result_size) {
+static int pbd_doc_compress(char* in, size_t in_size, char** result, 
+        size_t* result_size, pbd_conf conf) {
     z_stream strm;
     strm.zalloc = Z_NULL;
     strm.zfree = Z_NULL;
@@ -101,15 +104,15 @@ int pbd_doc_compress(char* in, size_t in_size, char** result, size_t* result_siz
         strm.next_out = out;
         deflate(&strm, Z_FINISH);
         unsigned have = CHUNK - strm.avail_out;
-        *result = realloc(*result, have + *result_size);
+        *result = conf.mem_realloc(*result, have + *result_size);
         memcpy(*result + *result_size, out, have);
         *result_size += have;
     } while (strm.avail_out == 0);
     deflateEnd(&strm);
     return 0;
 }
-
-int pbd_doc_to_buffer(pbd_element* e, char** buffer, size_t* size) {
+ 
+int pbd_doc_to_buffer_custom(pbd_element* e, char** buffer, size_t* size, pbd_conf conf) {
     char* e_buffer = NULL;
     size_t e_size = 0;
     int rcode = pbd_element_to_buffer(e, &e_buffer, &e_size);
@@ -119,26 +122,28 @@ int pbd_doc_to_buffer(pbd_element* e, char** buffer, size_t* size) {
     char* c_buffer = NULL;
     size_t c_size = 0;
     bool compressed = false;
-    rcode = pbd_doc_compress(e_buffer, e_size, &c_buffer, &c_size);
-    if (rcode == -1) {
-        free(e_buffer);
-        return -1;
-    }
     size_t uncompressed_size = e_size;
     size_t uncompressed_size_length = buffer_size_length_by_value(uncompressed_size);
-    if (e_size <= c_size + uncompressed_size_length) {
-        free(c_buffer);
-        uncompressed_size_length = 0;
-        
-    } else {
-        free(e_buffer);
-        e_buffer = c_buffer;
-        e_size = c_size;
-        compressed = true;
+    if (conf.use_compression) {
+        rcode = pbd_doc_compress(e_buffer, e_size, &c_buffer, &c_size, conf);
+        if (rcode == -1) {
+            free(e_buffer);
+            return -1;
+        }
+        if (e_size <= c_size + uncompressed_size_length) {
+            free(c_buffer);
+            uncompressed_size_length = 0;
+
+        } else {
+            free(e_buffer);
+            e_buffer = c_buffer;
+            e_size = c_size;
+            compressed = true;
+        }
     }
     size_t buffer_size_length = buffer_size_length_by_value(e_size);
     *size = PBDDOC_HEAD_SIZE + buffer_size_length + uncompressed_size_length + e_size + PBDDOC_CRC_SIZE;
-    *buffer = malloc(*size);
+    *buffer = conf.mem_alloc(*size);
     if (*buffer == NULL) {
         free(e_buffer);
         return -1;
@@ -179,6 +184,10 @@ int pbd_doc_to_buffer(pbd_element* e, char** buffer, size_t* size) {
     
     free(e_buffer);
     return 0;
+}
+
+int pbd_doc_to_buffer(pbd_element* e, char** buffer, size_t* size) {
+    return pbd_doc_to_buffer_custom(e, buffer, size, pbd_default_conf);
 }
 
 static size_t pbd_doc_get_buffer_size(pbd_doc_head h, const char*  buffer) {
@@ -281,7 +290,8 @@ pbd_doc_head pbd_doc_head_parse(uint8_t value) {
     return h;
 }
 
-int pbd_doc_decompress(const char* in, size_t in_size, char** result, size_t* result_size) {
+static int pbd_doc_decompress(const char* in, size_t in_size, size_t out_size, 
+        char** result, size_t* result_size, pbd_conf conf) {
     z_stream strm;    
     strm.zalloc = Z_NULL;
     strm.zfree = Z_NULL;
@@ -297,7 +307,7 @@ int pbd_doc_decompress(const char* in, size_t in_size, char** result, size_t* re
 
     size_t const CHUNK = 131072;
     unsigned char out[CHUNK];
-    *result = NULL;
+    *result = conf.mem_alloc(out_size);
     *result_size = 0;
     do {
         strm.avail_out = CHUNK;
@@ -315,7 +325,6 @@ int pbd_doc_decompress(const char* in, size_t in_size, char** result, size_t* re
                 return -1;
         }
         unsigned have = CHUNK - strm.avail_out;
-        *result = realloc(*result, have + *result_size);
         memcpy(*result + *result_size, out, have);
         *result_size += have;
     } while (strm.avail_out == 0);
@@ -323,7 +332,7 @@ int pbd_doc_decompress(const char* in, size_t in_size, char** result, size_t* re
     return 0;
 }
 
-pbd_element* pbd_doc_from_buffer(const char* buffer, size_t* read_bytes) {
+pbd_element* pbd_doc_from_buffer_custom(const char* buffer, size_t* read_bytes, pbd_conf conf) {
     pbd_doc_head h = pbd_doc_head_parse(buffer[0]);
     size_t buffer_size = pbd_doc_get_buffer_size(h, buffer);
     uint16_t checksum_calc = pbd_doc_get_checksum(buffer, PBDDOC_HEAD_SIZE + 
@@ -337,8 +346,14 @@ pbd_element* pbd_doc_from_buffer(const char* buffer, size_t* read_bytes) {
     char* d_buffer;
     char* c_buffer = (char*) buffer + PBDDOC_HEAD_SIZE +  h.size_length + h.uncompressed_size_length;
     if (h.compressed) {
+        size_t uncompressed_size = pbd_doc_get_uncompressed_size(h, buffer);
         size_t result_size;
-        if (-1 == pbd_doc_decompress(c_buffer, buffer_size, &d_buffer, &result_size)) {
+        if (-1 == pbd_doc_decompress(c_buffer, buffer_size, uncompressed_size, 
+                &d_buffer, &result_size, conf)) {
+            return NULL;
+        }
+        if (result_size != uncompressed_size) {
+            conf.free_mem(d_buffer);
             return NULL;
         }
     } else {
@@ -353,4 +368,8 @@ pbd_element* pbd_doc_from_buffer(const char* buffer, size_t* read_bytes) {
         free(d_buffer);
     }
     return e;
+}
+
+pbd_element* pbd_doc_from_buffer(const char* buffer, size_t* read_bytes) {
+    return pbd_doc_from_buffer_custom(buffer, read_bytes, pbd_default_conf);
 }

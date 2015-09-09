@@ -14,6 +14,7 @@ set(SOURCE_FILES
     integer.c
     integerarray.c
     null.c
+    pbdconf.c
     pbddoc.c
     real.c
     realarray.c

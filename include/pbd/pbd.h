@@ -12,6 +12,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include <pbd/pbdconf.h>
+
 #ifdef	__cplusplus
 extern "C" {
 #endif
