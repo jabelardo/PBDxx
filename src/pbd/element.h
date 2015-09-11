@@ -12,6 +12,7 @@
 #include <stdint.h>
 
 #include <pbd/pbd.h>
+#include <pbd/pbdconf.h>
 
 #include "typeid.h"
 
@@ -25,9 +26,9 @@ struct pbd_element;
     
 typedef struct pbd_element_vtable {
     const pbd_type_id type;
-    int (*to_buffer)(const struct pbd_element* e, char** buffer, size_t* size);
-    int (*from_buffer)(struct pbd_element* e, const char* buffer, pbd_type_id type_id,  size_t* read_bytes);
-    void (*free)(const struct pbd_element* e);
+    int (*to_buffer)(const struct pbd_element* e, char** buffer, size_t* size, pbd_conf conf);
+    int (*from_buffer)(struct pbd_element* e, const char* buffer, pbd_type_id type_id,  size_t* read_bytes, pbd_conf conf);
+    void (*free)(const struct pbd_element* e, pbd_conf conf);
 } pbd_element_vtable;
 
 struct pbd_element {

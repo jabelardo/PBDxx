@@ -10,6 +10,7 @@
 #include "typeid.h"
 #include "arrayutils.h"
 #include "endianess.h"
+#include "pbdconf_internal.h"
 
 typedef struct pbd_double_min_max {
     double min;
@@ -33,7 +34,8 @@ static pbd_double_min_max get_min_max(const pbd_real_array* s) {
 
 static struct pbd_element_vtable real_array_vtable;
     
-static int real_array_to_buffer(const pbd_element* e, char** buffer, size_t* size) {
+static int real_array_to_buffer(const pbd_element* e, char** buffer, 
+        size_t* size, pbd_conf conf) {
     assert(e != NULL);
     assert(buffer != NULL);
     assert(size != NULL);
@@ -49,7 +51,7 @@ static int real_array_to_buffer(const pbd_element* e, char** buffer, size_t* siz
         return -1;
     }
     size_t full_size = SIZEOF_TYPE_ID + sizeof_array_size + sizeof_value * s->size;
-    *buffer = malloc(full_size);
+    *buffer = conf.mem_alloc(full_size);
     if (*buffer == NULL) {
         return -1;
     }
@@ -70,7 +72,7 @@ static int real_array_to_buffer(const pbd_element* e, char** buffer, size_t* siz
 }
 
 static int real_array_from_buffer(struct pbd_element* e, const char* buffer, 
-        pbd_type_id type_id, size_t* read_bytes) {
+        pbd_type_id type_id, size_t* read_bytes, pbd_conf conf) {
     assert(e != NULL);
     assert(buffer != NULL);
     assert(read_bytes != NULL);
@@ -102,11 +104,11 @@ static int real_array_from_buffer(struct pbd_element* e, const char* buffer,
     return 0;
 }
 
-static void real_array_free(const pbd_element* e) {
+static void real_array_free(const pbd_element* e, pbd_conf conf) {
     assert(e != NULL);
     assert(e->vtable->type == real_array_vtable.type);
     pbd_real_array* s = (pbd_real_array*) &(*e);
-    free(s->values);
+    conf.free_mem(s->values);
     s->values = NULL;
     s->size = 0;
     s->capacity = 0;
@@ -116,8 +118,8 @@ static struct pbd_element_vtable real_array_vtable = {
     pbd_type_real_array, real_array_to_buffer, real_array_from_buffer, real_array_free
 };
 
-pbd_element* pbd_real_array_new() {
-    pbd_real_array* s = malloc(sizeof(pbd_real_array));
+pbd_element* pbd_real_array_new_custom(pbd_conf conf) {
+    pbd_real_array* s = conf.mem_alloc(sizeof(pbd_real_array));
     if (s == NULL) {
         return NULL;
     }
@@ -126,6 +128,10 @@ pbd_element* pbd_real_array_new() {
     s->capacity = 0;
     s->element.vtable = &real_array_vtable;
     return &s->element;
+}
+
+pbd_element* pbd_real_array_new() {
+    return pbd_real_array_new_custom(pbd_default_conf);
 }
 
 size_t pbd_real_array_size(const pbd_element* e) {
@@ -142,12 +148,12 @@ const double* pbd_real_array_values(const pbd_element* e) {
     return s->values;
 }
 
-int pbd_real_array_add(pbd_element* e, double value) {
+int pbd_real_array_add_custom(pbd_element* e, double value, pbd_conf conf) {
     assert(e != NULL);
     assert(e->vtable->type == real_array_vtable.type);
     pbd_real_array* s = (pbd_real_array*) &(*e);
     if (s->values == NULL) {
-        s->values = malloc(sizeof(double) * 2);
+        s->values = conf.mem_alloc(sizeof(double) * 2);
         if (s->values == NULL) {
             return -1;
         }
@@ -160,7 +166,7 @@ int pbd_real_array_add(pbd_element* e, double value) {
         ++s->size;
         
     } else {
-        s->values = realloc(s->values, sizeof(double) * s->capacity * 2);
+        s->values = conf.mem_realloc(s->values, sizeof(double) * s->capacity * 2);
         if (s->values == NULL) {
             return -1;
         }
@@ -169,4 +175,8 @@ int pbd_real_array_add(pbd_element* e, double value) {
         s->capacity *= 2;
     }
     return 0;
+}
+
+int pbd_real_array_add(pbd_element* e, double value) {
+    return pbd_real_array_add_custom(e, value, pbd_default_conf);
 }

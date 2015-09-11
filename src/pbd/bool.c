@@ -5,10 +5,12 @@
 
 #include "bool.h"
 #include "typeid.h"
+#include "pbdconf_internal.h"
 
 static struct pbd_element_vtable bool_vtable;
 
-static int bool_to_buffer(const pbd_element* e, char** buffer, size_t* size) {
+static int bool_to_buffer(const pbd_element* e, char** buffer, size_t* size, 
+        pbd_conf conf) {
     assert(e != NULL);
     assert(buffer != NULL);
     assert(size != NULL);
@@ -17,7 +19,7 @@ static int bool_to_buffer(const pbd_element* e, char** buffer, size_t* size) {
     uint8_t type_id = pbd_type_bool;    
     uint8_t value = s->value;    
     uint16_t full_size = sizeof(type_id) + sizeof(value);
-    *buffer = malloc(full_size);
+    *buffer = conf.mem_alloc(full_size);
     if (*buffer == NULL) {
         return -1;
     }
@@ -28,7 +30,7 @@ static int bool_to_buffer(const pbd_element* e, char** buffer, size_t* size) {
 }
 
 static int bool_from_buffer(struct pbd_element* e, const char* buffer, 
-        pbd_type_id type_id, size_t* read_bytes) {
+        pbd_type_id type_id, size_t* read_bytes, pbd_conf conf) {
     assert(e != NULL);
     assert(buffer != NULL);
     assert(read_bytes != NULL);
@@ -46,8 +48,8 @@ static struct pbd_element_vtable bool_vtable = {
     pbd_type_bool, bool_to_buffer, bool_from_buffer, NULL
 };
 
-pbd_element* pbd_bool_new() {
-    pbd_bool* s = malloc(sizeof(pbd_bool));
+pbd_element* pbd_bool_new_custom(pbd_conf conf) {
+    pbd_bool* s = conf.mem_alloc(sizeof(pbd_bool));
     if (s == NULL) {
         return NULL;
     }
@@ -55,13 +57,21 @@ pbd_element* pbd_bool_new() {
     return &s->element;
 }
 
-pbd_element* pbd_bool_create(bool value) {
-    pbd_element* e = pbd_bool_new();
+pbd_element* pbd_bool_new() {
+    return pbd_bool_new_custom(pbd_default_conf);
+}
+
+pbd_element* pbd_bool_create_custom(bool value, pbd_conf conf) {
+    pbd_element* e = pbd_bool_new_custom(conf);
     if (e == NULL) {
         return NULL;
     }
     pbd_bool_set(e, value);
     return e;
+}
+
+pbd_element* pbd_bool_create(bool value) {
+    return pbd_bool_create_custom(value, pbd_default_conf);
 }
 
 void pbd_bool_set(pbd_element* e, bool value) {

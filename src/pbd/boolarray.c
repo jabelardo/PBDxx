@@ -7,11 +7,12 @@
 #include "typeid.h"
 #include "boolarray.h"
 #include "arrayutils.h"
+#include "pbdconf_internal.h"
 
 static struct pbd_element_vtable bool_array_vtable;
 
 static int bool_array_to_buffer(const pbd_element* e, char** buffer, 
-        size_t* size) {
+        size_t* size, pbd_conf conf) {
     assert(e != NULL);
     assert(buffer != NULL);
     assert(size != NULL);
@@ -22,7 +23,7 @@ static int bool_array_to_buffer(const pbd_element* e, char** buffer,
     size_t sizeof_array_size = pbd_sizeof_array_size_by_value(raw_data_size);
     size_t full_size = SIZEOF_TYPE_ID + sizeof_array_size + raw_data_size + 
             sizeof(uint8_t);
-    *buffer = malloc(full_size);
+    *buffer = conf.mem_alloc(full_size);
     if (*buffer == NULL) {
         return -1;
     }
@@ -51,7 +52,7 @@ static int bool_array_to_buffer(const pbd_element* e, char** buffer,
 }
 
 static int bool_from_buffer(struct pbd_element* e, const char* buffer, 
-        pbd_type_id type_id, size_t* read_bytes) {
+        pbd_type_id type_id, size_t* read_bytes, pbd_conf conf) {
     assert(e != NULL);
     assert(buffer != NULL);
     assert(read_bytes != NULL);
@@ -63,14 +64,14 @@ static int bool_from_buffer(struct pbd_element* e, const char* buffer,
     uint8_t padding;
     pbd_bool_array* s = (pbd_bool_array*) &(*e);
     if (raw_data_size > 0) {
-        uint8_t* raw_data = malloc(raw_data_size);
+        uint8_t* raw_data = conf.mem_alloc(raw_data_size);
         memcpy(raw_data, buffer + SIZEOF_TYPE_ID + sizeof_raw_data_size, 
                 raw_data_size);
         memcpy(&padding, buffer + SIZEOF_TYPE_ID + sizeof_raw_data_size + 
                 raw_data_size, sizeof(padding));
         size_t array_size = raw_data_size * 8 - padding;
         if (array_size > 0) {
-            bool* values = malloc(sizeof(bool) * array_size);
+            bool* values = conf.mem_alloc(sizeof(bool) * array_size);
             for (size_t i = 0, k = 0; i < raw_data_size; ++i) {
                 for (size_t j = 0; j < 8; ++j, ++k) {
                     if (k > array_size) {
@@ -85,18 +86,18 @@ static int bool_from_buffer(struct pbd_element* e, const char* buffer,
             s->size = array_size;
             s->capacity = array_size;
         }
-        free(raw_data);
+        conf.free_mem(raw_data);
     }
     *read_bytes += SIZEOF_TYPE_ID + sizeof_raw_data_size + raw_data_size 
             + sizeof(padding);
     return 0;
 }
 
-static void bool_array_free(const pbd_element* e) {
+static void bool_array_free(const pbd_element* e, pbd_conf conf) {
     assert(e != NULL);
     assert(e->vtable->type == bool_array_vtable.type);
     pbd_bool_array* s = (pbd_bool_array*) &(*e);
-    free(s->values);
+    conf.free_mem(s->values);
     s->values = NULL;
     s->size = 0;
     s->capacity = 0;
@@ -106,8 +107,8 @@ static struct pbd_element_vtable bool_array_vtable = {
     pbd_type_bool_array, bool_array_to_buffer, bool_from_buffer, bool_array_free
 };
 
-pbd_element* pbd_bool_array_new() {
-    pbd_bool_array* s = malloc(sizeof(pbd_bool_array));
+pbd_element* pbd_bool_array_new_custom(pbd_conf conf) {
+    pbd_bool_array* s = conf.mem_alloc(sizeof(pbd_bool_array));
     if (s == NULL) {
         return NULL;
     }
@@ -116,6 +117,10 @@ pbd_element* pbd_bool_array_new() {
     s->capacity = 0;
     s->element.vtable = &bool_array_vtable;
     return &s->element;
+}
+
+pbd_element* pbd_bool_array_new() {
+    return pbd_bool_array_new_custom(pbd_default_conf);
 }
 
 size_t pbd_bool_array_size(const pbd_element* e) {
@@ -132,12 +137,12 @@ const bool* pbd_bool_array_values(const pbd_element* e) {
     return s->values;
 }
 
-int pbd_bool_array_add(pbd_element* e, bool value) {
+int pbd_bool_array_add_custom(pbd_element* e, bool value, pbd_conf conf) {
     assert(e != NULL);
     assert(e->vtable->type == bool_array_vtable.type);
     pbd_bool_array* s = (pbd_bool_array*) &(*e);
     if (s->values == NULL) {
-        s->values = malloc(sizeof(bool) * 2);
+        s->values = conf.mem_alloc(sizeof(bool) * 2);
         if (s->values == NULL) {
             return -1;
         }
@@ -150,7 +155,7 @@ int pbd_bool_array_add(pbd_element* e, bool value) {
         ++s->size;
         
     } else {
-        s->values = realloc(s->values, sizeof(bool) * s->capacity * 2);
+        s->values = conf.mem_realloc(s->values, sizeof(bool) * s->capacity * 2);
         if (s->values == NULL) {
             return -1;
         }
@@ -159,4 +164,8 @@ int pbd_bool_array_add(pbd_element* e, bool value) {
         s->capacity *= 2;
     }
     return 0;
+}
+
+int pbd_bool_array_add(pbd_element* e, bool value) {
+    return pbd_bool_array_add_custom(e, value, pbd_default_conf);
 }

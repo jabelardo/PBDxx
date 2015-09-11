@@ -6,10 +6,12 @@
 #include "string.h"
 #include "typeid.h"
 #include "arrayutils.h"
+#include "pbdconf_internal.h"
 
 static struct pbd_element_vtable string_vtable;
 
-static int string_to_buffer(const pbd_element* e, char** buffer, size_t* size) {
+static int string_to_buffer(const pbd_element* e, char** buffer, size_t* size,
+        pbd_conf conf) {
     assert(e != NULL);
     assert(buffer != NULL);
     assert(size != NULL);
@@ -20,7 +22,7 @@ static int string_to_buffer(const pbd_element* e, char** buffer, size_t* size) {
     uint8_t type_id = pbd_type_to_write(type, len);
     size_t sizeof_array_size = pbd_sizeof_array_size_by_value(len);
     size_t full_size = SIZEOF_TYPE_ID + sizeof_array_size + len;
-    *buffer = malloc(full_size);
+    *buffer = conf.mem_alloc(full_size);
     if (*buffer == NULL) {
         return -1;
     }
@@ -32,7 +34,7 @@ static int string_to_buffer(const pbd_element* e, char** buffer, size_t* size) {
 }
 
 static int string_from_buffer(struct pbd_element* e, const char* buffer, 
-        pbd_type_id type_id, size_t* read_bytes) {
+        pbd_type_id type_id, size_t* read_bytes, pbd_conf conf) {
     assert(e != NULL);
     assert(buffer != NULL);
     assert(read_bytes != NULL);
@@ -41,7 +43,7 @@ static int string_from_buffer(struct pbd_element* e, const char* buffer,
     buffer += *read_bytes;
     size_t sizeof_array_size = pbd_sizeof_array_size_by_type(type_id);
     uint32_t len = pbd_read_array_size(buffer, sizeof_array_size);
-    char* str = malloc(len + 1);
+    char* str = conf.mem_alloc(len + 1);
     strlcpy(str, buffer + SIZEOF_TYPE_ID + sizeof_array_size, len + 1);
     pbd_string* s = (pbd_string*) &(*e);
     s->value = str;
@@ -49,11 +51,11 @@ static int string_from_buffer(struct pbd_element* e, const char* buffer,
     return 0;
 }
 
-static void string_free(const pbd_element* e) {
+static void string_free(const pbd_element* e, pbd_conf conf) {
     assert(e != NULL);
     assert(e->vtable->type == string_vtable.type);
     pbd_string* s = (pbd_string*) &(*e);
-    free(s->value);
+    conf.free_mem(s->value);
     s->value = NULL;
 }
 
@@ -61,8 +63,8 @@ static struct pbd_element_vtable string_vtable = {
     pbd_type_string, string_to_buffer, string_from_buffer, string_free
 };
 
-pbd_element* pbd_string_new() {
-    pbd_string* s = malloc(sizeof(pbd_string));
+pbd_element* pbd_string_new_custom(pbd_conf conf) {
+    pbd_string* s = conf.mem_alloc(sizeof(pbd_string));
     if (s == NULL) {
         return NULL;
     }
@@ -71,26 +73,38 @@ pbd_element* pbd_string_new() {
     return &s->element;
 }
 
+pbd_element* pbd_string_new() {
+    return pbd_string_new_custom(pbd_default_conf);
+}
+
 pbd_element* pbd_string_create(const char* value) {
+    return pbd_string_create_custom(value, pbd_default_conf);
+}
+
+pbd_element* pbd_string_create_custom(const char* value, pbd_conf conf) {
     assert(value != NULL);
-    pbd_element* e = pbd_string_new();
+    pbd_element* e = pbd_string_new_custom(conf);
     if (e == NULL) {
         return NULL;
     }
-    pbd_string_set(e, value);
+    pbd_string_set_custom(e, value, conf);
     return e;
 }
 
 int pbd_string_set(pbd_element* e, const char* value) {
+    return pbd_string_set_custom(e, value, pbd_default_conf);
+}
+
+int pbd_string_set_custom(pbd_element* e, const char* value, pbd_conf conf) {
     assert(e != NULL);
     assert(value != NULL);
     assert(e->vtable->type == string_vtable.type);
     pbd_string* s = (pbd_string*) &(*e);
     size_t size = strlen(value) + 1;
     if (s->value) {
-        s->value = realloc(s->value, size);
+        s->value = conf.mem_realloc(s->value, size);
     } else {
-        s->value = malloc(size);
+        s->value = conf.mem_alloc(size);
     }
     if (s == NULL) {
         return -1;

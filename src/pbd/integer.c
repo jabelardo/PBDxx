@@ -6,10 +6,12 @@
 #include "integer.h"
 #include "typeid.h"
 #include "endianess.h"
+#include "pbdconf_internal.h"
 
 static struct pbd_element_vtable integer_vtable;
 
-static int integer_to_buffer(const pbd_element* e, char** buffer, size_t* size) {
+static int integer_to_buffer(const pbd_element* e, char** buffer, size_t* size,
+        pbd_conf conf) {
     assert(e != NULL);
     assert(buffer != NULL);
     assert(size != NULL);
@@ -21,7 +23,7 @@ static int integer_to_buffer(const pbd_element* e, char** buffer, size_t* size) 
         return -1;
     }
     uint16_t full_size = SIZEOF_TYPE_ID + sizeof_value;
-    *buffer = malloc(full_size);
+    *buffer = conf.mem_alloc(full_size);
     if (*buffer == NULL) {
         return -1;
     }
@@ -43,7 +45,7 @@ static int integer_to_buffer(const pbd_element* e, char** buffer, size_t* size) 
 }
 
 static int integer_from_buffer(struct pbd_element* e, const char* buffer, 
-        pbd_type_id type_id, size_t* read_bytes) {
+        pbd_type_id type_id, size_t* read_bytes, pbd_conf conf) {
     assert(e != NULL);
     assert(buffer != NULL);
     assert(read_bytes != NULL);
@@ -83,8 +85,8 @@ static struct pbd_element_vtable integer_vtable = {
     pbd_type_integer, integer_to_buffer, integer_from_buffer, NULL
 };
 
-pbd_element* pbd_integer_new() {
-    pbd_integer* s = malloc(sizeof(pbd_integer));
+pbd_element* pbd_integer_new_custom(pbd_conf conf) {
+    pbd_integer* s = conf.mem_alloc(sizeof(pbd_integer));
     if (s == NULL) {
         return NULL;
     }
@@ -92,13 +94,21 @@ pbd_element* pbd_integer_new() {
     return &s->element;
 }
 
-pbd_element* pbd_integer_create(int64_t value) {
-    pbd_element* e = pbd_integer_new();
+pbd_element* pbd_integer_new() {
+    return pbd_integer_new_custom(pbd_default_conf);
+}
+
+pbd_element* pbd_integer_create_custom(int64_t value, pbd_conf conf) {
+    pbd_element* e = pbd_integer_new_custom(conf);
     if (e == NULL) {
         return NULL;
     }
     pbd_integer_set(e, value);
     return e;
+}
+
+pbd_element* pbd_integer_create(int64_t value) {
+    return pbd_integer_create_custom(value, pbd_default_conf);
 }
 
 void pbd_integer_set(pbd_element* e, int64_t value) {

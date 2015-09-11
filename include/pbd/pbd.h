@@ -114,21 +114,37 @@ pbd_type_id pbd_element_type(const pbd_element* e);
 
 int pbd_element_to_buffer(const pbd_element* e, char** buffer, size_t* size);
 
+int pbd_element_to_buffer_custom(const pbd_element* e, char** buffer, size_t* size, pbd_conf conf);
+
 pbd_element* pbd_element_from_buffer(const char* buffer, size_t* read_bytes);
+
+pbd_element* pbd_element_from_buffer_custom(const char* buffer, size_t* read_bytes, pbd_conf conf);
 
 pbd_element* pbd_element_create(const char* buffer);
 
+pbd_element* pbd_element_create_custom(const char* buffer, pbd_conf conf);
+
 void pbd_element_free(const pbd_element* e);
 
+void pbd_element_free_custom(const pbd_element* e, pbd_conf conf);
+
 pbd_element* pbd_element_new(pbd_type_id type);
+
+pbd_element* pbd_element_new_custom(pbd_type_id type, pbd_conf conf);
 
 /* null */
 pbd_element* pbd_null_new();
 
+pbd_element* pbd_null_new_custom(pbd_conf conf);
+
 /* bool */
 pbd_element* pbd_bool_new();
 
+pbd_element* pbd_bool_new_custom(pbd_conf conf);
+
 pbd_element* pbd_bool_create(bool value);
+
+pbd_element* pbd_bool_create_custom(bool value, pbd_conf conf);
 
 void pbd_bool_set(pbd_element* e, bool value);
 
@@ -137,7 +153,11 @@ bool pbd_bool_get(const pbd_element* e);
 /* integer */
 pbd_element* pbd_integer_new();
 
+pbd_element* pbd_integer_new_custom(pbd_conf conf);
+
 pbd_element* pbd_integer_create(int64_t value);
+
+pbd_element* pbd_integer_create_custom(int64_t value, pbd_conf conf);
 
 void pbd_integer_set(pbd_element* e, int64_t value);
 
@@ -146,7 +166,11 @@ int64_t pbd_integer_get(const pbd_element* e);
 /* real */
 pbd_element* pbd_real_new();
 
+pbd_element* pbd_real_new_custom(pbd_conf conf);
+
 pbd_element* pbd_real_create(double value);
+
+pbd_element* pbd_real_create_custom(double value, pbd_conf conf);
 
 void pbd_real_set(pbd_element* e, double value);
 
@@ -155,16 +179,26 @@ double pbd_real_get(const pbd_element* e);
 /* string */
 pbd_element* pbd_string_new();
 
+pbd_element* pbd_string_new_custom(pbd_conf conf);
+
 pbd_element* pbd_string_create(const char* value);
 
+pbd_element* pbd_string_create_custom(const char* value, pbd_conf conf);
+
 int pbd_string_set(pbd_element* e, const char* value);
+
+int pbd_string_set_custom(pbd_element* e, const char* value, pbd_conf conf);
 
 const char* pbd_string_get(const pbd_element* e);
 
 /* bool_array */
 pbd_element* pbd_bool_array_new();
 
+pbd_element* pbd_bool_array_new_custom(pbd_conf conf);
+
 int pbd_bool_array_add(pbd_element* s, bool value);
+
+int pbd_bool_array_add_custom(pbd_element* s, bool value, pbd_conf conf);
 
 size_t pbd_bool_array_size(const pbd_element* s);
     
@@ -173,7 +207,11 @@ const bool* pbd_bool_array_values(const pbd_element* s);
 /* element_array */
 pbd_element* pbd_element_array_new();
 
+pbd_element* pbd_element_array_new_custom(pbd_conf conf);
+
 int pbd_element_array_add(pbd_element* s, pbd_element* value);
+
+int pbd_element_array_add_custom(pbd_element* e, pbd_element* value, pbd_conf conf);
 
 size_t pbd_element_array_size(const pbd_element* s);
     
@@ -182,7 +220,11 @@ const pbd_element** pbd_element_array_values(const pbd_element* s);
 /* integer_array */
 pbd_element* pbd_integer_array_new();
 
+pbd_element* pbd_integer_array_new_custom(pbd_conf conf);
+
 int pbd_integer_array_add(pbd_element* s, int64_t value);
+
+int pbd_integer_array_add_custom(pbd_element* s, int64_t value, pbd_conf conf);
 
 size_t pbd_integer_array_size(const pbd_element* s);
     
@@ -191,7 +233,11 @@ const int64_t* pbd_integer_array_values(const pbd_element* s);
 /* real_array */
 pbd_element* pbd_real_array_new();
 
+pbd_element* pbd_real_array_new_custom(pbd_conf conf);
+
 int pbd_real_array_add(pbd_element* s, double value);
+
+int pbd_real_array_add_custom(pbd_element* s, double value, pbd_conf conf);
 
 size_t pbd_real_array_size(const pbd_element* s);
     

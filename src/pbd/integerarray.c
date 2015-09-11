@@ -8,6 +8,7 @@
 #include "integerarray.h"
 #include "arrayutils.h"
 #include "endianess.h"
+#include "pbdconf_internal.h"
 
 typedef struct pbd_int64_t_min_max {
     int64_t min;
@@ -32,7 +33,7 @@ static pbd_int64_t_min_max get_min_max(const pbd_integer_array* s) {
 static struct pbd_element_vtable integer_array_vtable;
     
 static int integer_array_to_buffer(const pbd_element* e, char** buffer, 
-        size_t* size) {
+        size_t* size, pbd_conf conf) {
     assert(e != NULL);
     assert(buffer != NULL);
     assert(size != NULL);
@@ -48,7 +49,7 @@ static int integer_array_to_buffer(const pbd_element* e, char** buffer,
         return -1;
     }
     size_t full_size = SIZEOF_TYPE_ID + sizeof_array_size + sizeof_value * s->size;
-    *buffer = malloc(full_size);
+    *buffer = conf.mem_alloc(full_size);
     if (*buffer == NULL) {
         return -1;
     }
@@ -77,7 +78,7 @@ static int integer_array_to_buffer(const pbd_element* e, char** buffer,
 }
 
 static int integer_array_from_buffer(struct pbd_element* e, const char* buffer, 
-        pbd_type_id type_id, size_t* read_bytes) {
+        pbd_type_id type_id, size_t* read_bytes, pbd_conf conf) {
     assert(e != NULL);
     assert(buffer != NULL);
     assert(read_bytes != NULL);
@@ -121,11 +122,11 @@ static int integer_array_from_buffer(struct pbd_element* e, const char* buffer,
     return 0;
 }
 
-static void integer_array_free(const pbd_element* e) {
+static void integer_array_free(const pbd_element* e, pbd_conf conf) {
     assert(e != NULL);
     assert(e->vtable->type == integer_array_vtable.type);
     pbd_integer_array* s = (pbd_integer_array*) &(*e);
-    free(s->values);
+    conf.free_mem(s->values);
     s->values = NULL;
     s->size = 0;
     s->capacity = 0;
@@ -137,7 +138,11 @@ static struct pbd_element_vtable integer_array_vtable = {
 };
 
 pbd_element* pbd_integer_array_new() {
-    pbd_integer_array* s = malloc(sizeof(pbd_integer_array));
+    return pbd_integer_array_new_custom(pbd_default_conf);
+}
+
+pbd_element* pbd_integer_array_new_custom(pbd_conf conf) {
+    pbd_integer_array* s = conf.mem_alloc(sizeof(pbd_integer_array));
     if (s == NULL) {
         return NULL;
     }
@@ -162,12 +167,12 @@ const int64_t* pbd_integer_array_values(const pbd_element* e) {
     return s->values;
 }
 
-int pbd_integer_array_add(pbd_element* e, int64_t value) {
+int pbd_integer_array_add_custom(pbd_element* e, int64_t value, pbd_conf conf) {
     assert(e != NULL);
     assert(e->vtable->type == integer_array_vtable.type);
     pbd_integer_array* s = (pbd_integer_array*) &(*e);
     if (s->values == NULL) {
-        s->values = malloc(sizeof(int64_t) * 2);
+        s->values = conf.mem_alloc(sizeof(int64_t) * 2);
         if (s->values == NULL) {
             return -1;
         }
@@ -180,7 +185,7 @@ int pbd_integer_array_add(pbd_element* e, int64_t value) {
         ++s->size;
         
     } else {
-        s->values = realloc(s->values, sizeof(int64_t) * s->capacity * 2);
+        s->values = conf.mem_realloc(s->values, sizeof(int64_t) * s->capacity * 2);
         if (s->values == NULL) {
             return -1;
         }
@@ -189,4 +194,8 @@ int pbd_integer_array_add(pbd_element* e, int64_t value) {
         s->capacity *= 2;
     }
     return 0;
+}
+
+int pbd_integer_array_add(pbd_element* e, int64_t value) {
+    return pbd_integer_array_add_custom(e, value, pbd_default_conf);
 }

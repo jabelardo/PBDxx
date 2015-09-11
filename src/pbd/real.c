@@ -6,10 +6,12 @@
 #include "real.h"
 #include "typeid.h"
 #include "endianess.h"
+#include "pbdconf_internal.h"
 
 static struct pbd_element_vtable real_vtable;
 
-static int real_to_buffer(const pbd_element* e, char** buffer, size_t* size) {
+static int real_to_buffer(const pbd_element* e, char** buffer, size_t* size,
+        pbd_conf conf) {
     assert(e != NULL);
     assert(buffer != NULL);
     assert(size != NULL);
@@ -21,7 +23,7 @@ static int real_to_buffer(const pbd_element* e, char** buffer, size_t* size) {
         return -1;
     }
     uint16_t full_size = SIZEOF_TYPE_ID + sizeof_value;
-    *buffer = malloc(full_size);
+    *buffer = conf.mem_alloc(full_size);
     if (*buffer == NULL) {
         return -1;
     }
@@ -37,7 +39,7 @@ static int real_to_buffer(const pbd_element* e, char** buffer, size_t* size) {
 }
 
 static int real_from_buffer(struct pbd_element* e, const char* buffer, 
-        pbd_type_id type_id, size_t* read_bytes) {
+        pbd_type_id type_id, size_t* read_bytes, pbd_conf conf) {
     assert(e != NULL);
     assert(buffer != NULL);
     assert(read_bytes != NULL);
@@ -67,8 +69,8 @@ static struct pbd_element_vtable real_vtable = {
     pbd_type_real, real_to_buffer, real_from_buffer, NULL
 };
 
-pbd_element* pbd_real_new() {
-    pbd_real* s = malloc(sizeof(pbd_real));
+pbd_element* pbd_real_new_custom(pbd_conf conf) {
+    pbd_real* s = conf.mem_alloc(sizeof(pbd_real));
     if (s == NULL) {
         return NULL;
     }
@@ -76,8 +78,16 @@ pbd_element* pbd_real_new() {
     return &s->element;
 }
 
+pbd_element* pbd_real_new(pbd_conf conf) {
+    return pbd_real_new_custom(pbd_default_conf);
+}
+
 pbd_element* pbd_real_create(double value) {
-    pbd_element* e = pbd_real_new();
+    return pbd_real_create_custom(value, pbd_default_conf);
+}
+
+pbd_element* pbd_real_create_custom(double value, pbd_conf conf) {
+    pbd_element* e = pbd_real_new_custom(conf);
     if (e == NULL) {
         return NULL;
     }
