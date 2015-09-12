@@ -9,8 +9,8 @@
 
 static struct pbd_element_vtable null_vtable;
 
-static int null_to_buffer(const pbd_element* e, char** buffer, size_t* size,
-        pbd_conf conf) {
+static int null_to_buffer(pbd_conf conf, const pbd_element* e, char** buffer, 
+        size_t* size) {
     assert(e != NULL);
     assert(buffer != NULL);
     assert(size != NULL);
@@ -27,8 +27,8 @@ static int null_to_buffer(const pbd_element* e, char** buffer, size_t* size,
     return 0;
 }
 
-static int null_from_buffer(struct pbd_element* e, const char* buffer, 
-        pbd_type_id type_id, size_t* read_bytes, pbd_conf conf) {
+static int null_from_buffer(pbd_conf conf, struct pbd_element* e, 
+        const char* buffer, pbd_type_id type_id, size_t* read_bytes) {
     assert(e != NULL);
     assert(buffer != NULL);
     assert(read_bytes != NULL);

@@ -9,8 +9,8 @@
 
 static struct pbd_element_vtable bool_vtable;
 
-static int bool_to_buffer(const pbd_element* e, char** buffer, size_t* size, 
-        pbd_conf conf) {
+static int bool_to_buffer(pbd_conf conf, const pbd_element* e, char** buffer, 
+        size_t* size) {
     assert(e != NULL);
     assert(buffer != NULL);
     assert(size != NULL);
@@ -29,8 +29,8 @@ static int bool_to_buffer(const pbd_element* e, char** buffer, size_t* size,
     return 0;
 }
 
-static int bool_from_buffer(struct pbd_element* e, const char* buffer, 
-        pbd_type_id type_id, size_t* read_bytes, pbd_conf conf) {
+static int bool_from_buffer(pbd_conf conf, struct pbd_element* e, 
+        const char* buffer, pbd_type_id type_id, size_t* read_bytes) {
     assert(e != NULL);
     assert(buffer != NULL);
     assert(read_bytes != NULL);
@@ -61,7 +61,7 @@ pbd_element* pbd_bool_new() {
     return pbd_bool_new_custom(pbd_default_conf);
 }
 
-pbd_element* pbd_bool_create_custom(bool value, pbd_conf conf) {
+pbd_element* pbd_bool_create_custom(pbd_conf conf, bool value) {
     pbd_element* e = pbd_bool_new_custom(conf);
     if (e == NULL) {
         return NULL;
@@ -71,7 +71,7 @@ pbd_element* pbd_bool_create_custom(bool value, pbd_conf conf) {
 }
 
 pbd_element* pbd_bool_create(bool value) {
-    return pbd_bool_create_custom(value, pbd_default_conf);
+    return pbd_bool_create_custom(pbd_default_conf, value);
 }
 
 void pbd_bool_set(pbd_element* e, bool value) {

@@ -10,8 +10,8 @@
 
 static struct pbd_element_vtable real_vtable;
 
-static int real_to_buffer(const pbd_element* e, char** buffer, size_t* size,
-        pbd_conf conf) {
+static int real_to_buffer(pbd_conf conf, const pbd_element* e, char** buffer, 
+        size_t* size) {
     assert(e != NULL);
     assert(buffer != NULL);
     assert(size != NULL);
@@ -38,8 +38,8 @@ static int real_to_buffer(const pbd_element* e, char** buffer, size_t* size,
     return 0;
 }
 
-static int real_from_buffer(struct pbd_element* e, const char* buffer, 
-        pbd_type_id type_id, size_t* read_bytes, pbd_conf conf) {
+static int real_from_buffer(pbd_conf conf, struct pbd_element* e, 
+        const char* buffer, pbd_type_id type_id, size_t* read_bytes) {
     assert(e != NULL);
     assert(buffer != NULL);
     assert(read_bytes != NULL);
@@ -83,10 +83,10 @@ pbd_element* pbd_real_new(pbd_conf conf) {
 }
 
 pbd_element* pbd_real_create(double value) {
-    return pbd_real_create_custom(value, pbd_default_conf);
+    return pbd_real_create_custom(pbd_default_conf, value);
 }
 
-pbd_element* pbd_real_create_custom(double value, pbd_conf conf) {
+pbd_element* pbd_real_create_custom(pbd_conf conf, double value) {
     pbd_element* e = pbd_real_new_custom(conf);
     if (e == NULL) {
         return NULL;

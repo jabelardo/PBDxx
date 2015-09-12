@@ -15,8 +15,8 @@ typedef struct buffer_item {
 
 static struct pbd_element_vtable element_array_vtable;
 
-static int element_array_to_buffer(const pbd_element* e, char** buffer, 
-        size_t* size, pbd_conf conf) {
+static int element_array_to_buffer(pbd_conf conf, const pbd_element* e, 
+        char** buffer, size_t* size) {
     assert(e != NULL);
     assert(buffer != NULL);
     assert(size != NULL);
@@ -43,7 +43,7 @@ static int element_array_to_buffer(const pbd_element* e, char** buffer,
         buffer_item* item = &items[i + 1]; 
         item->buffer = NULL;
         item->size = 0;
-        if (-1 ==s->values[i]->vtable->to_buffer(e, &item->buffer, &item->size, conf)) {
+        if (-1 ==s->values[i]->vtable->to_buffer(conf, e, &item->buffer, &item->size)) {
             return -1;
         }
         *size += item->size;
@@ -63,8 +63,8 @@ static int element_array_to_buffer(const pbd_element* e, char** buffer,
     return 0;
 }
 
-static int element_array_from_buffer(struct pbd_element* e, const char* buffer, 
-        pbd_type_id type_id, size_t* read_bytes, pbd_conf conf) {
+static int element_array_from_buffer(pbd_conf conf, struct pbd_element* e, 
+        const char* buffer, pbd_type_id type_id, size_t* read_bytes) {
     assert(e != NULL);
     assert(buffer != NULL);
     assert(read_bytes != NULL);
@@ -88,14 +88,14 @@ static int element_array_from_buffer(struct pbd_element* e, const char* buffer,
     return 0;
 }
 
-static void element_array_free(const pbd_element* e, pbd_conf conf) {
+static void element_array_free(pbd_conf conf, const pbd_element* e) {
     assert(e != NULL);
     assert(e->vtable->type == element_array_vtable.type);
     pbd_element_array* s = (pbd_element_array*) &(*e);
     for (size_t i = 0; i < s->size; ++i) {
-        void (*method_free)(const struct pbd_element*, pbd_conf) = s->values[i]->vtable->free;
-        if (method_free) {
-            method_free(s->values[i], conf);
+        void (*free)(pbd_conf, const struct pbd_element*) = s->values[i]->vtable->free;
+        if (free) {
+            free(conf, s->values[i]);
         }
     }
     conf.free_mem(s->values);
@@ -139,7 +139,7 @@ const pbd_element** pbd_element_array_values(const pbd_element* e) {
     return (const pbd_element**) s->values;
 }
 
-int pbd_element_array_add_custom(pbd_element* e, pbd_element* value, pbd_conf conf) {
+int pbd_element_array_add_custom(pbd_conf conf, pbd_element* e, pbd_element* value) {
     assert(e != NULL);
     assert(e->vtable->type == element_array_vtable.type);
     pbd_element_array* s = (pbd_element_array*) &(*e);
@@ -169,5 +169,5 @@ int pbd_element_array_add_custom(pbd_element* e, pbd_element* value, pbd_conf co
 }
 
 int pbd_element_array_add(pbd_element* e, pbd_element* value) {
-    return pbd_element_array_add_custom(e, value, pbd_default_conf);
+    return pbd_element_array_add_custom(pbd_default_conf, e, value);
 }

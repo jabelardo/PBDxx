@@ -10,8 +10,8 @@
 
 static struct pbd_element_vtable string_vtable;
 
-static int string_to_buffer(const pbd_element* e, char** buffer, size_t* size,
-        pbd_conf conf) {
+static int string_to_buffer(pbd_conf conf, const pbd_element* e, char** buffer, 
+        size_t* size) {
     assert(e != NULL);
     assert(buffer != NULL);
     assert(size != NULL);
@@ -33,8 +33,8 @@ static int string_to_buffer(const pbd_element* e, char** buffer, size_t* size,
     return 0;
 }
 
-static int string_from_buffer(struct pbd_element* e, const char* buffer, 
-        pbd_type_id type_id, size_t* read_bytes, pbd_conf conf) {
+static int string_from_buffer(pbd_conf conf, struct pbd_element* e, 
+        const char* buffer, pbd_type_id type_id, size_t* read_bytes) {
     assert(e != NULL);
     assert(buffer != NULL);
     assert(read_bytes != NULL);
@@ -51,7 +51,7 @@ static int string_from_buffer(struct pbd_element* e, const char* buffer,
     return 0;
 }
 
-static void string_free(const pbd_element* e, pbd_conf conf) {
+static void string_free(pbd_conf conf, const pbd_element* e) {
     assert(e != NULL);
     assert(e->vtable->type == string_vtable.type);
     pbd_string* s = (pbd_string*) &(*e);
@@ -78,24 +78,24 @@ pbd_element* pbd_string_new() {
 }
 
 pbd_element* pbd_string_create(const char* value) {
-    return pbd_string_create_custom(value, pbd_default_conf);
+    return pbd_string_create_custom(pbd_default_conf, value);
 }
 
-pbd_element* pbd_string_create_custom(const char* value, pbd_conf conf) {
+pbd_element* pbd_string_create_custom(pbd_conf conf, const char* value) {
     assert(value != NULL);
     pbd_element* e = pbd_string_new_custom(conf);
     if (e == NULL) {
         return NULL;
     }
-    pbd_string_set_custom(e, value, conf);
+    pbd_string_set_custom(conf, e, value);
     return e;
 }
 
 int pbd_string_set(pbd_element* e, const char* value) {
-    return pbd_string_set_custom(e, value, pbd_default_conf);
+    return pbd_string_set_custom(pbd_default_conf, e, value);
 }
 
-int pbd_string_set_custom(pbd_element* e, const char* value, pbd_conf conf) {
+int pbd_string_set_custom(pbd_conf conf, pbd_element* e, const char* value) {
     assert(e != NULL);
     assert(value != NULL);
     assert(e->vtable->type == string_vtable.type);

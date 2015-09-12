@@ -10,8 +10,8 @@
 
 static struct pbd_element_vtable integer_vtable;
 
-static int integer_to_buffer(const pbd_element* e, char** buffer, size_t* size,
-        pbd_conf conf) {
+static int integer_to_buffer(pbd_conf conf, const pbd_element* e, char** buffer, 
+        size_t* size) {
     assert(e != NULL);
     assert(buffer != NULL);
     assert(size != NULL);
@@ -44,8 +44,8 @@ static int integer_to_buffer(const pbd_element* e, char** buffer, size_t* size,
     return 0;
 }
 
-static int integer_from_buffer(struct pbd_element* e, const char* buffer, 
-        pbd_type_id type_id, size_t* read_bytes, pbd_conf conf) {
+static int integer_from_buffer(pbd_conf conf, struct pbd_element* e, 
+        const char* buffer, pbd_type_id type_id, size_t* read_bytes) {
     assert(e != NULL);
     assert(buffer != NULL);
     assert(read_bytes != NULL);
@@ -98,7 +98,7 @@ pbd_element* pbd_integer_new() {
     return pbd_integer_new_custom(pbd_default_conf);
 }
 
-pbd_element* pbd_integer_create_custom(int64_t value, pbd_conf conf) {
+pbd_element* pbd_integer_create_custom(pbd_conf conf, int64_t value) {
     pbd_element* e = pbd_integer_new_custom(conf);
     if (e == NULL) {
         return NULL;
@@ -108,7 +108,7 @@ pbd_element* pbd_integer_create_custom(int64_t value, pbd_conf conf) {
 }
 
 pbd_element* pbd_integer_create(int64_t value) {
-    return pbd_integer_create_custom(value, pbd_default_conf);
+    return pbd_integer_create_custom(pbd_default_conf, value);
 }
 
 void pbd_integer_set(pbd_element* e, int64_t value) {

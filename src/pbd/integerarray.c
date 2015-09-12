@@ -32,8 +32,8 @@ static pbd_int64_t_min_max get_min_max(const pbd_integer_array* s) {
 
 static struct pbd_element_vtable integer_array_vtable;
     
-static int integer_array_to_buffer(const pbd_element* e, char** buffer, 
-        size_t* size, pbd_conf conf) {
+static int integer_array_to_buffer(pbd_conf conf, const pbd_element* e, 
+        char** buffer, size_t* size) {
     assert(e != NULL);
     assert(buffer != NULL);
     assert(size != NULL);
@@ -77,8 +77,8 @@ static int integer_array_to_buffer(const pbd_element* e, char** buffer,
     return 0;
 }
 
-static int integer_array_from_buffer(struct pbd_element* e, const char* buffer, 
-        pbd_type_id type_id, size_t* read_bytes, pbd_conf conf) {
+static int integer_array_from_buffer(pbd_conf conf, struct pbd_element* e, 
+        const char* buffer, pbd_type_id type_id, size_t* read_bytes) {
     assert(e != NULL);
     assert(buffer != NULL);
     assert(read_bytes != NULL);
@@ -122,7 +122,7 @@ static int integer_array_from_buffer(struct pbd_element* e, const char* buffer,
     return 0;
 }
 
-static void integer_array_free(const pbd_element* e, pbd_conf conf) {
+static void integer_array_free(pbd_conf conf, const pbd_element* e) {
     assert(e != NULL);
     assert(e->vtable->type == integer_array_vtable.type);
     pbd_integer_array* s = (pbd_integer_array*) &(*e);
@@ -167,7 +167,7 @@ const int64_t* pbd_integer_array_values(const pbd_element* e) {
     return s->values;
 }
 
-int pbd_integer_array_add_custom(pbd_element* e, int64_t value, pbd_conf conf) {
+int pbd_integer_array_add_custom(pbd_conf conf, pbd_element* e, int64_t value) {
     assert(e != NULL);
     assert(e->vtable->type == integer_array_vtable.type);
     pbd_integer_array* s = (pbd_integer_array*) &(*e);
@@ -197,5 +197,5 @@ int pbd_integer_array_add_custom(pbd_element* e, int64_t value, pbd_conf conf) {
 }
 
 int pbd_integer_array_add(pbd_element* e, int64_t value) {
-    return pbd_integer_array_add_custom(e, value, pbd_default_conf);
+    return pbd_integer_array_add_custom(pbd_default_conf, e, value);
 }

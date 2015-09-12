@@ -34,8 +34,8 @@ static pbd_double_min_max get_min_max(const pbd_real_array* s) {
 
 static struct pbd_element_vtable real_array_vtable;
     
-static int real_array_to_buffer(const pbd_element* e, char** buffer, 
-        size_t* size, pbd_conf conf) {
+static int real_array_to_buffer(pbd_conf conf, const pbd_element* e, 
+        char** buffer, size_t* size) {
     assert(e != NULL);
     assert(buffer != NULL);
     assert(size != NULL);
@@ -71,8 +71,8 @@ static int real_array_to_buffer(const pbd_element* e, char** buffer,
     return 0;
 }
 
-static int real_array_from_buffer(struct pbd_element* e, const char* buffer, 
-        pbd_type_id type_id, size_t* read_bytes, pbd_conf conf) {
+static int real_array_from_buffer( pbd_conf conf, struct pbd_element* e, 
+        const char* buffer, pbd_type_id type_id, size_t* read_bytes) {
     assert(e != NULL);
     assert(buffer != NULL);
     assert(read_bytes != NULL);
@@ -104,7 +104,7 @@ static int real_array_from_buffer(struct pbd_element* e, const char* buffer,
     return 0;
 }
 
-static void real_array_free(const pbd_element* e, pbd_conf conf) {
+static void real_array_free(pbd_conf conf, const pbd_element* e) {
     assert(e != NULL);
     assert(e->vtable->type == real_array_vtable.type);
     pbd_real_array* s = (pbd_real_array*) &(*e);
@@ -148,7 +148,7 @@ const double* pbd_real_array_values(const pbd_element* e) {
     return s->values;
 }
 
-int pbd_real_array_add_custom(pbd_element* e, double value, pbd_conf conf) {
+int pbd_real_array_add_custom(pbd_conf conf, pbd_element* e, double value) {
     assert(e != NULL);
     assert(e->vtable->type == real_array_vtable.type);
     pbd_real_array* s = (pbd_real_array*) &(*e);
@@ -178,5 +178,5 @@ int pbd_real_array_add_custom(pbd_element* e, double value, pbd_conf conf) {
 }
 
 int pbd_real_array_add(pbd_element* e, double value) {
-    return pbd_real_array_add_custom(e, value, pbd_default_conf);
+    return pbd_real_array_add_custom(pbd_default_conf, e, value);
 }

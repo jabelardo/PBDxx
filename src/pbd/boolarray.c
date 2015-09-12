@@ -11,8 +11,8 @@
 
 static struct pbd_element_vtable bool_array_vtable;
 
-static int bool_array_to_buffer(const pbd_element* e, char** buffer, 
-        size_t* size, pbd_conf conf) {
+static int bool_array_to_buffer(pbd_conf conf, const pbd_element* e, 
+        char** buffer, size_t* size) {
     assert(e != NULL);
     assert(buffer != NULL);
     assert(size != NULL);
@@ -51,8 +51,8 @@ static int bool_array_to_buffer(const pbd_element* e, char** buffer,
     return 0;
 }
 
-static int bool_from_buffer(struct pbd_element* e, const char* buffer, 
-        pbd_type_id type_id, size_t* read_bytes, pbd_conf conf) {
+static int bool_from_buffer(pbd_conf conf, struct pbd_element* e, 
+        const char* buffer, pbd_type_id type_id, size_t* read_bytes) {
     assert(e != NULL);
     assert(buffer != NULL);
     assert(read_bytes != NULL);
@@ -93,7 +93,7 @@ static int bool_from_buffer(struct pbd_element* e, const char* buffer,
     return 0;
 }
 
-static void bool_array_free(const pbd_element* e, pbd_conf conf) {
+static void bool_array_free(pbd_conf conf, const pbd_element* e) {
     assert(e != NULL);
     assert(e->vtable->type == bool_array_vtable.type);
     pbd_bool_array* s = (pbd_bool_array*) &(*e);
@@ -137,7 +137,7 @@ const bool* pbd_bool_array_values(const pbd_element* e) {
     return s->values;
 }
 
-int pbd_bool_array_add_custom(pbd_element* e, bool value, pbd_conf conf) {
+int pbd_bool_array_add_custom(pbd_conf conf, pbd_element* e, bool value) {
     assert(e != NULL);
     assert(e->vtable->type == bool_array_vtable.type);
     pbd_bool_array* s = (pbd_bool_array*) &(*e);
@@ -167,5 +167,5 @@ int pbd_bool_array_add_custom(pbd_element* e, bool value, pbd_conf conf) {
 }
 
 int pbd_bool_array_add(pbd_element* e, bool value) {
-    return pbd_bool_array_add_custom(e, value, pbd_default_conf);
+    return pbd_bool_array_add_custom(pbd_default_conf, e, value);
 }

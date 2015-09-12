@@ -112,7 +112,7 @@ static int pbd_doc_compress(char* in, size_t in_size, char** result,
     return 0;
 }
  
-int pbd_doc_to_buffer_custom(pbd_element* e, char** buffer, size_t* size, pbd_conf conf) {
+int pbd_doc_to_buffer_custom(pbd_conf conf, pbd_element* e, char** buffer, size_t* size) {
     char* e_buffer = NULL;
     size_t e_size = 0;
     int rcode = pbd_element_to_buffer(e, &e_buffer, &e_size);
@@ -187,7 +187,7 @@ int pbd_doc_to_buffer_custom(pbd_element* e, char** buffer, size_t* size, pbd_co
 }
 
 int pbd_doc_to_buffer(pbd_element* e, char** buffer, size_t* size) {
-    return pbd_doc_to_buffer_custom(e, buffer, size, pbd_default_conf);
+    return pbd_doc_to_buffer_custom(pbd_default_conf, e, buffer, size);
 }
 
 static size_t pbd_doc_get_buffer_size(pbd_doc_head h, const char*  buffer) {
@@ -332,7 +332,8 @@ static int pbd_doc_decompress(const char* in, size_t in_size, size_t out_size,
     return 0;
 }
 
-pbd_element* pbd_doc_from_buffer_custom(const char* buffer, size_t* read_bytes, pbd_conf conf) {
+pbd_element* pbd_doc_from_buffer_custom(pbd_conf conf, const char* buffer, 
+        size_t* read_bytes) {
     pbd_doc_head h = pbd_doc_head_parse(buffer[0]);
     size_t buffer_size = pbd_doc_get_buffer_size(h, buffer);
     uint16_t checksum_calc = pbd_doc_get_checksum(buffer, PBDDOC_HEAD_SIZE + 
@@ -371,5 +372,5 @@ pbd_element* pbd_doc_from_buffer_custom(const char* buffer, size_t* read_bytes, 
 }
 
 pbd_element* pbd_doc_from_buffer(const char* buffer, size_t* read_bytes) {
-    return pbd_doc_from_buffer_custom(buffer, read_bytes, pbd_default_conf);
+    return pbd_doc_from_buffer_custom(pbd_default_conf, buffer, read_bytes);
 }

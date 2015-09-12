@@ -14,16 +14,16 @@
 #include "boolarray.h"
 #include "pbdconf_internal.h"
 
-void pbd_element_free_custom(const pbd_element* e, pbd_conf conf) {
+void pbd_element_free_custom(pbd_conf conf, const pbd_element* e) {
     assert(e != NULL);
     if (e->vtable->free) {
-        e->vtable->free(e, conf);
+        e->vtable->free(conf, e);
     }
     conf.free_mem((pbd_element*) e);
 }
 
 void pbd_element_free(const pbd_element* e) {
-    pbd_element_free_custom(e, pbd_default_conf);
+    pbd_element_free_custom(pbd_default_conf, e);
 }
 
 pbd_type_id pbd_element_type(const pbd_element* e) {
@@ -31,23 +31,23 @@ pbd_type_id pbd_element_type(const pbd_element* e) {
     return e->vtable->type;
 }
 
-int pbd_element_to_buffer_custom(const pbd_element* e, char** buffer, size_t* size, 
-        pbd_conf conf) {
+int pbd_element_to_buffer_custom(pbd_conf conf, const pbd_element* e, 
+        char** buffer, size_t* size) {
     assert(e != NULL);
     assert(buffer != NULL);
     assert(size != NULL);
-    return e->vtable->to_buffer(e, buffer, size, conf);
+    return e->vtable->to_buffer(conf, e, buffer, size);
 }
 
 int pbd_element_to_buffer(const pbd_element* e, char** buffer, size_t* size) {
-    return pbd_element_to_buffer_custom(e, buffer, size, pbd_default_conf);
+    return pbd_element_to_buffer_custom(pbd_default_conf, e, buffer, size);
 }
 
 pbd_element* pbd_element_new(pbd_type_id type) {
-    return pbd_element_new_custom(type, pbd_default_conf);
+    return pbd_element_new_custom(pbd_default_conf, type);
 }
 
-pbd_element* pbd_element_new_custom(pbd_type_id type, pbd_conf conf) {
+pbd_element* pbd_element_new_custom(pbd_conf conf, pbd_type_id type) {
     switch (type) {
         case pbd_type_bool: 
             return pbd_bool_new_custom(conf);
@@ -83,17 +83,17 @@ pbd_element* pbd_element_new_custom(pbd_type_id type, pbd_conf conf) {
 }
 
 pbd_element* pbd_element_create(const char* buffer) {
-    return pbd_element_create_custom(buffer, pbd_default_conf);
+    return pbd_element_create_custom(pbd_default_conf, buffer);
 }
 
-pbd_element* pbd_element_create_custom(const char* buffer, pbd_conf conf) {
+pbd_element* pbd_element_create_custom(pbd_conf conf, const char* buffer) {
     assert(buffer != NULL);
     size_t read_bytes = 0;
-    return pbd_element_from_buffer_custom(buffer, &read_bytes, conf);
+    return pbd_element_from_buffer_custom(conf, buffer, &read_bytes);
 }
 
-pbd_element* pbd_element_from_buffer_custom(const char* buffer, 
-        size_t* read_bytes, pbd_conf conf) {
+pbd_element* pbd_element_from_buffer_custom(pbd_conf conf, const char* buffer, 
+        size_t* read_bytes) {
     assert(buffer != NULL);
     assert(read_bytes != NULL);
     uint8_t type_id;
@@ -105,7 +105,7 @@ pbd_element* pbd_element_from_buffer_custom(const char* buffer,
         
         case pbd_type_bool: {
             pbd_element* e = pbd_bool_new_custom(conf);
-            e->vtable->from_buffer(e, buffer, type_id, read_bytes, conf);
+            e->vtable->from_buffer(conf, e, buffer, type_id, read_bytes);
             return e;
         }
         case pbd_type_int8_scalar:
@@ -116,24 +116,24 @@ pbd_element* pbd_element_from_buffer_custom(const char* buffer,
         case pbd_type_uint32_scalar:
         case pbd_type_int64_scalar: {
             pbd_element* e = pbd_integer_new_custom(conf);
-            e->vtable->from_buffer(e, buffer, type_id, read_bytes, conf);
+            e->vtable->from_buffer(conf, e, buffer, type_id, read_bytes);
             return e;
         }
         case pbd_type_float_scalar:
         case pbd_type_double_scalar: {
             pbd_element* e = pbd_real_new_custom(conf);
-            e->vtable->from_buffer(e, buffer, type_id, read_bytes, conf);
+            e->vtable->from_buffer(conf, e, buffer, type_id, read_bytes);
             return e;
         }
         case pbd_type_null: {
             pbd_element* e = pbd_null_new_custom(conf);
-            e->vtable->from_buffer(e, buffer, type_id, read_bytes, conf);
+            e->vtable->from_buffer(conf, e, buffer, type_id, read_bytes);
             return e;
         }
         case pbd_type_float_array:
         case pbd_type_double_array: {
             pbd_element* e = pbd_real_array_new_custom(conf);
-            e->vtable->from_buffer(e, buffer, type_id, read_bytes, conf);
+            e->vtable->from_buffer(conf, e, buffer, type_id, read_bytes);
             return e;
         }
         case pbd_type_int8_array:
@@ -144,22 +144,22 @@ pbd_element* pbd_element_from_buffer_custom(const char* buffer,
         case pbd_type_uint32_array:
         case pbd_type_int64_array: {
             pbd_element* e = pbd_integer_array_new_custom(conf);
-            e->vtable->from_buffer(e, buffer, type_id, read_bytes, conf);
+            e->vtable->from_buffer(conf, e, buffer, type_id, read_bytes);
             return e;
         }
         case pbd_type_string: {
             pbd_element* e = pbd_string_new_custom(conf);
-            e->vtable->from_buffer(e, buffer, type_id, read_bytes, conf);
+            e->vtable->from_buffer(conf, e, buffer, type_id, read_bytes);
             return e;
         }
         case pbd_type_bool_array: {
             pbd_element* e = pbd_bool_array_new_custom(conf);
-            e->vtable->from_buffer(e, buffer, type_id, read_bytes, conf);
+            e->vtable->from_buffer(conf, e, buffer, type_id, read_bytes);
             return e;
         }
         case pbd_type_element_array: {
             pbd_element* e = pbd_element_array_new_custom(conf);
-            e->vtable->from_buffer(e, buffer, type_id, read_bytes, conf);
+            e->vtable->from_buffer(conf, e, buffer, type_id, read_bytes);
             return e;
         }
         default: 
@@ -169,5 +169,5 @@ pbd_element* pbd_element_from_buffer_custom(const char* buffer,
 }
 
 pbd_element* pbd_element_from_buffer(const char* buffer, size_t* read_bytes) {
-    return pbd_element_from_buffer_custom(buffer, read_bytes, pbd_default_conf);
+    return pbd_element_from_buffer_custom(pbd_default_conf, buffer, read_bytes);
 }
