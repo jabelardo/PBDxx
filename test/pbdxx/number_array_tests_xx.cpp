@@ -114,7 +114,7 @@ void test_integer_array_from_buffer(void **state) {
     assert_true(element_2.integer_array()->values()[4] == max);
 }
 
-static const struct CMUnitTest pbd_number_array_tests_xx[] = {
+static const struct CMUnitTest group_tests[] = {
     cmocka_unit_test(test_real_array_to_buffer),
     cmocka_unit_test(test_real_array_from_buffer),
     cmocka_unit_test(test_integer_array_to_buffer),
@@ -122,5 +122,5 @@ static const struct CMUnitTest pbd_number_array_tests_xx[] = {
 };
 
 int main() {
-    return cmocka_run_group_tests(pbd_number_array_tests_xx, NULL, NULL);
+    return cmocka_run_group_tests(group_tests, NULL, NULL);
 }

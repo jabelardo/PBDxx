@@ -132,7 +132,8 @@ public:
      * Devuelve el "tipo fisico Real" del elemento al momento de escribirse.
      * @return un TypeId que identifica el tipo del elemento.
      */
-	virtual TypeId::TypeId type_id_to_write() const = 0;
+    virtual TypeId::TypeId type_id_to_write() const = 0;
+    
     /**
      * Metodo abstracto que difine la accion de leer de un stream de entrada.
      * @param is el stream de entrada de donde se leeran los datos.

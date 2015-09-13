@@ -10,9 +10,9 @@ find_package(zlib)
 
 include_directories(${Boost_INCLUDE_DIRS})
 
-add_subdirectory(src/PBD++)
+#add_subdirectory(src/PBD++)
 
-add_subdirectory(test/PBD++)
+#add_subdirectory(test/PBD++)
 
 add_subdirectory(src/pbd)
 

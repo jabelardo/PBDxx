@@ -211,7 +211,7 @@ pbd_element* pbd_element_array_new_custom(pbd_conf conf);
 
 int pbd_element_array_add(pbd_element* s, pbd_element* value);
 
-int pbd_element_array_add_custom(pbd_conf conf, pbd_element* e, pbd_element* value);
+int pbd_element_array_add_custom(pbd_conf conf, pbd_element* e, const pbd_element* value);
 
 size_t pbd_element_array_size(const pbd_element* s);
     

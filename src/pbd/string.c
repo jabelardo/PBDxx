@@ -6,7 +6,6 @@
 #include "string.h"
 #include "typeid.h"
 #include "arrayutils.h"
-#include "pbdconf_internal.h"
 
 static struct pbd_element_vtable string_vtable;
 

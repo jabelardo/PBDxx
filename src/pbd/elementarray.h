@@ -16,7 +16,7 @@ extern "C" {
 
 typedef struct pbd_element_array {
     struct pbd_element element;
-    struct pbd_element** values;
+    const struct pbd_element** values;
     size_t size;
     size_t capacity;
 } pbd_element_array;

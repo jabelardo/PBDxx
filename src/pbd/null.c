@@ -5,7 +5,6 @@
 
 #include "null.h"
 #include "typeid.h"
-#include "pbdconf_internal.h"
 
 static struct pbd_element_vtable null_vtable;
 
@@ -15,7 +14,6 @@ static int null_to_buffer(pbd_conf conf, const pbd_element* e, char** buffer,
     assert(buffer != NULL);
     assert(size != NULL);
     assert(e->vtable->type == null_vtable.type);
-    pbd_null* s = (pbd_null*) &(*e);
     uint8_t type_id = pbd_type_null;  
     size_t full_size = sizeof(type_id);
     *buffer = conf.mem_alloc(full_size);

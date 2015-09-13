@@ -10,7 +10,6 @@
 #include "typeid.h"
 #include "arrayutils.h"
 #include "endianess.h"
-#include "pbdconf_internal.h"
 
 typedef struct pbd_double_min_max {
     double min;

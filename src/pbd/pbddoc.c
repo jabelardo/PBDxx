@@ -7,7 +7,6 @@
 #include <pbd/pbd.h>
 #include <pbd/pbddoc.h>
 #include "endianess.h"
-#include "pbdconf_internal.h"
 
 static size_t buffer_size_length_by_value(size_t size) {
     if (size > UINT32_MAX) {
@@ -191,7 +190,7 @@ int pbd_doc_to_buffer(pbd_element* e, char** buffer, size_t* size) {
 }
 
 static size_t pbd_doc_get_buffer_size(pbd_doc_head h, const char*  buffer) {
-    size_t buffer_size;
+    size_t buffer_size = 0;
     if (h.size_length == 1) {
         uint8_t tmp_size;
         memcpy(&tmp_size, buffer + PBDDOC_HEAD_SIZE, sizeof(uint8_t));

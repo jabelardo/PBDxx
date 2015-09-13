@@ -6,7 +6,6 @@
 #include "typeid.h"
 #include "arrayutils.h"
 #include "elementarray.h"
-#include "pbdconf_internal.h"
 
 typedef struct buffer_item {
     char* buffer;
@@ -39,11 +38,11 @@ static int element_array_to_buffer(pbd_conf conf, const pbd_element* e,
     items[0].size = head_size;
     *size = head_size;
     for (size_t i = 0; i < s->size; ++i) {
-        pbd_element* e = s->values[i];
+        const pbd_element* value = s->values[i];
         buffer_item* item = &items[i + 1]; 
         item->buffer = NULL;
         item->size = 0;
-        if (-1 ==s->values[i]->vtable->to_buffer(conf, e, &item->buffer, &item->size)) {
+        if (-1 == value->vtable->to_buffer(conf, value, &item->buffer, &item->size)) {
             return -1;
         }
         *size += item->size;
@@ -93,9 +92,10 @@ static void element_array_free(pbd_conf conf, const pbd_element* e) {
     assert(e->vtable->type == element_array_vtable.type);
     pbd_element_array* s = (pbd_element_array*) &(*e);
     for (size_t i = 0; i < s->size; ++i) {
-        void (*free)(pbd_conf, const struct pbd_element*) = s->values[i]->vtable->free;
-        if (free) {
-            free(conf, s->values[i]);
+        const pbd_element* value = s->values[i];
+        void (*free_func)(pbd_conf, const struct pbd_element*) = value->vtable->free;
+        if (free_func) {
+            free_func(conf, value);
         }
     }
     conf.free_mem(s->values);
@@ -139,7 +139,7 @@ const pbd_element** pbd_element_array_values(const pbd_element* e) {
     return (const pbd_element**) s->values;
 }
 
-int pbd_element_array_add_custom(pbd_conf conf, pbd_element* e, pbd_element* value) {
+int pbd_element_array_add_custom(pbd_conf conf, pbd_element* e, const pbd_element* value) {
     assert(e != NULL);
     assert(e->vtable->type == element_array_vtable.type);
     pbd_element_array* s = (pbd_element_array*) &(*e);

@@ -23,6 +23,8 @@ typedef struct pbd_conf {
     void* (*zero_init_array_alloc)(size_t num, size_t size);
 } pbd_conf;
 
+extern struct pbd_conf pbd_default_conf;
+
 #ifdef	__cplusplus
 }
 #endif

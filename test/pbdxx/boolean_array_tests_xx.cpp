@@ -37,10 +37,10 @@ void test_pbd_boolean_array(void **state) {
     }
 }
 
-static const struct CMUnitTest pbdboolean_array_tests[] = {
+static const struct CMUnitTest group_tests[] = {
     cmocka_unit_test(test_pbd_boolean_array),
 };
 
 int main() {
-    return cmocka_run_group_tests(pbdboolean_array_tests, NULL, NULL);
+    return cmocka_run_group_tests(group_tests, NULL, NULL);
 }

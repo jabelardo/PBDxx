@@ -7,7 +7,6 @@
 #include "typeid.h"
 #include "boolarray.h"
 #include "arrayutils.h"
-#include "pbdconf_internal.h"
 
 static struct pbd_element_vtable bool_array_vtable;
 

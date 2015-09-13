@@ -5,7 +5,6 @@
 
 #include "bool.h"
 #include "typeid.h"
-#include "pbdconf_internal.h"
 
 static struct pbd_element_vtable bool_vtable;
 

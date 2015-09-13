@@ -6,7 +6,6 @@
 #include "real.h"
 #include "typeid.h"
 #include "endianess.h"
-#include "pbdconf_internal.h"
 
 static struct pbd_element_vtable real_vtable;
 

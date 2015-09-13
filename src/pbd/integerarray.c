@@ -8,7 +8,6 @@
 #include "integerarray.h"
 #include "arrayutils.h"
 #include "endianess.h"
-#include "pbdconf_internal.h"
 
 typedef struct pbd_int64_t_min_max {
     int64_t min;
