@@ -160,7 +160,7 @@ namespace pbdxx {
     struct element_array : public element_base {
         int add(element const& value);
         size_t size() const;
-//        std::vector<element> values() const;
+        std::vector<element> values() const;
         virtual const element_array& as_element_array() const;      
         virtual element_array& as_element_array(); 
     protected:
@@ -168,8 +168,6 @@ namespace pbdxx {
         element_array();
         element_array(pbd_conf conf);
         element_array(pbd_conf conf, pbd_element* impl);
-    //private:
-        //std::vector<element> elements;
     };
     
     struct integer_array : public element_base {

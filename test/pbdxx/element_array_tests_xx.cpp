@@ -15,60 +15,60 @@ using namespace pbdxx;
 
 void test_pbd_element_array_single_element_childs(void **state) { 
     element e1 = element::create_element_array();
-//    printf("e1 count %ld\n", e1.impl.use_count());
     
     assert_int_equal(e1.as_element_array().size(), 0);
     
-//    e1.as_element_array().add(null());
-//    printf("0 add count %ld\n", e1.elements[0].impl.use_count());
+    e1.as_element_array().add(element::create_null());
     
-//    e1.as_element_array().add(boolean(true));
-//    e1.add(boolean(false));
-//    e1.add(null());
-//    e1.add(integer(INT8_MAX/2));
-//    e1.add(integer(INT16_MAX/2));
-//    e1.add(integer(INT32_MAX/2));
-//    e1.add(integer(INT64_MAX/2));
-//    e1.add(null());
-//    e1.add(real(FLT_MAX/2.0f));
-//    e1.add(real(DBL_MAX/2.0));
-//    e1.add(null());
-//    e1.add(string("1029384756!@#$%ˆ*()-=_+asdA"));
-//    e1.add(null());
+    e1.as_element_array().add(element::create_boolean(true));
+    e1.as_element_array().add(element::create_boolean(false));
+    e1.as_element_array().add(element::create_null());
+    e1.as_element_array().add(element::create_integer(INT8_MAX/2));
+    e1.as_element_array().add(element::create_integer(INT16_MAX/2));
+    e1.as_element_array().add(element::create_integer(INT32_MAX/2));
+    e1.as_element_array().add(element::create_integer(INT64_MAX/2));
+    e1.as_element_array().add(element::create_null());
+    e1.as_element_array().add(element::create_real(FLT_MAX/2.0f));
+    e1.as_element_array().add(element::create_real(DBL_MAX/2.0));
+    e1.as_element_array().add(element::create_null());
+    e1.as_element_array().add(element::create_string("1029384756!@#$%ˆ*()-=_+asdA"));
+    e1.as_element_array().add(element::create_null());
     
     std::vector<char> buffer;
-    //e1.to_buffer(buffer);
+    e1.to_buffer(buffer);
     
-//    size_t read_bytes = 0;
-//    element e2 = element::from_buffer(buffer, read_bytes);
-//    assert_int_equal(buffer.size(), read_bytes);
-//    assert_int_equal(e2.type(), pbd_type_element_array);
+    size_t read_bytes = 0;
+    element e2 = element::from_buffer(buffer, read_bytes);
+    assert_int_equal(buffer.size(), read_bytes);
+    assert_int_equal(e2.type(), pbd_type_element_array);
     
-//    assert_int_equal(pbd_element_array_size(e2), 14);
-//    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[0]), pbd_type_null);
-//    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[1]), pbd_type_bool);
-//    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[2]), pbd_type_bool);
-//    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[3]), pbd_type_null);
-//    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[4]), pbd_type_integer);
-//    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[5]), pbd_type_integer);
-//    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[6]), pbd_type_integer);
-//    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[7]), pbd_type_integer);
-//    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[8]), pbd_type_null);
-//    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[9]), pbd_type_real);
-//    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[10]), pbd_type_real);
-//    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[11]), pbd_type_null);
-//    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[12]), pbd_type_string);
-//    assert_int_equal(pbd_element_type(pbd_element_array_values(e2)[13]), pbd_type_null);
-//    
-//    assert_int_equal(pbd_bool_get(pbd_element_array_values(e2)[1]), true);
-//    assert_int_equal(pbd_bool_get(pbd_element_array_values(e2)[2]), false);
-//    assert_int_equal(pbd_integer_get(pbd_element_array_values(e2)[4]), INT8_MAX/2);
-//    assert_int_equal(pbd_integer_get(pbd_element_array_values(e2)[5]), INT16_MAX/2);
-//    assert_int_equal(pbd_integer_get(pbd_element_array_values(e2)[6]), INT32_MAX/2);
-//    assert_int_equal(pbd_integer_get(pbd_element_array_values(e2)[7]), INT64_MAX/2);
-//    assert(pbd_real_get(pbd_element_array_values(e2)[9]) == FLT_MAX/2.0f);
-//    assert(pbd_real_get(pbd_element_array_values(e2)[10]) == DBL_MAX/2.0);
-//    assert_string_equal(pbd_string_get(pbd_element_array_values(e2)[12]), "1029384756!@#$%ˆ*()-=_+asdA");
+    element_array& element_array2 = e2.as_element_array();
+    
+    assert_int_equal(element_array2.size(), 14);
+    assert_int_equal(element_array2.values()[0].type(), pbd_type_null);
+    assert_int_equal(element_array2.values()[1].type(), pbd_type_bool);
+    assert_int_equal(element_array2.values()[2].type(), pbd_type_bool);
+    assert_int_equal(element_array2.values()[3].type(), pbd_type_null);
+    assert_int_equal(element_array2.values()[4].type(), pbd_type_integer);
+    assert_int_equal(element_array2.values()[5].type(), pbd_type_integer);
+    assert_int_equal(element_array2.values()[6].type(), pbd_type_integer);
+    assert_int_equal(element_array2.values()[7].type(), pbd_type_integer);
+    assert_int_equal(element_array2.values()[8].type(), pbd_type_null);
+    assert_int_equal(element_array2.values()[9].type(), pbd_type_real);
+    assert_int_equal(element_array2.values()[10].type(), pbd_type_real);
+    assert_int_equal(element_array2.values()[11].type(), pbd_type_null);
+    assert_int_equal(element_array2.values()[12].type(), pbd_type_string);
+    assert_int_equal(element_array2.values()[13].type(), pbd_type_null);
+    
+    assert_int_equal(element_array2.values()[1].as_boolean().get(), true);
+    assert_int_equal(element_array2.values()[2].as_boolean().get(), false);
+    assert_int_equal(element_array2.values()[4].as_integer().get(), INT8_MAX/2);
+    assert_int_equal(element_array2.values()[5].as_integer().get(), INT16_MAX/2);
+    assert_int_equal(element_array2.values()[6].as_integer().get(), INT32_MAX/2);
+    assert_int_equal(element_array2.values()[7].as_integer().get(), INT64_MAX/2);
+    assert(element_array2.values()[9].as_real().get() == FLT_MAX/2.0f);
+    assert(element_array2.values()[10].as_real().get() == DBL_MAX/2.0);
+    assert_string_equal(element_array2.values()[12].as_string().get().c_str(), "1029384756!@#$%ˆ*()-=_+asdA");
 }
 
 static const struct CMUnitTest group_tests[] = {

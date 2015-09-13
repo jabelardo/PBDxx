@@ -361,10 +361,6 @@ element_array::element_array(pbd_conf conf, pbd_element* impl)
 } 
 
 int element_array::add(element const& value) {
-//    // NOTE: This vector is needed basically to increase the ref counter of the 
-//    //       internal shared_ptr
-////    elements.push_back(value);
-
     const pbd_element* v = value.impl->impl;
     return pbd_element_array_add_custom(conf, impl, v);
 }
@@ -373,9 +369,22 @@ size_t element_array::size() const {
     return pbd_element_array_size(impl);
 }
 
-//std::vector<element> element_array::values() const {
-//    return std::vector<element>();
-//}
+std::vector<element> element_array::values() const {
+    int length = size();
+    if (length > 0) {
+        std::vector<element> result;
+        const pbd_element** values = pbd_element_array_values(impl);
+        for (int i = 0; i < length; ++i) {
+            pbd_element* value = const_cast<pbd_element*>(values[i]);
+            element_base* base = element_base::create(conf, value);
+            std::shared_ptr<element_base> shared_ptr(base);
+            result.push_back(element(shared_ptr));
+        }
+        return result;
+    } else {
+        return std::vector<element>();
+    }
+}
 
 const element_array& element_array::as_element_array() const {
     return *this;
