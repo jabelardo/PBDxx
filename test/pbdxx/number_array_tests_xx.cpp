@@ -33,9 +33,9 @@ void test_real_array_to_buffer(void **state) {
     element element_2 = element::from_buffer(buffer, read_bytes);
     assert_int_equal(buffer.size(), read_bytes);
     assert_int_equal(element_2.type(), pbd_type_real_array);
-    assert_int_equal(element_2.real_array().size(), 2);
-    assert_int_equal(element_2.real_array().values()[0], min);
-    assert_int_equal(element_2.real_array().values()[1], max);
+    assert_int_equal(element_2.real_array()->size(), 2);
+    assert_int_equal(element_2.real_array()->values()[0], min);
+    assert_int_equal(element_2.real_array()->values()[1], max);
 }
 
 void test_real_array_from_buffer(void **state) {
@@ -62,12 +62,12 @@ void test_real_array_from_buffer(void **state) {
     size_t read_bytes = 0;    
     element element_2 = element::from_buffer(buffer, read_bytes);
     assert_int_equal(buffer.size(), read_bytes);
-    assert_int_equal(element_2.real_array().size(), 5);
-    assert_true(element_2.real_array().values()[0] == min);
-    assert_true(element_2.real_array().values()[1] == max/4);
-    assert_true(element_2.real_array().values()[2] == max/3);
-    assert_true(element_2.real_array().values()[3] == max/2);
-    assert_true(element_2.real_array().values()[4] == max);
+    assert_int_equal(element_2.real_array()->size(), 5);
+    assert_true(element_2.real_array()->values()[0] == min);
+    assert_true(element_2.real_array()->values()[1] == max/4);
+    assert_true(element_2.real_array()->values()[2] == max/3);
+    assert_true(element_2.real_array()->values()[3] == max/2);
+    assert_true(element_2.real_array()->values()[4] == max);
 }
 
 void test_integer_array_to_buffer(void **state) {
@@ -106,12 +106,12 @@ void test_integer_array_from_buffer(void **state) {
     size_t read_bytes = 0;
     element element_2 = element::from_buffer(buffer, read_bytes);
     assert_int_equal(buffer.size(), read_bytes);
-    assert_int_equal(element_2.integer_array().size(), 5);
-    assert_true(element_2.integer_array().values()[0] == min);
-    assert_true(element_2.integer_array().values()[1] == max/4);
-    assert_true(element_2.integer_array().values()[2] == max/3);
-    assert_true(element_2.integer_array().values()[3] == max/2);
-    assert_true(element_2.integer_array().values()[4] == max);
+    assert_int_equal(element_2.integer_array()->size(), 5);
+    assert_true(element_2.integer_array()->values()[0] == min);
+    assert_true(element_2.integer_array()->values()[1] == max/4);
+    assert_true(element_2.integer_array()->values()[2] == max/3);
+    assert_true(element_2.integer_array()->values()[3] == max/2);
+    assert_true(element_2.integer_array()->values()[4] == max);
 }
 
 static const struct CMUnitTest pbd_number_array_tests_xx[] = {

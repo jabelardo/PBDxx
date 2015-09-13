@@ -41,60 +41,46 @@ pbd_type_id element::type() const {
     return pbd_element_type(impl.get());
 }
 
-boolean element::boolean() const {
-    assert(type() == pbd_type_bool);
-    struct boolean s;
-    s.impl = this->impl;
-    return s;
+const boolean* element::boolean() const {
+    return (type() == pbd_type_bool) 
+        ? reinterpret_cast<const struct boolean*>(this)
+        : 0;
 }
 
-boolean_array element::boolean_array() const {
-    assert(type() == pbd_type_bool_array);
-    struct boolean_array s;
-    s.impl = this->impl;
-    return s;
+const boolean_array* element::boolean_array() const {
+    return (type() == pbd_type_bool_array) 
+        ? reinterpret_cast<const struct boolean_array*>(this)
+        : 0;
 }
 
-integer element::integer() const {
-    assert(type() == pbd_type_integer);
-    struct integer s;
-    s.impl = this->impl;
-    return s;
+const integer* element::integer() const {
+    return (type() == pbd_type_integer) 
+        ? reinterpret_cast<const struct integer*>(this)
+        : 0;
 }
 
-integer_array element::integer_array() const {
-    assert(type() == pbd_type_integer_array);
-    struct integer_array s;
-    s.impl = this->impl;
-    return s;
+const integer_array* element::integer_array() const {
+    return (type() == pbd_type_integer_array) 
+        ? reinterpret_cast<const struct integer_array*>(this)
+        : 0;
 }
 
-null element::null() const {
-    assert(type() == pbd_type_null);
-    struct null s;
-    s.impl = this->impl;
-    return s;
+const real* element::real() const {
+    return (type() == pbd_type_real) 
+        ? reinterpret_cast<const struct real*>(this)
+        : 0;
 }
 
-real element::real() const {
-    assert(type() == pbd_type_real);
-    struct real s;
-    s.impl = this->impl;
-    return s;
+const real_array* element::real_array() const {
+    return (type() == pbd_type_real_array) 
+        ? reinterpret_cast<const struct real_array*>(this)
+        : 0;
 }
 
-real_array element::real_array() const {
-    assert(type() == pbd_type_real_array);
-    struct real_array s;
-    s.impl = this->impl;
-    return s;
-}
-
-string element::string() const {
-    assert(type() == pbd_type_string);
-    struct string s;
-    s.impl = this->impl;
-    return s;
+const string* element::string() const {
+    return (type() == pbd_type_string) 
+        ? reinterpret_cast<const struct string*>(this)
+        : 0;
 }
 
 null::null() 

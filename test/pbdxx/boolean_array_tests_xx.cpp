@@ -30,8 +30,8 @@ void test_pbd_boolean_array(void **state) {
     element element_2 = element::from_buffer(buffer, read_bytes);
     assert_int_equal(buffer.size(), read_bytes);
     assert_int_equal(element_2.type(), pbd_type_bool_array);
-    assert_int_equal(element_2.boolean_array().size(), n_elem);
-    std::vector<bool> values = element_2.boolean_array().values();
+    assert_int_equal(element_2.boolean_array()->size(), n_elem);
+    std::vector<bool> values = element_2.boolean_array()->values();
     for (int i = 0; i < n_elem; ++i) {
         assert_int_equal(values[i], i % 3 != 0);
     }

@@ -30,14 +30,13 @@ namespace pbdxx {
         static element from_buffer(pbd_conf conf, std::vector<char> const& buffer, size_t& read_bytes);
         int to_buffer(std::vector<char>& buffer);
         pbd_type_id type() const;   
-        boolean boolean() const;    
-        boolean_array boolean_array() const;   
-        integer integer() const;      
-        integer_array integer_array() const;   
-        null null() const;     
-        real real() const;  
-        real_array real_array() const;  
-        string string() const;  
+        const boolean* boolean() const;    
+        const boolean_array* boolean_array() const;   
+        const integer* integer() const;      
+        const integer_array* integer_array() const;   
+        const real* real() const;  
+        const real_array* real_array() const;  
+        const string* string() const;  
     protected: 
         element(std::shared_ptr<pbd_element> const& impl);
         element(pbd_conf conf, std::shared_ptr<pbd_element> const& impl);

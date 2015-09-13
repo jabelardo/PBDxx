@@ -22,7 +22,7 @@ void test_string(void **state) {
     element element = element::from_buffer(buffer, read_bytes);
     assert_int_equal(buffer.size(), read_bytes);
     assert_int_equal(element.type(), pbd_type_string);
-    assert_string_equal(element.string().get().c_str(), STRING);
+    assert_string_equal(element.string()->get().c_str(), STRING);
 }
 
 void test_boolean(void **state) {
@@ -34,7 +34,7 @@ void test_boolean(void **state) {
     element element = element::from_buffer(buffer, read_bytes);
     assert_int_equal(buffer.size(), read_bytes);
     assert_int_equal(element.type(), pbd_type_bool); 
-    assert_int_equal(element.boolean().get(), true);
+    assert_int_equal(element.boolean()->get(), true);
 }
 
 void test_null(void **state) {
@@ -46,7 +46,6 @@ void test_null(void **state) {
     element element = element::from_buffer(buffer, read_bytes);
     assert_int_equal(buffer.size(), read_bytes);
     assert_int_equal(element.type(), pbd_type_null); 
-    element.null();
 }
 
 void test_integer(void **state) { 
@@ -59,7 +58,7 @@ void test_integer(void **state) {
     element element = element::from_buffer(buffer, read_bytes);
     assert_int_equal(buffer.size(), read_bytes);
     assert_int_equal(element.type(), pbd_type_integer); 
-    assert_int_equal(element.integer().get(), number);
+    assert_int_equal(element.integer()->get(), number);
 }
 
 void test_real(void **state) { 
@@ -72,7 +71,7 @@ void test_real(void **state) {
     element element = element::from_buffer(buffer, read_bytes);
     assert_int_equal(buffer.size(), read_bytes);
     assert_int_equal(element.type(), pbd_type_real); 
-    assert_int_equal(element.real().get(), number);
+    assert_int_equal(element.real()->get(), number);
 }
 
 static const struct CMUnitTest pbd_single_element_tests_xx[] = {
