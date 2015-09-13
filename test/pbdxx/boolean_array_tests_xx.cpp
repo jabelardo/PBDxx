@@ -13,14 +13,14 @@ extern "C" {
 using namespace pbdxx;
 
 void test_pbd_boolean_array(void **state) {
-    boolean_array element_1;
-    assert_int_equal(element_1.size(), 0);
+    element element_1 = element::create_boolean_array();
+    assert_int_equal(element_1.as_boolean_array().size(), 0);
     
     int n_elem = 524281;
     for (int i = 0; i < n_elem; ++i) {
-        element_1.add(i % 3 != 0);
+        element_1.as_boolean_array().add(i % 3 != 0);
     }
-    assert_int_equal(element_1.size(), n_elem);
+    assert_int_equal(element_1.as_boolean_array().size(), n_elem);
     
     std::vector<char> buffer;
     element_1.to_buffer(buffer);
@@ -30,8 +30,8 @@ void test_pbd_boolean_array(void **state) {
     element element_2 = element::from_buffer(buffer, read_bytes);
     assert_int_equal(buffer.size(), read_bytes);
     assert_int_equal(element_2.type(), pbd_type_bool_array);
-    assert_int_equal(element_2.boolean_array()->size(), n_elem);
-    std::vector<bool> values = element_2.boolean_array()->values();
+    assert_int_equal(element_2.as_boolean_array().size(), n_elem);
+    std::vector<bool> values = element_2.as_boolean_array().values();
     for (int i = 0; i < n_elem; ++i) {
         assert_int_equal(values[i], i % 3 != 0);
     }

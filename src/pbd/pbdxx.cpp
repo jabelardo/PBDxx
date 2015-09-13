@@ -121,6 +121,14 @@ boolean_array& element_base::as_boolean_array() {
     throw bad_cast_exception("element_impl is not a boolean_array");     
 }   
         
+const element_array& element_base::as_element_array() const {    
+    throw bad_cast_exception("element_impl is not an element_array");     
+}
+
+element_array& element_base::as_element_array() {    
+    throw bad_cast_exception("element_impl is not an element_array");     
+}  
+        
 const integer& element_base::as_integer() const {    
     throw bad_cast_exception("element_impl is not an integer");     
 }
@@ -352,12 +360,14 @@ element_array::element_array(pbd_conf conf, pbd_element* impl)
     : element_base(conf, impl) {
 } 
 
-//int element_array::add(element const& value) {
+int element_array::add(element const& value) {
 //    // NOTE: This vector is needed basically to increase the ref counter of the 
 //    //       internal shared_ptr
 ////    elements.push_back(value);
-//    return pbd_element_array_add_custom(conf, impl, value.impl);
-//}
+
+    const pbd_element* v = value.impl->impl;
+    return pbd_element_array_add_custom(conf, impl, v);
+}
 
 size_t element_array::size() const {
     return pbd_element_array_size(impl);
@@ -496,6 +506,26 @@ element::create_string(const std::string& value, pbd_conf conf) {
     return e;
 }
         
+element 
+element::create_boolean_array(pbd_conf conf) {
+    return element(pbd_type_bool_array, conf);
+}
+        
+element 
+element::create_integer_array(pbd_conf conf) {
+    return element(pbd_type_integer_array, conf);
+}
+        
+element 
+element::create_real_array(pbd_conf conf) {
+    return element(pbd_type_real_array, conf);
+}
+        
+element 
+element::create_element_array(pbd_conf conf) {
+    return element(pbd_type_element_array, conf);
+}
+        
 element element::from_buffer(std::vector<char> const& buffer, size_t& read_bytes, pbd_conf conf) {
     pbd_element* e = pbd_element_from_buffer_custom(conf, &buffer[0], &read_bytes);
     element_base* base = element_base::create(conf, e);
@@ -520,6 +550,14 @@ const boolean_array& element::as_boolean_array() const {
 
 boolean_array& element::as_boolean_array() {
     return impl->as_boolean_array();
+}
+
+const element_array& element::as_element_array() const {
+    return impl->as_element_array();
+}
+
+element_array& element::as_element_array() {
+    return impl->as_element_array();
 }
 
 const integer& element::as_integer() const {

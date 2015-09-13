@@ -56,6 +56,9 @@ namespace pbdxx {
         virtual const boolean_array& as_boolean_array() const;  
         virtual boolean_array& as_boolean_array();   
         
+        virtual const element_array& as_element_array() const;   
+        virtual element_array& as_element_array(); 
+        
         virtual const integer& as_integer() const;      
         virtual integer& as_integer();   
         
@@ -76,6 +79,7 @@ namespace pbdxx {
             element_base(pbd_conf conf, pbd_element* impl);
             pbd_conf conf;
             pbd_element* impl;
+            friend struct element_array;
             
         private:
             element_base() = delete;
@@ -154,7 +158,7 @@ namespace pbdxx {
     };
     
     struct element_array : public element_base {
-//        int add(element const& value);
+        int add(element const& value);
         size_t size() const;
 //        std::vector<element> values() const;
         virtual const element_array& as_element_array() const;      
@@ -206,6 +210,10 @@ namespace pbdxx {
         static element create_integer(int64_t value = 0, pbd_conf conf = pbd_default_conf);
         static element create_real(double value = 0, pbd_conf conf = pbd_default_conf);
         static element create_string(const std::string& value = "", pbd_conf conf = pbd_default_conf);
+        static element create_boolean_array(pbd_conf conf = pbd_default_conf);
+        static element create_integer_array(pbd_conf conf = pbd_default_conf);
+        static element create_real_array(pbd_conf conf = pbd_default_conf);
+        static element create_element_array(pbd_conf conf = pbd_default_conf);
         
         int to_buffer(std::vector<char>& buffer);
         
@@ -216,6 +224,9 @@ namespace pbdxx {
         
         const boolean_array& as_boolean_array() const;  
         boolean_array& as_boolean_array();   
+        
+        const element_array& as_element_array() const;   
+        element_array& as_element_array(); 
         
         const integer& as_integer() const;      
         integer& as_integer();   
@@ -234,6 +245,7 @@ namespace pbdxx {
         
     protected:
         std::shared_ptr<element_base> impl; 
+        friend struct element_array;
     };
 }
 

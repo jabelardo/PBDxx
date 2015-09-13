@@ -14,15 +14,15 @@ extern "C" {
 using namespace pbdxx;
 
 void test_pbd_element_array_single_element_childs(void **state) { 
-    element_array e1;
-    printf("e1 count %ld\n", e1.impl.use_count());
+    element e1 = element::create_element_array();
+//    printf("e1 count %ld\n", e1.impl.use_count());
     
-    assert_int_equal(e1.size(), 0);
+    assert_int_equal(e1.as_element_array().size(), 0);
     
-    e1.add(null());
+//    e1.as_element_array().add(null());
 //    printf("0 add count %ld\n", e1.elements[0].impl.use_count());
     
-    e1.add(boolean(true));
+//    e1.as_element_array().add(boolean(true));
 //    e1.add(boolean(false));
 //    e1.add(null());
 //    e1.add(integer(INT8_MAX/2));
