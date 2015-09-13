@@ -203,6 +203,9 @@ namespace pbdxx {
         
         static element create_null(pbd_conf conf = pbd_default_conf);
         static element create_boolean(bool value = false, pbd_conf conf = pbd_default_conf);
+        static element create_integer(int64_t value = 0, pbd_conf conf = pbd_default_conf);
+        static element create_real(double value = 0, pbd_conf conf = pbd_default_conf);
+        static element create_string(const std::string& value = "", pbd_conf conf = pbd_default_conf);
         
         int to_buffer(std::vector<char>& buffer);
         

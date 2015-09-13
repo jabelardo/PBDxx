@@ -475,6 +475,27 @@ element::create_boolean(bool value, pbd_conf conf) {
     return e;
 }
         
+element 
+element::create_integer(int64_t value, pbd_conf conf) {
+    element e(pbd_type_integer, conf);
+    e.as_integer().set(value);
+    return e;
+}
+        
+element 
+element::create_real(double value, pbd_conf conf) {
+    element e(pbd_type_real, conf);
+    e.as_real().set(value);
+    return e;
+}
+        
+element 
+element::create_string(const std::string& value, pbd_conf conf) {
+    element e(pbd_type_string, conf);
+    e.as_string().set(value);
+    return e;
+}
+        
 element element::from_buffer(std::vector<char> const& buffer, size_t& read_bytes, pbd_conf conf) {
     pbd_element* e = pbd_element_from_buffer_custom(conf, &buffer[0], &read_bytes);
     element_base* base = element_base::create(conf, e);

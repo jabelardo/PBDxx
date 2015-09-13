@@ -37,42 +37,45 @@ void test_boolean(void **state) {
 }
 
 void test_integer(void **state) { 
-//    int64_t number = INT64_MAX;
-//    integer integer_1(number);
-//    std::vector<char> buffer;
-//    integer_1.to_buffer(buffer);
-//    assert_int_equal(buffer.size(), 9);
-//    size_t read_bytes = 0;
-//    element element = element::from_buffer(buffer, read_bytes);
-//    assert_int_equal(buffer.size(), read_bytes);
-//    assert_int_equal(element.type(), pbd_type_integer); 
-//    assert_int_equal(element.integer()->get(), number);
+    int64_t number = INT64_MAX;
+    element integer_1 = element::create_integer(number);
+    assert_int_equal(integer_1.as_integer().get(), number);
+    std::vector<char> buffer;
+    integer_1.to_buffer(buffer);
+    assert_int_equal(buffer.size(), 9);
+    size_t read_bytes = 0;
+    element element = element::from_buffer(buffer, read_bytes);
+    assert_int_equal(buffer.size(), read_bytes);
+    assert_int_equal(element.type(), pbd_type_integer); 
+    assert_int_equal(element.as_integer().get(), number);
 }
 
 void test_real(void **state) { 
-//    double number = DBL_MAX;
-//    real real_1(number);
-//    std::vector<char> buffer;
-//    real_1.to_buffer(buffer);
-//    assert_int_equal(buffer.size(), 9);
-//    size_t read_bytes = 0;
-//    element element = element::from_buffer(buffer, read_bytes);
-//    assert_int_equal(buffer.size(), read_bytes);
-//    assert_int_equal(element.type(), pbd_type_real); 
-//    assert_int_equal(element.real()->get(), number);
+    double number = DBL_MAX;
+    element real_1 = element::create_real(number);
+    assert_int_equal(real_1.as_real().get(), number);
+    std::vector<char> buffer;
+    real_1.to_buffer(buffer);
+    assert_int_equal(buffer.size(), 9);
+    size_t read_bytes = 0;
+    element element = element::from_buffer(buffer, read_bytes);
+    assert_int_equal(buffer.size(), read_bytes);
+    assert_int_equal(element.type(), pbd_type_real); 
+    assert_int_equal(element.as_real().get(), number);
 }
 
 void test_string(void **state) {   
-//    const char* STRING = "12345"; 
-//    string string_1(STRING);
-//    std::vector<char> buffer;
-//    string_1.to_buffer(buffer);
-//    assert_int_equal(buffer.size(), 7);
-//    size_t read_bytes = 0;
-//    element element = element::from_buffer(buffer, read_bytes);
-//    assert_int_equal(buffer.size(), read_bytes);
-//    assert_int_equal(element.type(), pbd_type_string);
-//    assert_string_equal(element.string()->get().c_str(), STRING);
+    const char* STRING = "12345"; 
+    element string_1 = element::create_string(STRING);
+    assert_string_equal(string_1.as_string().get().c_str(), STRING);
+    std::vector<char> buffer;
+    string_1.to_buffer(buffer);
+    assert_int_equal(buffer.size(), 7);
+    size_t read_bytes = 0;
+    element element = element::from_buffer(buffer, read_bytes);
+    assert_int_equal(buffer.size(), read_bytes);
+    assert_int_equal(element.type(), pbd_type_string);
+    assert_string_equal(element.as_string().get().c_str(), STRING);
 }
 
 static const struct CMUnitTest group_tests[] = {
