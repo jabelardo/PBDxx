@@ -17,3 +17,5 @@ add_subdirectory(test/PBD++)
 add_subdirectory(src/pbd)
 
 add_subdirectory(test/pbd)
+
+add_subdirectory(test/pbdxx)

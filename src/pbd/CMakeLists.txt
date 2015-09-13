@@ -1,10 +1,10 @@
 project(pdb)
 
-set(LIB_NAME pbd)
+set(C_LIB_NAME pbd)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../include)
 
-set(SOURCE_FILES
+set(C_SOURCE_FILES
     arrayutils.c
     bool.c
     boolarray.c
@@ -21,6 +21,15 @@ set(SOURCE_FILES
     string.c
     typeid.c)
 
-add_library(${LIB_NAME} ${SOURCE_FILES})
+add_library(${C_LIB_NAME} ${C_SOURCE_FILES})
 
-target_link_libraries(${LIB_NAME} ${ZLIB_LIBRARY})
+target_link_libraries(${C_LIB_NAME} ${ZLIB_LIBRARY})
+
+set(CXX_LIB_NAME pbdxx)
+
+set(CXX_SOURCE_FILES 
+    pbdxx.cpp)
+
+add_library(${CXX_LIB_NAME} ${CXX_SOURCE_FILES})
+
+target_link_libraries(${CXX_LIB_NAME} ${C_LIB_NAME} ${ZLIB_LIBRARY})
