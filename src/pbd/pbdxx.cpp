@@ -48,9 +48,23 @@ boolean element::boolean() const {
     return s;
 }
 
+boolean_array element::boolean_array() const {
+    assert(type() == pbd_type_bool_array);
+    struct boolean_array s;
+    s.impl = this->impl;
+    return s;
+}
+
 integer element::integer() const {
     assert(type() == pbd_type_integer);
     struct integer s;
+    s.impl = this->impl;
+    return s;
+}
+
+integer_array element::integer_array() const {
+    assert(type() == pbd_type_integer_array);
+    struct integer_array s;
     s.impl = this->impl;
     return s;
 }
@@ -65,6 +79,13 @@ null element::null() const {
 real element::real() const {
     assert(type() == pbd_type_real);
     struct real s;
+    s.impl = this->impl;
+    return s;
+}
+
+real_array element::real_array() const {
+    assert(type() == pbd_type_real_array);
+    struct real_array s;
     s.impl = this->impl;
     return s;
 }

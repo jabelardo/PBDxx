@@ -4,11 +4,11 @@
 #include <csetjmp>
 #include <cfloat>
 
+#include <pbd/pbdxx.h>
+
 extern "C" {
 #include <cmocka.h>    
 }
-
-#include <pbd/pbdxx.h>
 
 using namespace pbdxx;
 

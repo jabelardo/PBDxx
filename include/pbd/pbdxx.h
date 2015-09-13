@@ -16,10 +16,13 @@
 namespace pbdxx {
 
     struct boolean;
+    struct boolean_array;
     struct element_array;
     struct integer;
+    struct integer_array;
     struct null;
     struct real;
+    struct real_array;
     struct string;
     
     struct element {
@@ -27,10 +30,13 @@ namespace pbdxx {
         static element from_buffer(pbd_conf conf, std::vector<char> const& buffer, size_t& read_bytes);
         int to_buffer(std::vector<char>& buffer);
         pbd_type_id type() const;   
-        boolean boolean() const;     
-        integer integer() const;     
+        boolean boolean() const;    
+        boolean_array boolean_array() const;   
+        integer integer() const;      
+        integer_array integer_array() const;   
         null null() const;     
         real real() const;  
+        real_array real_array() const;  
         string string() const;  
     protected: 
         element(std::shared_ptr<pbd_element> const& impl);
