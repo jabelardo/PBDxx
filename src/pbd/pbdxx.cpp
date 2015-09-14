@@ -54,42 +54,42 @@ element_base::create(pbd_conf conf, pbd_element* e) {
             break;
         }
         case pbd_type_bool_array: {
-            void* mem = conf.mem_alloc(sizeof(boolean));
+            void* mem = conf.mem_alloc(sizeof(boolean_array));
             base = new (mem) boolean_array(conf, e);
             break;
         }
         case pbd_type_element_array: {
-            void* mem = conf.mem_alloc(sizeof(boolean));
+            void* mem = conf.mem_alloc(sizeof(element_array));
             base = new (mem) element_array(conf, e);
             break;
         }
         case pbd_type_integer: {
-            void* mem = conf.mem_alloc(sizeof(boolean));
+            void* mem = conf.mem_alloc(sizeof(integer));
             base = new (mem) integer(conf, e);
             break;
         }
         case pbd_type_integer_array: {
-            void* mem = conf.mem_alloc(sizeof(boolean));
+            void* mem = conf.mem_alloc(sizeof(integer_array));
             base = new (mem) integer_array(conf, e);
             break;
         }
         case pbd_type_null: {
-            void* mem = conf.mem_alloc(sizeof(boolean));
+            void* mem = conf.mem_alloc(sizeof(null));
             base = new (mem) null(conf, e);
             break;
         }
         case pbd_type_real: {
-            void* mem = conf.mem_alloc(sizeof(boolean));
+            void* mem = conf.mem_alloc(sizeof(real));
             base = new (mem) real(conf, e);
             break;
         }
         case pbd_type_real_array: {
-            void* mem = conf.mem_alloc(sizeof(boolean));
+            void* mem = conf.mem_alloc(sizeof(real_array));
             base = new (mem) real_array(conf, e);
             break;
         }
         case pbd_type_string: {
-            void* mem = conf.mem_alloc(sizeof(boolean));
+            void* mem = conf.mem_alloc(sizeof(string));
             base = new (mem) string(conf, e);
             break;
         }

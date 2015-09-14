@@ -163,63 +163,62 @@ void test_pbd_element_array_single_element_array_childs(void **state) {
 }
 
 void test_pbd_element_array_element_array_childs(void **state) { 
-//    element e = pbd_element_array_new();
+    element e = element::create_element_array();
     element e1 = element::create_element_array();
-//    element e1_1 = pbd_element_array_new();
-//    element e2 = pbd_element_array_new();
-//    
-//    pbd_element_array_add(e, e1);
-//    e1.as_element_array().add(e1_1);
-//    pbd_element_array_add(e, e2);
-//    
-//    pbd_element_array_add(e, pbd_null_new());
-//    e1.as_element_array().add(pbd_null_new());
-//    pbd_element_array_add(e1_1, pbd_null_new());
-//    pbd_element_array_add(e2, pbd_null_new());
-//    pbd_element_array_add(e, pbd_bool_create(true));
-//    pbd_element_array_add(e, pbd_integer_create(INT8_MAX/2));
-//    pbd_element_array_add(e, pbd_real_create(FLT_MAX/2.0f));
-//    
+    element e1_1 = element::create_element_array();
+    element e2 = element::create_element_array();
+    
+    e.as_element_array().add(e1);
+    e1.as_element_array().add(e1_1);
+    e.as_element_array().add(e2);
+
+    e.as_element_array().add(element::create_null());
+    e1.as_element_array().add(element::create_null());
+    e1_1.as_element_array().add(element::create_null());
+    e2.as_element_array().add(element::create_null());
+    e.as_element_array().add(element::create_boolean(true));
+    e.as_element_array().add(element::create_integer(INT8_MAX/2));
+    e.as_element_array().add(element::create_real(FLT_MAX/2.0f));
+    
     element ba = element::create_boolean_array();
     e1.as_element_array().add(ba);
     ba.as_boolean_array().add(false);
-//    
-//    element ia = pbd_integer_arra1y_new();
-//    pbd_element_array_add(e1_1, ia);
-//    ia.as_integer_array().add(UINT8_MAX);
-//    
-//    element ra = pbd_real_array_new();
-//    pbd_element_array_add(e2, ra);
-//    ra.as_real_array().add(FLT_MIN);
-//    
+    
+    element ia = element::create_integer_array();
+    e1_1.as_element_array().add(ia);
+    ia.as_integer_array().add(UINT8_MAX);
+    
+    element ra = element::create_real_array();
+    e2.as_element_array().add(ra);
+    ra.as_real_array().add(FLT_MIN);
+    
     std::vector<char> buffer;
-//    size_t size;
-//    pbd_element_to_buffer(e, &buffer, &size);
-//    assert_non_null(buffer);
-//    
-//    size_t read_bytes = 0;
-//    element ne = pbd_element_from_buffer(buffer, &read_bytes);
-//    assert_non_null(ne);
-//    assert_int_equal(buffer.size(), read_bytes);
-//    assert_int_equal(pbd_element_type(ne), pbd_type_element_array);
-//    
-//    assert_int_equal(pbd_element_array_size(ne), 6);
-//    assert_int_equal(pbd_element_type(pbd_element_array_values(ne)[0]), pbd_type_element_array);
-//    assert_int_equal(pbd_element_type(pbd_element_array_values(ne)[1]), pbd_type_element_array);
-//    assert_int_equal(pbd_element_type(pbd_element_array_values(ne)[2]), pbd_type_null);
-//    assert_int_equal(pbd_element_type(pbd_element_array_values(ne)[3]), pbd_type_bool);
-//    assert_int_equal(pbd_element_type(pbd_element_array_values(ne)[4]), pbd_type_integer);
-//    assert_int_equal(pbd_element_type(pbd_element_array_values(ne)[5]), pbd_type_real);
-//    assert_int_equal(pbd_bool_get(pbd_element_array_values(ne)[3]), true);
-//    assert_int_equal(pbd_integer_get(pbd_element_array_values(ne)[4]), INT8_MAX/2);
-//    assert_true(pbd_real_get(pbd_element_array_values(ne)[5]) == FLT_MAX/2.0f);
-//    
-//    const element ne1 = pbd_element_array_values(ne)[0];
-//    assert_int_equal(pbd_element_array_size(ne1), 3);
-//    assert_int_equal(pbd_element_type(pbd_element_array_values(ne1)[0]), pbd_type_element_array);
-//    assert_int_equal(pbd_element_type(pbd_element_array_values(ne1)[1]), pbd_type_null);
-//    assert_int_equal(pbd_element_type(pbd_element_array_values(ne1)[2]), pbd_type_bool_array);
-//    
+    e.to_buffer(buffer);
+
+    size_t read_bytes = 0;
+    element ne = element::from_buffer(buffer, read_bytes);
+    assert_int_equal(buffer.size(), read_bytes);
+    assert_int_equal(ne.type(), pbd_type_element_array);
+
+    element_array& nae = ne.as_element_array();
+    
+    assert_int_equal(nae.size(), 6);
+    assert_int_equal(nae.values()[0].type(), pbd_type_element_array);
+    assert_int_equal(nae.values()[1].type(), pbd_type_element_array);
+    assert_int_equal(nae.values()[2].type(), pbd_type_null);
+    assert_int_equal(nae.values()[3].type(), pbd_type_bool);
+    assert_int_equal(nae.values()[4].type(), pbd_type_integer);
+    assert_int_equal(nae.values()[5].type(), pbd_type_real);
+    assert_int_equal(nae.values()[3].as_boolean().get(), true);
+    assert_int_equal(nae.values()[4].as_integer().get(), INT8_MAX/2);
+    assert_true(nae.values()[5].as_real().get() == FLT_MAX/2.0f);
+
+    element_array& ne1 = nae.values()[0].as_element_array();
+    assert_int_equal(ne1.size(), 3);
+    assert_int_equal(ne1.values()[0].type(), pbd_type_element_array);
+    assert_int_equal(ne1.values()[1].type(), pbd_type_null);
+    assert_int_equal(ne1.values()[2].type(), pbd_type_bool_array);
+
 //    const element ne1_1 = pbd_element_array_values(ne1)[0];
 //    assert_int_equal(pbd_element_array_size(ne1_1), 2);
 //    assert_int_equal(pbd_element_type(pbd_element_array_values(ne1_1)[0]), pbd_type_null);
@@ -243,7 +242,7 @@ void test_pbd_element_array_element_array_childs(void **state) {
 static const struct CMUnitTest group_tests[] = {
     cmocka_unit_test(test_pbd_element_array_single_element_childs),
     cmocka_unit_test(test_pbd_element_array_single_element_array_childs),
-//    cmocka_unit_test(test_pbd_element_array_element_array_childs),
+    cmocka_unit_test(test_pbd_element_array_element_array_childs),
 };
 
 int main() {
