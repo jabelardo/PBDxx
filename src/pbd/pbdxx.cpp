@@ -30,67 +30,58 @@ pbd_conf element_base::config() const {
     return conf;
 }
 
-element_base::element_base(pbd_element* impl) 
-    : conf(pbd_default_conf), impl(impl) {
-}
-
-element_base::element_base(pbd_conf conf, pbd_element* impl) 
-    : conf(conf), impl(impl) {
-}
-
-element_base* 
-element_base::create(pbd_type_id type) {
-    return create(pbd_default_conf, type);
+element_base::element_base(pbd_element* impl, pbd_conf conf) 
+    : impl(impl), conf(conf) {
 }
        
 element_base* 
-element_base::create(pbd_conf conf, pbd_element* e) {
+element_base::create(pbd_element* e, pbd_conf conf) {
     pbd_type_id type = e->vtable->type;
     element_base* base = 0;
     switch (type) {
         case pbd_type_bool: {
             void* mem = conf.mem_alloc(sizeof(boolean));
-            base = new (mem) boolean(conf, e);
+            base = new (mem) boolean(e, conf);
             break;
         }
         case pbd_type_bool_array: {
             void* mem = conf.mem_alloc(sizeof(boolean_array));
-            base = new (mem) boolean_array(conf, e);
+            base = new (mem) boolean_array(e, conf);
             break;
         }
         case pbd_type_element_array: {
             void* mem = conf.mem_alloc(sizeof(element_array));
-            base = new (mem) element_array(conf, e);
+            base = new (mem) element_array(e, conf);
             break;
         }
         case pbd_type_integer: {
             void* mem = conf.mem_alloc(sizeof(integer));
-            base = new (mem) integer(conf, e);
+            base = new (mem) integer(e, conf);
             break;
         }
         case pbd_type_integer_array: {
             void* mem = conf.mem_alloc(sizeof(integer_array));
-            base = new (mem) integer_array(conf, e);
+            base = new (mem) integer_array(e, conf);
             break;
         }
         case pbd_type_null: {
             void* mem = conf.mem_alloc(sizeof(null));
-            base = new (mem) null(conf, e);
+            base = new (mem) null(e, conf);
             break;
         }
         case pbd_type_real: {
             void* mem = conf.mem_alloc(sizeof(real));
-            base = new (mem) real(conf, e);
+            base = new (mem) real(e, conf);
             break;
         }
         case pbd_type_real_array: {
             void* mem = conf.mem_alloc(sizeof(real_array));
-            base = new (mem) real_array(conf, e);
+            base = new (mem) real_array(e, conf);
             break;
         }
         case pbd_type_string: {
             void* mem = conf.mem_alloc(sizeof(string));
-            base = new (mem) string(conf, e);
+            base = new (mem) string(e, conf);
             break;
         }
         default:
@@ -100,9 +91,9 @@ element_base::create(pbd_conf conf, pbd_element* e) {
 }
 
 element_base* 
-element_base::create(pbd_conf conf, pbd_type_id type) {
+element_base::create(pbd_type_id type, pbd_conf conf) {
     pbd_element* e = pbd_element_new_custom(conf, type);
-    return create(conf, e);
+    return create(e, conf);
 }
 
 const boolean& element_base::as_boolean() const {
@@ -185,29 +176,20 @@ int element::to_buffer(std::vector<char>& buffer) {
     return impl->to_buffer(buffer);
 }
 
-null::null() 
-    : element_base(pbd_null_new()) {
-}
-
 null::null(pbd_conf conf) 
-    : element_base(conf, pbd_null_new_custom(conf)) {
+    : element_base(pbd_null_new_custom(conf), conf) {
 }
 
-null::null(pbd_conf conf, pbd_element* impl) 
-    : element_base(conf, impl) {
-}
-
-        
-boolean::boolean(bool value) 
-    : element_base(pbd_bool_create(value)) {
+null::null(pbd_element* impl, pbd_conf conf) 
+    : element_base(impl, conf) {
 }
         
-boolean::boolean(pbd_conf conf, bool value) 
-    : element_base(conf, pbd_bool_create_custom(conf, value)) {
+boolean::boolean(bool value, pbd_conf conf) 
+    : element_base(pbd_bool_create_custom(conf, value), conf) {
 }
         
-boolean::boolean(pbd_conf conf, pbd_element* impl, bool value) 
-    : element_base(conf, impl) {
+boolean::boolean(pbd_element* impl, pbd_conf conf) 
+    : element_base(impl, conf) {
 }
 
 bool boolean::get() const {    
@@ -225,17 +207,13 @@ const boolean& boolean::as_boolean() const {
 boolean& boolean::as_boolean() {
     return *this;
 }
-
-integer::integer(int64_t value) 
-    : element_base(pbd_integer_create(value)) {
+        
+integer::integer(int64_t value, pbd_conf conf) 
+    : element_base(pbd_integer_create_custom(conf, value), conf) {
 }
         
-integer::integer(pbd_conf conf, int64_t value) 
-    : element_base(conf, pbd_integer_create_custom(conf, value)) {
-}
-        
-integer::integer(pbd_conf conf, pbd_element* impl, int64_t value) 
-    : element_base(conf, impl) {
+integer::integer(pbd_element* impl, pbd_conf conf) 
+    : element_base(impl, conf) {
 }
         
 int64_t integer::get() const {    
@@ -253,17 +231,13 @@ const integer& integer::as_integer() const {
 integer& integer::as_integer() {
     return *this;
 }
-
-real::real(double value) 
-    : element_base(pbd_real_create(value)) {
+        
+real::real(double value, pbd_conf conf) 
+    : element_base(pbd_real_create_custom(conf, value), conf) {
 }
         
-real::real(pbd_conf conf, double value) 
-    : element_base(conf, pbd_real_create_custom(conf, value)) {
-}
-        
-real::real(pbd_conf conf, pbd_element* impl, double value) 
-    : element_base(conf, impl) {
+real::real(pbd_element* impl, pbd_conf conf) 
+    : element_base(impl, conf) {
 } 
 
 double real::get() const {    
@@ -281,17 +255,13 @@ const real& real::as_real() const {
 real& real::as_real() {
     return *this;
 }
-
-string::string(std::string const& value) 
-    : element_base(pbd_string_create(value.c_str())) {
+        
+string::string(std::string const& value, pbd_conf conf) 
+    : element_base(pbd_string_create_custom(conf, value.c_str()), conf) {
 }
         
-string::string(pbd_conf conf, std::string const& value) 
-    : element_base(conf, pbd_string_create_custom(conf, value.c_str())) {
-}
-        
-string::string(pbd_conf conf, pbd_element* impl, std::string const& value) 
-    : element_base(conf, impl) {
+string::string(pbd_element* impl, pbd_conf conf) 
+    : element_base(impl, conf) {
 } 
         
 std::string string::get() const {    
@@ -309,17 +279,13 @@ const string& string::as_string() const {
 string& string::as_string() {
     return *this;
 }
-
-boolean_array::boolean_array() 
-    : element_base(pbd_bool_array_new()) {
-}
         
 boolean_array::boolean_array(pbd_conf conf) 
-    : element_base(conf, pbd_bool_array_new_custom(conf)) {
+    : element_base(pbd_bool_array_new_custom(conf), conf) {
 }
         
-boolean_array::boolean_array(pbd_conf conf, pbd_element* impl) 
-    : element_base(conf, impl) {
+boolean_array::boolean_array(pbd_element* impl, pbd_conf conf) 
+    : element_base(impl, conf) {
 } 
 
 int boolean_array::add(bool value) {
@@ -347,17 +313,13 @@ const boolean_array& boolean_array::as_boolean_array() const {
 boolean_array& boolean_array::as_boolean_array() {
     return *this;
 }
-
-element_array::element_array() 
-    : element_base(pbd_element_array_new()) {
-}
         
 element_array::element_array(pbd_conf conf) 
-    : element_base(conf, pbd_element_array_new_custom(conf)) {
+    : element_base(pbd_element_array_new_custom(conf), conf) {
 }
         
-element_array::element_array(pbd_conf conf, pbd_element* impl) 
-    : element_base(conf, impl) {
+element_array::element_array(pbd_element* impl, pbd_conf conf) 
+    : element_base(impl, conf) {
 } 
 
 int element_array::add(element const& value) {
@@ -375,9 +337,8 @@ std::vector<element> element_array::values() const {
         std::vector<element> result;
         const pbd_element** values = pbd_element_array_values(impl);
         for (int i = 0; i < length; ++i) {
-            pbd_element* value = const_cast<pbd_element*>(values[i]);
-            element_base* base = element_base::create(conf, value);
-            std::shared_ptr<element_base> shared_ptr(base);
+            pbd_element* value = (pbd_element*) values[i];
+            std::shared_ptr<element_base> shared_ptr(create(value, conf));
             result.push_back(element(shared_ptr));
         }
         return result;
@@ -393,17 +354,13 @@ const element_array& element_array::as_element_array() const {
 element_array& element_array::as_element_array() {
     return *this;
 }
-
-integer_array::integer_array() 
-    : element_base(pbd_integer_array_new()) {
-}
         
 integer_array::integer_array(pbd_conf conf) 
-    : element_base(conf, pbd_integer_array_new_custom(conf)) {
+    : element_base(pbd_integer_array_new_custom(conf), conf) {
 }
         
-integer_array::integer_array(pbd_conf conf, pbd_element* impl) 
-    : element_base(conf, impl) {
+integer_array::integer_array(pbd_element* impl, pbd_conf conf) 
+    : element_base(impl, conf) {
 } 
 
 int integer_array::add(int64_t value) {
@@ -431,17 +388,13 @@ const integer_array& integer_array::as_integer_array() const {
 integer_array& integer_array::as_integer_array() {
     return *this;
 }
-
-real_array::real_array() 
-    : element_base(pbd_real_array_new()) {
-}
         
 real_array::real_array(pbd_conf conf) 
-    : element_base(conf, pbd_real_array_new_custom(conf)) {
+    : element_base(pbd_real_array_new_custom(conf), conf) {
 }
         
-real_array::real_array(pbd_conf conf, pbd_element* impl) 
-    : element_base(conf, impl) {
+real_array::real_array(pbd_element* impl, pbd_conf conf) 
+    : element_base(impl, conf) {
 } 
 
 int real_array::add(double value) {
@@ -475,7 +428,7 @@ element::element(pbd_conf conf)
 }
 
 element::element(pbd_type_id type, pbd_conf conf) 
-    : impl(std::shared_ptr<element_base>(element_base::create(conf, type))) {
+    : impl(std::shared_ptr<element_base>(element_base::create(type, conf))) {
 }
         
 element::element(const std::shared_ptr<element_base>& impl)
@@ -539,7 +492,7 @@ element element::from_buffer(std::vector<char> const& buffer,
         size_t& read_bytes, pbd_conf conf) {
     pbd_element* e = 
             pbd_element_from_buffer_custom(conf, &buffer[0], &read_bytes);
-    element_base* base = element_base::create(conf, e);
+    element_base* base = element_base::create(e, conf);
     return element(std::shared_ptr<element_base>(base));
 }
         

@@ -34,11 +34,9 @@ namespace pbdxx {
     
     struct element_base {
         
-        static element_base* create(pbd_type_id type);
+        static element_base* create(pbd_type_id type, pbd_conf conf = pbd_default_conf);
         
-        static element_base* create(pbd_conf conf, pbd_type_id type);
-        
-        static element_base* create(pbd_conf conf, pbd_element* impl);
+        static element_base* create(pbd_element* impl, pbd_conf conf = pbd_default_conf);
         
         static void destroy(element_base* e);
         
@@ -75,10 +73,9 @@ namespace pbdxx {
         virtual string& as_string();
         
         protected:
-            element_base(pbd_element* impl);
-            element_base(pbd_conf conf, pbd_element* impl);
-            pbd_conf conf;
+            element_base(pbd_element* impl, pbd_conf conf = pbd_default_conf);
             pbd_element* impl;
+            pbd_conf conf;
             friend struct element_array;
             
         private:
@@ -94,9 +91,8 @@ namespace pbdxx {
     protected:
         friend struct element;
         friend struct element_base;
-        null();
-        null(pbd_conf conf);
-        null(pbd_conf conf, pbd_element* impl);
+        null(pbd_conf conf = pbd_default_conf);
+        null(pbd_element* impl, pbd_conf conf = pbd_default_conf);
     };
     
     struct boolean : public element_base {
@@ -106,9 +102,8 @@ namespace pbdxx {
         virtual boolean& as_boolean();  
     protected:
         friend struct element_base;
-        boolean(bool value = false);
-        boolean(pbd_conf conf, bool value = false);
-        boolean(pbd_conf conf, pbd_element* impl, bool value = false);
+        boolean(bool value, pbd_conf conf = pbd_default_conf);
+        boolean(pbd_element* impl, pbd_conf conf = pbd_default_conf);
     };
     
     struct integer : public element_base {
@@ -118,9 +113,8 @@ namespace pbdxx {
         virtual integer& as_integer(); 
     protected:
         friend struct element_base;
-        integer(int64_t value = 0);
-        integer(pbd_conf conf, int64_t value = 0);
-        integer(pbd_conf conf, pbd_element* impl, int64_t value = 0);
+        integer(int64_t value, pbd_conf conf = pbd_default_conf);
+        integer(pbd_element* impl, pbd_conf conf = pbd_default_conf);
     };
     
     struct real : public element_base {
@@ -130,9 +124,8 @@ namespace pbdxx {
         virtual real& as_real(); 
     protected:
         friend struct element_base;
-        real(double value = 0);
-        real(pbd_conf conf, double value = 0);
-        real(pbd_conf conf, pbd_element* impl, double value = 0);
+        real(double value, pbd_conf conf = pbd_default_conf);
+        real(pbd_element* impl, pbd_conf conf = pbd_default_conf);
     };
     
     struct string : public element_base {
@@ -142,9 +135,8 @@ namespace pbdxx {
         virtual string& as_string(); 
     protected:
         friend struct element_base;
-        string(std::string const& value = "");
-        string(pbd_conf conf, std::string const& value = "");
-        string(pbd_conf conf, pbd_element* impl, std::string const& value = "");
+        string(std::string const& value, pbd_conf conf = pbd_default_conf);
+        string(pbd_element* impl, pbd_conf conf = pbd_default_conf);
     };
     
     struct boolean_array : public element_base {
@@ -155,9 +147,8 @@ namespace pbdxx {
         virtual boolean_array& as_boolean_array(); 
     protected:
         friend struct element_base;
-        boolean_array();
-        boolean_array(pbd_conf conf);
-        boolean_array(pbd_conf conf, pbd_element* impl);
+        boolean_array(pbd_conf conf = pbd_default_conf);
+        boolean_array(pbd_element* impl, pbd_conf conf = pbd_default_conf);
     };
     
     struct element_array : public element_base {
@@ -168,9 +159,8 @@ namespace pbdxx {
         virtual element_array& as_element_array(); 
     protected:
         friend struct element_base;
-        element_array();
-        element_array(pbd_conf conf);
-        element_array(pbd_conf conf, pbd_element* impl);
+        element_array(pbd_conf conf = pbd_default_conf);
+        element_array(pbd_element* impl, pbd_conf conf = pbd_default_conf);
     };
     
     struct integer_array : public element_base {
@@ -181,9 +171,8 @@ namespace pbdxx {
         virtual integer_array& as_integer_array(); 
     protected:
         friend struct element_base;
-        integer_array();
-        integer_array(pbd_conf conf);
-        integer_array(pbd_conf conf, pbd_element* impl);
+        integer_array(pbd_conf conf = pbd_default_conf);
+        integer_array(pbd_element* impl, pbd_conf conf = pbd_default_conf);
     };
     
     struct real_array : public element_base {
@@ -194,9 +183,8 @@ namespace pbdxx {
         virtual real_array& as_real_array(); 
     protected:
         friend struct element_base;
-        real_array();
-        real_array(pbd_conf conf);
-        real_array(pbd_conf conf, pbd_element* impl);
+        real_array(pbd_conf conf = pbd_default_conf);
+        real_array(pbd_element* impl, pbd_conf conf = pbd_default_conf);
     };
     
     struct element {
@@ -206,22 +194,19 @@ namespace pbdxx {
         
         element(const std::shared_ptr<element_base>& impl);
         
-        static element from_buffer(std::vector<char> const& buffer,
+        static element from_buffer(std::vector<char> const& buffer, 
             size_t& read_bytes, pbd_conf conf = pbd_default_conf);
         
         static element create_null(pbd_conf conf = pbd_default_conf);
         
-        static element create_boolean(bool value = false, 
-            pbd_conf conf = pbd_default_conf);
+        static element create_boolean(bool value, pbd_conf conf = pbd_default_conf);
         
-        static element create_integer(int64_t value = 0, 
-            pbd_conf conf = pbd_default_conf);
+        static element create_integer(int64_t value, pbd_conf conf = pbd_default_conf);
         
-        static element create_real(double value = 0, 
-            pbd_conf conf = pbd_default_conf);
+        static element create_real(double value, pbd_conf conf = pbd_default_conf);
         
-        static element create_string(const std::string& value = "", 
-            pbd_conf conf = pbd_default_conf);
+        static element create_string(const std::string& value, pbd_conf conf = pbd_default_conf);
+        
         static element create_boolean_array(pbd_conf conf = pbd_default_conf);
         
         static element create_integer_array(pbd_conf conf = pbd_default_conf);
