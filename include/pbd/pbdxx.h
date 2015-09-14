@@ -36,8 +36,6 @@ namespace pbdxx {
         
         static element_base* create(pbd_type_id type, pbd_conf conf = pbd_default_conf);
         
-        static element_base* create(pbd_element* impl, pbd_conf conf = pbd_default_conf);
-        
         static void destroy(element_base* e);
         
         virtual ~element_base() = 0;
@@ -73,11 +71,17 @@ namespace pbdxx {
         virtual string& as_string();
         
         protected:
-            element_base(pbd_element* impl, pbd_conf conf = pbd_default_conf);
+            element_base(pbd_element* impl, bool destroy_impl, pbd_conf conf);
+        
+            static element_base* create(pbd_element* impl, bool destroy_impl, pbd_conf conf);
+        
             pbd_element* impl;
+            bool destroy_impl;
             pbd_conf conf;
+        
+            friend struct element;
             friend struct element_array;
-            
+        
         private:
             // non default construction
             element_base() = delete;
@@ -92,7 +96,7 @@ namespace pbdxx {
         friend struct element;
         friend struct element_base;
         null(pbd_conf conf = pbd_default_conf);
-        null(pbd_element* impl, pbd_conf conf = pbd_default_conf);
+        null(pbd_element* impl, bool destroy_impl, pbd_conf conf);
     };
     
     struct boolean : public element_base {
@@ -103,7 +107,7 @@ namespace pbdxx {
     protected:
         friend struct element_base;
         boolean(bool value, pbd_conf conf = pbd_default_conf);
-        boolean(pbd_element* impl, pbd_conf conf = pbd_default_conf);
+        boolean(pbd_element* impl, bool destroy_impl, pbd_conf conf);
     };
     
     struct integer : public element_base {
@@ -114,7 +118,7 @@ namespace pbdxx {
     protected:
         friend struct element_base;
         integer(int64_t value, pbd_conf conf = pbd_default_conf);
-        integer(pbd_element* impl, pbd_conf conf = pbd_default_conf);
+        integer(pbd_element* impl, bool destroy_impl, pbd_conf conf);
     };
     
     struct real : public element_base {
@@ -125,7 +129,7 @@ namespace pbdxx {
     protected:
         friend struct element_base;
         real(double value, pbd_conf conf = pbd_default_conf);
-        real(pbd_element* impl, pbd_conf conf = pbd_default_conf);
+        real(pbd_element* impl, bool destroy_impl, pbd_conf conf);
     };
     
     struct string : public element_base {
@@ -136,7 +140,7 @@ namespace pbdxx {
     protected:
         friend struct element_base;
         string(std::string const& value, pbd_conf conf = pbd_default_conf);
-        string(pbd_element* impl, pbd_conf conf = pbd_default_conf);
+        string(pbd_element* impl, bool destroy_impl, pbd_conf conf);
     };
     
     struct boolean_array : public element_base {
@@ -148,7 +152,7 @@ namespace pbdxx {
     protected:
         friend struct element_base;
         boolean_array(pbd_conf conf = pbd_default_conf);
-        boolean_array(pbd_element* impl, pbd_conf conf = pbd_default_conf);
+        boolean_array(pbd_element* impl, bool destroy_impl, pbd_conf conf);
     };
     
     struct element_array : public element_base {
@@ -160,7 +164,7 @@ namespace pbdxx {
     protected:
         friend struct element_base;
         element_array(pbd_conf conf = pbd_default_conf);
-        element_array(pbd_element* impl, pbd_conf conf = pbd_default_conf);
+        element_array(pbd_element* impl, bool destroy_impl, pbd_conf conf);
     };
     
     struct integer_array : public element_base {
@@ -172,7 +176,7 @@ namespace pbdxx {
     protected:
         friend struct element_base;
         integer_array(pbd_conf conf = pbd_default_conf);
-        integer_array(pbd_element* impl, pbd_conf conf = pbd_default_conf);
+        integer_array(pbd_element* impl, bool destroy_impl, pbd_conf conf);
     };
     
     struct real_array : public element_base {
@@ -184,7 +188,7 @@ namespace pbdxx {
     protected:
         friend struct element_base;
         real_array(pbd_conf conf = pbd_default_conf);
-        real_array(pbd_element* impl, pbd_conf conf = pbd_default_conf);
+        real_array(pbd_element* impl, bool destroy_impl, pbd_conf conf);
     };
     
     struct element {
