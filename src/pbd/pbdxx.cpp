@@ -535,8 +535,10 @@ element::create_element_array(pbd_conf conf) {
     return element(pbd_type_element_array, conf);
 }
         
-element element::from_buffer(std::vector<char> const& buffer, size_t& read_bytes, pbd_conf conf) {
-    pbd_element* e = pbd_element_from_buffer_custom(conf, &buffer[0], &read_bytes);
+element element::from_buffer(std::vector<char> const& buffer, 
+        size_t& read_bytes, pbd_conf conf) {
+    pbd_element* e = 
+            pbd_element_from_buffer_custom(conf, &buffer[0], &read_bytes);
     element_base* base = element_base::create(conf, e);
     return element(std::shared_ptr<element_base>(base));
 }

@@ -82,9 +82,12 @@ namespace pbdxx {
             friend struct element_array;
             
         private:
+            // non default construction
             element_base() = delete;
-            element_base(const element_base& e) = delete; // non construction-copyable
-            element_base& operator=(const element_base&) = delete; // non copyable
+            // non construction-copyable
+            element_base(const element_base& e) = delete; 
+             // non copyable
+            element_base& operator=(const element_base&) = delete;
     };
     
     struct null : public element_base {
@@ -198,19 +201,33 @@ namespace pbdxx {
     
     struct element {
         element(pbd_conf conf = pbd_default_conf);
+        
         element(pbd_type_id type, pbd_conf conf = pbd_default_conf);
+        
         element(const std::shared_ptr<element_base>& impl);
         
-        static element from_buffer(std::vector<char> const& buffer, size_t& read_bytes, pbd_conf conf = pbd_default_conf);
+        static element from_buffer(std::vector<char> const& buffer,
+            size_t& read_bytes, pbd_conf conf = pbd_default_conf);
         
         static element create_null(pbd_conf conf = pbd_default_conf);
-        static element create_boolean(bool value = false, pbd_conf conf = pbd_default_conf);
-        static element create_integer(int64_t value = 0, pbd_conf conf = pbd_default_conf);
-        static element create_real(double value = 0, pbd_conf conf = pbd_default_conf);
-        static element create_string(const std::string& value = "", pbd_conf conf = pbd_default_conf);
+        
+        static element create_boolean(bool value = false, 
+            pbd_conf conf = pbd_default_conf);
+        
+        static element create_integer(int64_t value = 0, 
+            pbd_conf conf = pbd_default_conf);
+        
+        static element create_real(double value = 0, 
+            pbd_conf conf = pbd_default_conf);
+        
+        static element create_string(const std::string& value = "", 
+            pbd_conf conf = pbd_default_conf);
         static element create_boolean_array(pbd_conf conf = pbd_default_conf);
+        
         static element create_integer_array(pbd_conf conf = pbd_default_conf);
+        
         static element create_real_array(pbd_conf conf = pbd_default_conf);
+        
         static element create_element_array(pbd_conf conf = pbd_default_conf);
         
         int to_buffer(std::vector<char>& buffer);

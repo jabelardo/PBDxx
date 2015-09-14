@@ -18,7 +18,6 @@ void pbd_element_free_custom(pbd_conf conf, const pbd_element* e) {
     if (e->vtable->free) {
         e->vtable->free(conf, e);
     }
-    printf("pbd_element_free %d\n", e->vtable->type);
     conf.free_mem((pbd_element*) e);
 }
 
