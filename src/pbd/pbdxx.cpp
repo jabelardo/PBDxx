@@ -334,19 +334,21 @@ size_t element_array::size() const {
 }
 
 std::vector<element> element_array::values() const {
-    int length = size();
-    if (length > 0) {
-        std::vector<element> result;
-        const pbd_element** values = pbd_element_array_values(impl);
-        for (int i = 0; i < length; ++i) {
-            pbd_element* value = (pbd_element*) values[i];
-            std::shared_ptr<element_base> shared_ptr(create(value, false, conf));
-            result.push_back(element(shared_ptr));
+    size_t impl_size = size();
+    size_t elements_size = elements.size();
+    if (impl_size != elements_size) {
+        elements.clear();
+        if (impl_size > 0) {
+            std::vector<element> result;
+            const pbd_element** values = pbd_element_array_values(impl);
+            for (int i = 0; i < impl_size; ++i) {
+                pbd_element* value = (pbd_element*) values[i];
+                std::shared_ptr<element_base> shared_ptr(create(value, false, conf));
+                elements.push_back(element(shared_ptr));
+            }
         }
-        return result;
-    } else {
-        return std::vector<element>();
     }
+    return elements;
 }
 
 const element_array& element_array::as_element_array() const {

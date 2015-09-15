@@ -165,6 +165,7 @@ namespace pbdxx {
         friend struct element_base;
         element_array(pbd_conf conf = pbd_default_conf);
         element_array(pbd_element* impl, bool destroy_impl, pbd_conf conf);
+        mutable std::vector<element> elements;
     };
     
     struct integer_array : public element_base {
