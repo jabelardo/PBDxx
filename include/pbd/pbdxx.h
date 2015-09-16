@@ -248,10 +248,17 @@ namespace pbdxx {
         const string& as_string() const;  
         string& as_string();
         
+        int to_doc_buffer(std::vector<char>& doc_buffer, pbd_conf conf = pbd_default_conf) const;
+        
+        static element from_doc_buffer(std::vector<char> const& buffer, 
+            size_t& read_bytes, pbd_conf conf = pbd_default_conf);
+        
     protected:
         std::shared_ptr<element_base> impl; 
         friend struct element_array;
     };
+    
+    int doc_buffer_valid_checksum(const std::vector<char>& doc_buffer);
 }
 
 #endif	/* PBDXX_H */

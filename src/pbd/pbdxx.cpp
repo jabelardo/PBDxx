@@ -1,4 +1,5 @@
 #include <pbd/pbdxx.h>
+#include <pbd/pbddoc.h>
 #include <cassert>
 
 #include "element.h"
@@ -566,6 +567,25 @@ const string& element::as_string() const {
 
 string& element::as_string() {
     return impl->as_string();
+}
+
+int element::to_doc_buffer(std::vector<char>& doc_buffer, pbd_conf conf) const {
+    char* buffer = 0;
+    size_t size = 0;
+    int result = pbd_doc_to_buffer_custom(conf, impl->impl, &buffer, &size);
+    doc_buffer.assign(buffer, buffer + size);
+    return result;
+}
+
+int doc_buffer_valid_checksum(const std::vector<char>& doc_buffer) {
+    return pbd_doc_valid_checksum(&doc_buffer[0]);
+}
+
+element element::from_doc_buffer(std::vector<char> const& buffer, 
+        size_t& read_bytes, pbd_conf conf) {
+    pbd_element* e = pbd_doc_from_buffer_custom(conf, &buffer[0], &read_bytes);
+    element_base* base = element_base::create(e, true, conf);
+    return element(std::shared_ptr<element_base>(base));
 }
 
 }
