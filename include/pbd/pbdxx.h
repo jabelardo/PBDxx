@@ -153,6 +153,7 @@ namespace pbdxx {
         friend struct element_base;
         boolean_array(pbd_conf conf = pbd_default_conf);
         boolean_array(pbd_element* impl, bool destroy_impl, pbd_conf conf);
+        mutable std::vector<bool> booleans;
     };
     
     struct element_array : public element_base {
@@ -178,6 +179,7 @@ namespace pbdxx {
         friend struct element_base;
         integer_array(pbd_conf conf = pbd_default_conf);
         integer_array(pbd_element* impl, bool destroy_impl, pbd_conf conf);
+        mutable std::vector<int64_t> integers;
     };
     
     struct real_array : public element_base {
@@ -190,6 +192,7 @@ namespace pbdxx {
         friend struct element_base;
         real_array(pbd_conf conf = pbd_default_conf);
         real_array(pbd_element* impl, bool destroy_impl, pbd_conf conf);
+        mutable std::vector<double> reals;
     };
     
     struct element {

@@ -300,13 +300,16 @@ size_t boolean_array::size() const {
 }
 
 std::vector<bool> boolean_array::values() const {
-    int length = size();
-    if (length > 0) {
-        const bool* values = pbd_bool_array_values(impl);
-        return std::vector<bool>(values, values + length);
-    } else {
-        return std::vector<bool>();
+    size_t impl_size = size();
+    size_t booleans_size = booleans.size();
+    if (impl_size != booleans_size) {
+        booleans.clear();
+        if (impl_size > 0) {
+            const bool* values = pbd_bool_array_values(impl);
+            booleans.insert(booleans.end(), values, values + impl_size);
+        }
     }
+    return booleans;
 }
 
 const boolean_array& boolean_array::as_boolean_array() const {
@@ -340,7 +343,6 @@ std::vector<element> element_array::values() const {
     if (impl_size != elements_size) {
         elements.clear();
         if (impl_size > 0) {
-            std::vector<element> result;
             const pbd_element** values = pbd_element_array_values(impl);
             for (int i = 0; i < impl_size; ++i) {
                 pbd_element* value = (pbd_element*) values[i];
@@ -377,13 +379,16 @@ size_t integer_array::size() const {
 }
 
 std::vector<int64_t> integer_array::values() const {
-    int length = size();
-    if (length > 0) {
-        const int64_t* values = pbd_integer_array_values(impl);
-        return std::vector<int64_t>(values, values + length);
-    } else {
-        return std::vector<int64_t>();
+    size_t impl_size = size();
+    size_t integers_size = integers.size();
+    if (impl_size != integers_size) {
+        integers.clear();
+        if (impl_size > 0) {
+            const int64_t* values = pbd_integer_array_values(impl);
+            integers.insert(integers.end(), values, values + impl_size);
+        } 
     }
+    return integers;
 }
 
 const integer_array& integer_array::as_integer_array() const {
@@ -411,13 +416,16 @@ size_t real_array::size() const {
 }
 
 std::vector<double> real_array::values() const {
-    int length = size();
-    if (length > 0) {
+    size_t impl_size = size();
+    size_t reals_size = reals.size();
+    if (impl_size != reals_size) {
+        reals.clear();
+        if (impl_size > 0) {
         const double* values = pbd_real_array_values(impl);
-        return std::vector<double>(values, values + length);
-    } else {
-        return std::vector<double>();
+        reals.insert(reals.end(), values, values + impl_size);
+        } 
     }
+    return reals;
 }
 
 const real_array& real_array::as_real_array() const {
