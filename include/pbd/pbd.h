@@ -21,9 +21,9 @@ extern "C" {
 typedef enum pbd_type_id {
         pbd_type_unknown	      =   0
     /**
-     * IMPORT NOTE: the delta value between _scalar and _array types must use 
+     * IMPORT NOTE: the delta value between _scalar and _array types must be 
      * scalar_delta value, because both select_best_integer and select_best_real
-     * implementation needs that to work properly.
+     * implementation depends on that to work properly.
      */
     ,   pbd_type_int8_scalar   =   1
     ,   pbd_type_uint8_scalar  =   4
