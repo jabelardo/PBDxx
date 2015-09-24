@@ -81,6 +81,8 @@ uint16_t pbd_doc_get_checksum(const char* buffer, size_t size) {
     return crc;    
 }
 
+#define ZLIB_CHUNK_SIZE 131072
+
 static int pbd_doc_compress(char* in, size_t in_size, char** result, 
         size_t* result_size, pbd_conf conf) {
     z_stream strm;
@@ -94,15 +96,14 @@ static int pbd_doc_compress(char* in, size_t in_size, char** result,
     strm.avail_in = in_size;
     strm.next_in = (Bytef *) &in[0];
 
-    size_t const CHUNK = 131072;
-    unsigned char out[CHUNK];
+    unsigned char out[ZLIB_CHUNK_SIZE];
     *result = NULL;
     *result_size = 0;
     do {
-        strm.avail_out = CHUNK;
+        strm.avail_out = ZLIB_CHUNK_SIZE;
         strm.next_out = out;
         deflate(&strm, Z_FINISH);
-        unsigned have = CHUNK - strm.avail_out;
+        unsigned have = ZLIB_CHUNK_SIZE - strm.avail_out;
         *result = conf.mem_realloc(*result, have + *result_size);
         memcpy(*result + *result_size, out, have);
         *result_size += have;
@@ -304,12 +305,11 @@ static int pbd_doc_decompress(const char* in, size_t in_size, size_t out_size,
     strm.avail_in = in_size;
     strm.next_in = (Bytef *) &in[0];
 
-    size_t const CHUNK = 131072;
-    unsigned char out[CHUNK];
+    unsigned char out[ZLIB_CHUNK_SIZE];
     *result = conf.mem_alloc(out_size);
     *result_size = 0;
     do {
-        strm.avail_out = CHUNK;
+        strm.avail_out = ZLIB_CHUNK_SIZE;
         strm.next_out = out;
         ret = inflate(&strm, Z_NO_FLUSH);
         switch (ret)  {
@@ -323,7 +323,7 @@ static int pbd_doc_decompress(const char* in, size_t in_size, size_t out_size,
                 *result_size = 0;
                 return -1;
         }
-        unsigned have = CHUNK - strm.avail_out;
+        unsigned have = ZLIB_CHUNK_SIZE - strm.avail_out;
         memcpy(*result + *result_size, out, have);
         *result_size += have;
     } while (strm.avail_out == 0);

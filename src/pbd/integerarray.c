@@ -21,7 +21,7 @@ static pbd_int64_t_min_max get_min_max(const pbd_integer_array* s) {
     if (s->size) {
         min_max.min = INT64_MAX;
         min_max.max = INT64_MIN;
-        for (int i = 0; i < s->size; ++i) {
+        for (size_t i = 0; i < s->size; ++i) {
             min_max.min = min_max.min < s->values[i] ? min_max.min : s->values[i];
             min_max.max = min_max.max > s->values[i] ? min_max.max : s->values[i];
         }
@@ -57,15 +57,15 @@ static int integer_array_to_buffer(pbd_conf conf, const pbd_element* e,
     pbd_write_array_size(*buffer, s->size, sizeof_array_size);
     for (size_t i = 0; i < s->size; ++i) {
         if (sizeof_value == sizeof(int8_t)) {
-            int8_t value = s->values[i];  
+            int8_t value = (int8_t) s->values[i];
             memcpy(*buffer + SIZEOF_TYPE_ID + sizeof_array_size + sizeof_value * i, 
                     &value, sizeof_value);
         } else if (sizeof_value == sizeof(int16_t)) {
-            int16_t value = s->values[i];  
+            int16_t value = (int16_t) s->values[i];
             memcpy(*buffer + SIZEOF_TYPE_ID + sizeof_array_size + sizeof_value * i, 
                     &value, sizeof_value);
         } else if (sizeof_value == sizeof(int32_t)) {
-            int32_t value = s->values[i];  
+            int32_t value = (int32_t) s->values[i];
             memcpy(*buffer + SIZEOF_TYPE_ID + sizeof_array_size + sizeof_value * i, 
                     &value, sizeof_value);
         } else {
@@ -91,7 +91,7 @@ static int integer_array_from_buffer(pbd_conf conf, struct pbd_element* e,
     size_t sizeof_array_size = pbd_sizeof_array_size_by_type(type_id);
     uint32_t size = pbd_read_array_size(buffer, sizeof_array_size);
     bool little_endian = pbd_is_little_endian();
-    for (int i = 0; i < size; ++i) {
+    for (size_t i = 0; i < size; ++i) {
         int64_t value;
         if (sizeof_value == 1) {
             int8_t tmp_val;

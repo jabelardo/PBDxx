@@ -21,7 +21,7 @@ static int integer_to_buffer(pbd_conf conf, const pbd_element* e, char** buffer,
     if (sizeof_value == 0) {
         return -1;
     }
-    uint16_t full_size = SIZEOF_TYPE_ID + sizeof_value;
+	size_t full_size = SIZEOF_TYPE_ID + sizeof_value;
     *buffer = conf.mem_alloc(full_size);
     if (*buffer == NULL) {
         return -1;
@@ -29,13 +29,13 @@ static int integer_to_buffer(pbd_conf conf, const pbd_element* e, char** buffer,
     *size = full_size;
     memcpy(*buffer, &type_id, SIZEOF_TYPE_ID);
     if (sizeof_value == sizeof(int8_t)) {
-        int8_t tmp_value = s->value;
+        int8_t tmp_value = (int8_t) s->value;
         memcpy(*buffer + SIZEOF_TYPE_ID, &tmp_value, sizeof_value);
     } else if (sizeof_value == sizeof(int16_t)) {
-        int16_t tmp_value = s->value;
+        int16_t tmp_value = (int16_t) s->value;
         memcpy(*buffer + SIZEOF_TYPE_ID, &tmp_value, sizeof_value);
     } else if (sizeof_value == sizeof(int32_t)) {
-        int32_t tmp_value = s->value;
+        int32_t tmp_value = (int32_t) s->value;
         memcpy(*buffer + SIZEOF_TYPE_ID, &tmp_value, sizeof_value);
     } else {
         memcpy(*buffer + SIZEOF_TYPE_ID, &s->value, sizeof_value);

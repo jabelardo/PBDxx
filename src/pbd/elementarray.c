@@ -79,7 +79,7 @@ static int element_array_from_buffer(pbd_conf conf, struct pbd_element* e,
     if (s->values == NULL) {
         return -1;
     }
-    for (int i = 0; i < size; ++i) {
+    for (size_t i = 0; i < size; ++i) {
         if (NULL == (s->values[i] = pbd_element_from_buffer(buffer, read_bytes))) {
             return -1;
         }
@@ -98,7 +98,7 @@ static void element_array_free(pbd_conf conf, const pbd_element* e) {
             free_func(conf, value);
         }
     }
-    conf.free_mem(s->values);
+    conf.free_mem((void*) s->values);
     s->values = NULL;
     s->size = 0;
     s->capacity = 0;
@@ -157,7 +157,7 @@ int pbd_element_array_add_custom(pbd_conf conf, pbd_element* e, const pbd_elemen
         ++s->size;
         
     } else {
-        s->values = conf.mem_realloc(s->values, sizeof(pbd_element*) * s->capacity * 2);
+        s->values = conf.mem_realloc((void*) s->values, sizeof(pbd_element*) * s->capacity * 2);
         if (s->values == NULL) {
             return -1;
         }

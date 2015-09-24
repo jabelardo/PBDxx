@@ -74,11 +74,11 @@ uint32_t pbd_read_array_size(const char* buffer, pbd_array_size_bytes sizeof_arr
 void pbd_write_array_size(char* buffer, size_t size, pbd_array_size_bytes sizeof_array_size) {
     assert(buffer != NULL);
     if (sizeof_array_size == pbd_one_byte) {
-        uint8_t array_size = size;
+        uint8_t array_size = (uint8_t) size;
         memcpy(buffer + SIZEOF_TYPE_ID, &array_size, pbd_one_byte);   
         
     } else if (sizeof_array_size == pbd_two_bytes) {
-        uint16_t array_size = size;
+        uint16_t array_size = (uint16_t) size;
         memcpy(buffer + SIZEOF_TYPE_ID, &array_size, pbd_two_bytes);
         
     } else {

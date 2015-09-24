@@ -344,7 +344,7 @@ std::vector<element> element_array::values() const {
         elements.clear();
         if (impl_size > 0) {
             const pbd_element** values = pbd_element_array_values(impl);
-            for (int i = 0; i < impl_size; ++i) {
+            for (size_t i = 0; i < impl_size; ++i) {
                 pbd_element* value = (pbd_element*) values[i];
                 std::shared_ptr<element_base> shared_ptr(create(value, false, conf));
                 elements.push_back(element(shared_ptr));

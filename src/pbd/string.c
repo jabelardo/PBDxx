@@ -43,7 +43,8 @@ static int string_from_buffer(pbd_conf conf, struct pbd_element* e,
     size_t sizeof_array_size = pbd_sizeof_array_size_by_type(type_id);
     uint32_t len = pbd_read_array_size(buffer, sizeof_array_size);
     char* str = conf.mem_alloc(len + 1);
-    strlcpy(str, buffer + SIZEOF_TYPE_ID + sizeof_array_size, len + 1);
+    memcpy(str, buffer + SIZEOF_TYPE_ID + sizeof_array_size, len);
+	str[len] = 0;
     pbd_string* s = (pbd_string*) &(*e);
     s->value = str;
     *read_bytes += SIZEOF_TYPE_ID + sizeof_array_size + len;
@@ -108,7 +109,8 @@ int pbd_string_set_custom(pbd_conf conf, pbd_element* e, const char* value) {
     if (s == NULL) {
         return -1;
     }
-    strlcpy(s->value, value, size);
+    memcpy(s->value, value, size - 1);
+	s->value[size] = 0;
     return 0;
 }
 

@@ -21,7 +21,7 @@ static int real_to_buffer(pbd_conf conf, const pbd_element* e, char** buffer,
     if (sizeof_value == 0) {
         return -1;
     }
-    uint16_t full_size = SIZEOF_TYPE_ID + sizeof_value;
+	size_t full_size = SIZEOF_TYPE_ID + sizeof_value;
     *buffer = conf.mem_alloc(full_size);
     if (*buffer == NULL) {
         return -1;
@@ -29,7 +29,7 @@ static int real_to_buffer(pbd_conf conf, const pbd_element* e, char** buffer,
     *size = full_size;
     memcpy(*buffer, &type_id, SIZEOF_TYPE_ID);
     if (sizeof_value == sizeof(float)) {
-        float value = s->value; 
+        float value = (float) s->value;
         memcpy(*buffer + SIZEOF_TYPE_ID, &value, sizeof_value);
     } else {
         memcpy(*buffer + SIZEOF_TYPE_ID, &s->value, sizeof_value);
